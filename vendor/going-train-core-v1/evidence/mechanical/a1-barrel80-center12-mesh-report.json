@@ -1,0 +1,1973 @@
+{
+  "schema": "post5d-rendered-train-mesh-v2",
+  "pairId": "barrel80-center12",
+  "classification": "VALID — BARREL WHEEL / CENTER PINION POSITIVE CLEARANCE",
+  "participants": {
+    "primary": {
+      "name": "barrel:wheel",
+      "path": "Scene/calibre/barrel:pose/barrel:motion/barrel:geom/barrel:wheel",
+      "motionPath": "Scene/calibre/barrel:pose/barrel:motion",
+      "itemSize": 3,
+      "localRotation": 0,
+      "matrix": [
+        0.9222009716704519,
+        0.38671096163682045,
+        0,
+        0,
+        -0.38671096163682045,
+        0.9222009716704519,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        -6.045072939534456,
+        -2.818863805810464,
+        0,
+        1
+      ],
+      "localBounds": {
+        "min": [
+          -5.930500030517578,
+          -5.930500030517578,
+          -0.1459999978542328
+        ],
+        "max": [
+          5.930500030517578,
+          5.930500030517578,
+          0.11400000005960464
+        ]
+      },
+      "worldBounds": {
+        "min": [
+          -13.807575199958055,
+          -10.581366066234065,
+          -0.1459999978542328
+        ],
+        "max": [
+          1.7174293208891447,
+          4.9436384546131364,
+          0.11400000005960464
+        ]
+      },
+      "teeth": 80
+    },
+    "secondary": {
+      "name": "center:pinion",
+      "path": "Scene/calibre/center:pose/center:motion/center:geom/center:pinion",
+      "motionPath": "Scene/calibre/center:pose/center:motion",
+      "itemSize": 3,
+      "localRotation": 0,
+      "matrix": [
+        -0.90630778703665,
+        -0.42261826174069905,
+        0,
+        0,
+        0.42261826174069905,
+        -0.90630778703665,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "localBounds": {
+        "min": [
+          -1.0295000076293945,
+          -1.0295000076293945,
+          -0.16599999368190765
+        ],
+        "max": [
+          1.0295000076293945,
+          1.0295000076293945,
+          0.1340000033378601
+        ]
+      },
+      "worldBounds": {
+        "min": [
+          -1.368129377355182,
+          -1.368129377355182,
+          -0.16599999368190765
+        ],
+        "max": [
+          1.368129377355182,
+          1.368129377355182,
+          0.1340000033378601
+        ]
+      },
+      "teeth": 12
+    }
+  },
+  "geometry": {
+    "primaryContour": {
+      "points": 2248,
+      "z": -0.146,
+      "maxRadius": 5.930500234396588
+    },
+    "secondaryContour": {
+      "points": 408,
+      "z": -0.16599999,
+      "maxRadius": 1.0295000529410605
+    },
+    "centerDistanceMm": 6.67,
+    "requiredPitchSumMm": 6.67,
+    "axialOverlapMm": 0.25999999791383743,
+    "radialEnvelope": {
+      "policy": "frozen analytic pitch/root/tip radii preserved; the authorized rendered contraction removes only the legacy expanding-bevel overshoot",
+      "primary": {
+        "pitchRadiusMm": 5.8,
+        "rootRadiusMm": 5.6376,
+        "tipRadiusMm": 5.930499999999999,
+        "gate0RenderedMaxRadiusMm": 5.946525840584782,
+        "currentRenderedMaxRadiusMm": 5.930500234396588,
+        "renderedDeltaFromGate0Mm": -0.01602560618819382,
+        "noRenderedGrowth": true
+      },
+      "secondary": {
+        "pitchRadiusMm": 0.8699999999999999,
+        "rootRadiusMm": 0.6887499999999999,
+        "tipRadiusMm": 1.0294999999999999,
+        "gate0RenderedMaxRadiusMm": 1.0457883713900649,
+        "currentRenderedMaxRadiusMm": 1.0295000529410605,
+        "renderedDeltaFromGate0Mm": -0.016288318449004358,
+        "noRenderedGrowth": true
+      }
+    },
+    "profile": {
+      "type": "pair-specific 20 degree involute barrel wheel / center pinion",
+      "pressureAngleDeg": 20,
+      "totalPitchCircleBacklashMm": 0.02,
+      "nominalToothThicknessMm": 0.22776546738526,
+      "finishedToothThicknessEachMm": 0.21776546738525998,
+      "primaryMotionPhaseDeg": 22.74999999999999,
+      "primaryLocalClockingDeg": 0,
+      "secondaryMotionPhaseDeg": -155.00000000000003,
+      "secondaryLocalClockingDeg": 0
+    }
+  },
+  "method": "actual rendered BufferGeometry maximum-section contours; exact star-polygon fan triangle clipping over 8,193 states spanning one complete 80T/12T repeating mesh cycle; 2049-state local refinement around the coarse minimum; boundary-segment BVH nearest points for positive clearance",
+  "phaseOverrideDeg": 0,
+  "result": {
+    "phaseRad": 0,
+    "phaseDeg": 0,
+    "sampleCount": 8193,
+    "collisionSamples": 0,
+    "maximumIntersectionAreaMm2": 0,
+    "minimumPositiveClearanceMm": 0.0029000327921249796,
+    "witness": {
+      "sample": 0,
+      "centerDeltaRad": 0,
+      "centerDeltaDeg": 0,
+      "area": 0,
+      "maxPairArea": 0,
+      "pair": null,
+      "distance": 0.0029000327921249796,
+      "nearest": {
+        "distance": 0.0029000327921249796,
+        "a": {
+          "x": 5.633253574371338,
+          "y": 0.2213311344385147,
+          "r": 5.637599959578481,
+          "a": 0.03926990793947819
+        },
+        "b": {
+          "x": 5.636151371292286,
+          "y": 0.22144499048949798
+        },
+        "edgeA": 14,
+        "edgeB": 0
+      }
+    }
+  },
+  "localRefinement": {
+    "sampleCount": 2049,
+    "rangeRad": [
+      -0.000009587379924285257,
+      0.000009587379924285257
+    ],
+    "rangeDeg": [
+      -0.00054931640625,
+      0.00054931640625
+    ],
+    "collisionSamples": 0,
+    "maximumIntersectionAreaMm2": 0,
+    "minimumPositiveClearanceMm": 0.0029000327921249796,
+    "witness": {
+      "sample": 1024,
+      "centerDeltaRad": 0,
+      "centerDeltaDeg": 0,
+      "area": 0,
+      "maxPairArea": 0,
+      "pair": null,
+      "distance": 0.0029000327921249796,
+      "nearest": {
+        "distance": 0.0029000327921249796,
+        "a": {
+          "x": 5.633253574371338,
+          "y": 0.2213311344385147,
+          "r": 5.637599959578481,
+          "a": 0.03926990793947819
+        },
+        "b": {
+          "x": 5.636151371292286,
+          "y": 0.22144499048949798
+        },
+        "edgeA": 14,
+        "edgeB": 0
+      }
+    }
+  },
+  "phaseScan": null,
+  "otherPairScreens": [
+    {
+      "id": "barrel80-center12",
+      "participants": {
+        "primary": {
+          "name": "barrel:wheel",
+          "path": "Scene/calibre/barrel:pose/barrel:motion/barrel:geom/barrel:wheel",
+          "motionPath": "Scene/calibre/barrel:pose/barrel:motion",
+          "teeth": 80
+        },
+        "secondary": {
+          "name": "center:pinion",
+          "path": "Scene/calibre/center:pose/center:motion/center:geom/center:pinion",
+          "motionPath": "Scene/calibre/center:pose/center:motion",
+          "teeth": 12
+        }
+      },
+      "sampleCount": 2049,
+      "axialOverlapMm": 0.25999999791383743,
+      "centerDistanceMm": 6.67,
+      "collisionSamples": 0,
+      "maximumIntersectionAreaMm2": 0,
+      "witness": null,
+      "classification": "NO RENDERED INTERSECTION"
+    },
+    {
+      "id": "center64-third10",
+      "participants": {
+        "primary": {
+          "name": "center:wheel",
+          "path": "Scene/calibre/center:pose/center:motion/center:geom/center:wheel",
+          "motionPath": "Scene/calibre/center:pose/center:motion",
+          "teeth": 64
+        },
+        "secondary": {
+          "name": "third:pinion",
+          "path": "Scene/calibre/third:pose/third:motion/third:geom/third:pinion",
+          "motionPath": "Scene/calibre/third:pose/third:motion",
+          "teeth": 10
+        }
+      },
+      "sampleCount": 2049,
+      "axialOverlapMm": 0.14499999210238457,
+      "centerDistanceMm": 5.364999999999999,
+      "collisionSamples": 0,
+      "maximumIntersectionAreaMm2": 0,
+      "witness": null,
+      "classification": "NO RENDERED INTERSECTION"
+    },
+    {
+      "id": "third60-fourth8",
+      "participants": {
+        "primary": {
+          "name": "third:wheel",
+          "path": "Scene/calibre/third:pose/third:motion/third:geom/third:wheel",
+          "motionPath": "Scene/calibre/third:pose/third:motion",
+          "teeth": 60
+        },
+        "secondary": {
+          "name": "fourth:pinion",
+          "path": "Scene/calibre/fourth:pose/fourth:motion/fourth:geom/fourth:pinion",
+          "motionPath": "Scene/calibre/fourth:pose/fourth:motion",
+          "teeth": 8
+        }
+      },
+      "sampleCount": 2049,
+      "axialOverlapMm": 0.14499999210238457,
+      "centerDistanceMm": 4.930000000000001,
+      "collisionSamples": 0,
+      "maximumIntersectionAreaMm2": 0,
+      "witness": null,
+      "classification": "NO RENDERED INTERSECTION"
+    },
+    {
+      "id": "fourth56-escape7",
+      "participants": {
+        "primary": {
+          "name": "fourth:wheel",
+          "path": "Scene/calibre/fourth:pose/fourth:motion/fourth:geom/fourth:wheel",
+          "motionPath": "Scene/calibre/fourth:pose/fourth:motion",
+          "teeth": 56
+        },
+        "secondary": {
+          "name": "escape:pinion",
+          "path": "Scene/calibre/escape:pose/escape:motion/escape:geom/escape:pinion",
+          "motionPath": "Scene/calibre/escape:pose/escape:motion",
+          "teeth": 7
+        }
+      },
+      "sampleCount": 2049,
+      "axialOverlapMm": 0.09999999776482582,
+      "centerDistanceMm": 4.5675,
+      "collisionSamples": 0,
+      "maximumIntersectionAreaMm2": 0,
+      "witness": null,
+      "classification": "NO RENDERED INTERSECTION"
+    }
+  ],
+  "invariance": {
+    "axes": {
+      "primary": [
+        -6.045072939534456,
+        -2.818863805810464,
+        0
+      ],
+      "secondary": [
+        0,
+        0,
+        1.24
+      ]
+    },
+    "toothCounts": {
+      "primary": 80,
+      "secondary": 12
+    },
+    "moduleMm": 0.145,
+    "ratio": "secondaryDelta = -primaryDelta * 80/12",
+    "goingTrain": {
+      "units": "radians",
+      "ownership": {
+        "barrel": "calibre/barrel:pose/barrel:motion/barrel:geom/barrel:wheel",
+        "centerPinion": "calibre/center:pose/center:motion/center:geom/center:pinion",
+        "center": "calibre/center:pose/center:motion",
+        "third": "calibre/third:pose/third:motion",
+        "fourth": "calibre/fourth:pose/fourth:motion",
+        "escape": "calibre/escape:pose/escape:motion"
+      },
+      "samples": [
+        {
+          "time": 0,
+          "rotations": {
+            "barrel": 0.3970624048287098,
+            "center": -2.7052603405912112,
+            "third": -2.5830872929516078,
+            "fourth": -0.46517387888778894,
+            "escape": 0.4151893944399231,
+            "barrelArborEffective": 0
+          },
+          "barrelArbor": {
+            "parent": "barrel:pose",
+            "path": "calibre/barrel:pose/barrel:arbor",
+            "inheritsBarrelMotion": false
+          }
+        },
+        {
+          "time": 10,
+          "rotations": {
+            "barrel": 0.3892084231947353,
+            "center": -2.6529004630313815,
+            "third": -2.918190509334519,
+            "fourth": 2.0481002439840457,
+            "escape": -19.691003588534752,
+            "barrelArborEffective": 0
+          },
+          "barrelArbor": {
+            "parent": "barrel:pose",
+            "path": "calibre/barrel:pose/barrel:arbor",
+            "inheritsBarrelMotion": false
+          }
+        },
+        {
+          "time": 60,
+          "rotations": {
+            "barrel": 0.3499385150248629,
+            "center": -2.391101075232232,
+            "third": -4.5937065912490755,
+            "fourth": 14.614470858343218,
+            "escape": -120.22196850340814,
+            "barrelArborEffective": 0
+          },
+          "barrelArbor": {
+            "parent": "barrel:pose",
+            "path": "calibre/barrel:pose/barrel:arbor",
+            "inheritsBarrelMotion": false
+          }
+        }
+      ]
+    },
+    "phase4b": {
+      "phase": "4B",
+      "disposition": "PHASE 4B — CLOSED & FROZEN — REAL TWO-HAND DISPLAY DRIVE",
+      "architecture": "rigid center staff/cannon → off-axis compound minute wheel/pinion → independent center hour wheel/pipe",
+      "settingOrSlipValidated": false,
+      "axis": {
+        "source": {
+          "x": 0,
+          "y": 0
+        },
+        "drive": {
+          "x": 0,
+          "y": 0
+        },
+        "drift": 0
+      },
+      "source": {
+        "owner": "calibre/center:pose/center:motion",
+        "sourceZero": 61.17379028240125,
+        "runtimeQ": -2.7052603405912112,
+        "displayedQ": -2.7052603405912112,
+        "centerOutputLocalZCompensation": -1.24,
+        "expectedLocalZCompensation": -1.24
+      },
+      "derivation": {
+        "minuteFromSource": 1,
+        "compoundFromMinute": -0.5,
+        "hourFromCompound": -0.16666666666666666,
+        "netFromTraversedMeshes": 0.08333333333333333,
+        "reportedNetConstant": 0.08333333333333333,
+        "sameDisplayedDirection": true,
+        "runtimePath": "qMinute=q-q0; qCompound=meshA.signedRatio*qMinute; qHour=meshB.signedRatio*qCompound"
+      },
+      "meshes": [
+        {
+          "id": "minuteReduction",
+          "driver": "cannonPinion",
+          "driven": "minuteWheel",
+          "driverTeeth": 16,
+          "drivenTeeth": 32,
+          "module": 0.0216666666667,
+          "driverPitchR": 0.1733333333336,
+          "drivenPitchR": 0.3466666666672,
+          "expectedCenterDistance": 0.52,
+          "signedRatio": -0.5,
+          "measuredCenterDistance": 0.52,
+          "centerDistanceError": 0,
+          "direction": "external"
+        },
+        {
+          "id": "hourReduction",
+          "driver": "minutePinion",
+          "driven": "hourWheel",
+          "driverTeeth": 8,
+          "drivenTeeth": 48,
+          "module": 0.0185714285714,
+          "driverPitchR": 0.0742857142856,
+          "drivenPitchR": 0.44571428571360006,
+          "expectedCenterDistance": 0.52,
+          "signedRatio": -0.16666666666666666,
+          "measuredCenterDistance": 0.52,
+          "centerDistanceError": 0,
+          "direction": "external"
+        }
+      ],
+      "gears": [
+        {
+          "id": "cannonPinion",
+          "teeth": 16,
+          "module": 0.0216666666667,
+          "style": "pinion",
+          "boreR": 0.1,
+          "pitchR": 0.1733333333336,
+          "rootR": 0.14625000000022498,
+          "outerR": 0.19716666666697,
+          "z0": 2.94,
+          "z1": 3.06,
+          "localPhase": -1.7671458676442586,
+          "measured": {
+            "boreR": 0.09999999852325936,
+            "outerR": 0.19716666984351464,
+            "localZ0": -0.05999999865889549,
+            "localZ1": 0.05999999865889549,
+            "face": 0.11999999731779099
+          }
+        },
+        {
+          "id": "minuteWheel",
+          "teeth": 32,
+          "module": 0.0216666666667,
+          "style": "wheel",
+          "boreR": 0.026,
+          "pitchR": 0.3466666666672,
+          "rootR": 0.32240000000049596,
+          "outerR": 0.36616666666722997,
+          "z0": 2.94,
+          "z1": 3.06,
+          "localPhase": 1.5707963267948966,
+          "measured": {
+            "boreR": 0.025999999475932702,
+            "outerR": 0.36616667872533454,
+            "localZ0": -0.05999999865889549,
+            "localZ1": 0.05999999865889549,
+            "face": 0.11999999731779099
+          }
+        },
+        {
+          "id": "minutePinion",
+          "teeth": 8,
+          "module": 0.0185714285714,
+          "style": "pinion",
+          "boreR": 0.026,
+          "pitchR": 0.0742857142856,
+          "rootR": 0.051071428571350004,
+          "outerR": 0.09471428571414,
+          "z0": 3.16,
+          "z1": 3.28,
+          "localPhase": 1.1780972450961724,
+          "measured": {
+            "boreR": 0.025999999475932702,
+            "outerR": 0.09471428881246377,
+            "localZ0": -0.05999999865889549,
+            "localZ1": 0.05999999865889549,
+            "face": 0.11999999731779099
+          }
+        },
+        {
+          "id": "hourWheel",
+          "teeth": 48,
+          "module": 0.0185714285714,
+          "style": "wheel",
+          "boreR": 0.24,
+          "pitchR": 0.44571428571360006,
+          "rootR": 0.42491428571363205,
+          "outerR": 0.46242857142786004,
+          "z0": 3.16,
+          "z1": 3.28,
+          "localPhase": -1.5707963267948966,
+          "measured": {
+            "boreR": 0.2399999937024469,
+            "outerR": 0.4624285905248216,
+            "localZ0": -0.05999999865889549,
+            "localZ1": 0.05999999865889549,
+            "face": 0.11999999731779099
+          }
+        }
+      ],
+      "members": {
+        "staff": {
+          "lowerCouplingR": 0.052,
+          "lowerCouplingZ0": 1.82,
+          "lowerCouplingZ1": 1.94,
+          "journalR": 0.075,
+          "journalZ0": 1.9,
+          "journalZ1": 2.64,
+          "upperCoreR": 0.085,
+          "upperCoreZ0": 2.6,
+          "upperCoreZ1": 2.94,
+          "requiredStationaryBoreR": 0.082,
+          "existingJewelApertureR": 0.136,
+          "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:owner:minuteDrive/phase4b:centerStaff:stepped"
+        },
+        "minuteTube": {
+          "innerR": 0.1,
+          "outerR": 0.14,
+          "z0": 2.884,
+          "z1": 4.8756,
+          "integralStem": {
+            "visibleSection": {
+              "outerR": 0.11,
+              "z0": 4.8756,
+              "z1": 5.0436
+            },
+            "handTenon": {
+              "outerR": 0.08,
+              "z0": 5.0436,
+              "z1": 5.1516
+            }
+          },
+          "cannonOuterR": 0.19716666666697,
+          "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:owner:minuteDrive/phase4b:minuteDrive:continuousTubeStem"
+        },
+        "compound": {
+          "axis": {
+            "x": 0,
+            "y": -0.52
+          },
+          "bearing": {
+            "studR": 0.02,
+            "gearBoreR": 0.026,
+            "sleeveOuterR": 0.04,
+            "footR": 0.04,
+            "footZ0": 2.864,
+            "footZ1": 2.93,
+            "studZ0": 2.884,
+            "studZ1": 3.32,
+            "capR": 0.046,
+            "capZ0": 3.292,
+            "capZ1": 3.316
+          },
+          "path": "Phase4BDisplayDriveRoot/phase4b:fixedRoot/phase4b:offAxisPose/phase4b:owner:compoundMotion"
+        },
+        "hourPipe": {
+          "innerR": 0.24,
+          "outerR": 0.3,
+          "z0": 3.16,
+          "z1": 4.7216,
+          "hubCoupling": {
+            "innerR": 0.18,
+            "shoulderOuterR": 0.3,
+            "neckOuterR": 0.22,
+            "z0": 4.7016,
+            "shoulderZ1": 4.7216,
+            "z1": 4.8
+          },
+          "hourWheelOuterR": 0.46242857142786004,
+          "path": "Phase4BDisplayDriveRoot/phase4b:owner:hourMotion/phase4b:hourGeometry/phase4b:hourDrive:pipe"
+        }
+      },
+      "connections": {
+        "minuteAnnulusToIntegralStem": {
+          "commonMesh": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:owner:minuteDrive/phase4b:minuteDrive:continuousTubeStem",
+          "transitionZ": 4.8756,
+          "continuous": true
+        },
+        "minuteStemToCollar": {
+          "claimed": true,
+          "axialEngagement": 0.08799999952316284,
+          "matchingRadius": 0.08
+        },
+        "minuteStemToHand": {
+          "claimed": true,
+          "axialEngagement": 0.10800000000000054,
+          "matchingRadius": 0.08
+        },
+        "hourPipeToHubCoupling": {
+          "commonOwner": "Phase4BDisplayDriveRoot/phase4b:owner:hourMotion",
+          "axialOverlap": 0.019999999999999574,
+          "radialOverlap": 0.06
+        },
+        "hourCouplingToCollar": {
+          "claimed": true,
+          "axialEngagement": 0.05639999952614261,
+          "matchingRadius": 0.22
+        },
+        "hourCouplingToHand": {
+          "claimed": true,
+          "axialEngagement": 0.07840000346004938,
+          "matchingRadius": 0.22
+        },
+        "coaxialRunningGap": 0.03999999999999998,
+        "interpretation": "rigid runtime press/collet fits; hand-setting and slip torque are not claimed"
+      },
+      "containment": {
+        "minuteInnerPreserved": true,
+        "minuteOuterPreserved": true,
+        "minuteZPreserved": true,
+        "minuteIntegralStemInsideAcceptedHub": true,
+        "hourInnerPreserved": true,
+        "hourOuterPreserved": true,
+        "hourZStrictSubset": true,
+        "hourHubCouplingInsideAcceptedHub": true,
+        "coaxialMembersSeparated": true,
+        "compoundFootInsideInterface": true,
+        "intermediateRadialMax": 0.88616666666723
+      },
+      "clearances": {
+        "interfaceTopToLowerGear": 0.05600000000000005,
+        "nearestFrozenCentralTopToLowerGear": 0.1259999999999999,
+        "upperGearToChapter": 1.1616000000000004,
+        "upperGearToHourHand": 1.4575999999999998,
+        "sapphireRemaining": 0.8620000000000001,
+        "renderedCannonToMinuteEnvelope": 0.0028333301564853752,
+        "renderedHourWheelToHourEnvelope": 0.0375714094751784,
+        "renderedMinuteWheelBoreToStud": 0.005999999475932702,
+        "renderedMinutePinionBoreToStud": 0.005999999475932702
+      },
+      "bearingPassage": {
+        "rotatingJournalR": 0.075,
+        "requiredStationaryBoreR": 0.082,
+        "radialRunningClearance": 0.007000000000000006,
+        "existingJewelApertureR": 0.136,
+        "jewelRadialClearance": 0.06100000000000001,
+        "note": "The stationary bridge/support implementation must provide this coaxial bore; this layer supplies only the center-owned rotating staff."
+      },
+      "presentation": {
+        "active": false
+      },
+      "runtime": {
+        "inputQ": -2.7052603405912112,
+        "sourceZero": 61.17379028240125,
+        "sourceDelta": -63.87905062299246,
+        "members": {
+          "centerSource": {
+            "id": "centerSource",
+            "angleRad": -2.7052603405912112,
+            "angleDeg": -155.00000000000003,
+            "kinematicAngleRad": -2.7052603405912112,
+            "localPhaseRad": 0,
+            "ratioToCenter": 1
+          },
+          "centerStaff": {
+            "id": "centerStaff",
+            "angleRad": -63.87905062299246,
+            "angleDeg": -3660,
+            "kinematicAngleRad": -63.87905062299246,
+            "localPhaseRad": 0,
+            "ratioToCenter": 1
+          },
+          "cannonPinion": {
+            "id": "cannonPinion",
+            "angleRad": -65.64619649063671,
+            "angleDeg": -3761.2499999999995,
+            "kinematicAngleRad": -63.87905062299246,
+            "localPhaseRad": -1.7671458676442586,
+            "ratioToCenter": 1
+          },
+          "minuteDrive": {
+            "id": "minuteDrive",
+            "angleRad": -63.87905062299246,
+            "angleDeg": -3660,
+            "kinematicAngleRad": -63.87905062299246,
+            "localPhaseRad": 0,
+            "ratioToCenter": 1
+          },
+          "minuteWheel": {
+            "id": "minuteWheel",
+            "angleRad": 33.510321638291124,
+            "angleDeg": 1919.9999999999998,
+            "kinematicAngleRad": 31.93952531149623,
+            "localPhaseRad": 1.5707963267948966,
+            "ratioToCenter": -0.5
+          },
+          "minutePinion": {
+            "id": "minutePinion",
+            "angleRad": 33.1176225565924,
+            "angleDeg": 1897.5,
+            "kinematicAngleRad": 31.93952531149623,
+            "localPhaseRad": 1.1780972450961724,
+            "ratioToCenter": -0.5
+          },
+          "hourWheel": {
+            "id": "hourWheel",
+            "angleRad": -6.894050545377601,
+            "angleDeg": -394.99999999999994,
+            "kinematicAngleRad": -5.323254218582704,
+            "localPhaseRad": -1.5707963267948966,
+            "ratioToCenter": 0.08333333333333333
+          },
+          "hourPipe": {
+            "id": "hourPipe",
+            "angleRad": -5.323254218582704,
+            "angleDeg": -304.99999999999994,
+            "kinematicAngleRad": -5.323254218582704,
+            "localPhaseRad": 0,
+            "ratioToCenter": 0.08333333333333333
+          },
+          "minuteHand": {
+            "id": "minuteHand",
+            "angleRad": -63.87905062299246,
+            "angleDeg": -3660,
+            "kinematicAngleRad": -63.87905062299246,
+            "localPhaseRad": 0,
+            "ratioToCenter": 1
+          },
+          "hourHand": {
+            "id": "hourHand",
+            "angleRad": -5.323254218582704,
+            "angleDeg": -304.99999999999994,
+            "kinematicAngleRad": -5.323254218582704,
+            "localPhaseRad": 0,
+            "ratioToCenter": 0.08333333333333333
+          }
+        }
+      },
+      "ownership": {
+        "stationary": "Phase4BDisplayDriveRoot/phase4b:fixedRoot/phase4b:offAxisPose/phase4b:owner:stationaryBearing",
+        "minute": "calibre/center:pose/center:motion/phase4b:centerOutput",
+        "compound": "Phase4BDisplayDriveRoot/phase4b:fixedRoot/phase4b:offAxisPose/phase4b:owner:compoundMotion",
+        "hour": "Phase4BDisplayDriveRoot/phase4b:owner:hourMotion",
+        "claims": [
+          {
+            "role": "hourHandMount",
+            "owner": "hour",
+            "name": "HourHandMount",
+            "path": "Phase4BDisplayDriveRoot/phase4b:owner:hourMotion/phase4b:claims:hour/HourHandMount"
+          },
+          {
+            "role": "minuteHandMount",
+            "owner": "minute",
+            "name": "MinuteHandMount",
+            "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:claims:minute/MinuteHandMount"
+          },
+          {
+            "role": "hourCollar",
+            "owner": "hour",
+            "name": "readout:hub:hourCollar",
+            "path": "Phase4BDisplayDriveRoot/phase4b:owner:hourMotion/phase4b:claims:hour/readout:hub:hourCollar"
+          },
+          {
+            "role": "centerStem",
+            "owner": "minute",
+            "name": "readout:hub:minuteStem",
+            "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:claims:minute/readout:hub:minuteStem"
+          },
+          {
+            "role": "minuteCollar",
+            "owner": "minute",
+            "name": "readout:hub:minuteCollar",
+            "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:claims:minute/readout:hub:minuteCollar"
+          },
+          {
+            "role": "cap",
+            "owner": "minute",
+            "name": "readout:hub:cap",
+            "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:claims:minute/readout:hub:cap"
+          }
+        ]
+      },
+      "bounds": {
+        "stationary": {
+          "minX": -0.04600000008940697,
+          "maxX": 0.04600000008940697,
+          "minY": -0.566000000089407,
+          "maxY": -0.47399999991059305,
+          "minZ": 2.864000000178814,
+          "maxZ": 3.319999994754791
+        },
+        "minute": {
+          "minX": -0.19671008554724476,
+          "maxX": 0.19671008554724476,
+          "minY": -0.19671008554724476,
+          "maxY": 0.19671008554724476,
+          "minZ": 1.8200000013411044,
+          "maxZ": 5.151600029754639
+        },
+        "compound": {
+          "minX": -0.3661229755131112,
+          "maxX": 0.3661229755131112,
+          "minY": -0.8861229755131113,
+          "maxY": -0.15387702448688884,
+          "minZ": 2.9399999982118605,
+          "maxZ": 3.280000001788139
+        },
+        "hour": {
+          "minX": -0.4624040698424102,
+          "maxX": 0.4624040698424102,
+          "minY": -0.4624040698424102,
+          "maxY": 0.4624040698424102,
+          "minZ": 3.1600000013411043,
+          "maxZ": 4.799999998378754
+        },
+        "minuteClaims": {
+          "minX": -0.6383385007041703,
+          "maxX": 6.105403278492507,
+          "minY": -0.4296347166006406,
+          "maxY": 3.5249562263488885,
+          "minZ": 5.043599997135996,
+          "maxZ": 5.199600000324844
+        },
+        "hourClaims": {
+          "minX": -4.0480259065853685,
+          "maxX": 0.7703981083270788,
+          "minY": -0.6136666908020266,
+          "maxY": 2.8344582546592645,
+          "minZ": 4.72159999653995,
+          "maxZ": 4.8755999997586015
+        }
+      },
+      "notClaimed": [
+        "hand-setting or setting clutch",
+        "cannon-pinion slip torque",
+        "winding or keyless works",
+        "crown stem",
+        "seconds display"
+      ],
+      "accepted": true,
+      "samples": [
+        {
+          "time": 0,
+          "sourceAngleRad": -2.7052603405912112,
+          "sourceAngleDeg": -155.00000000000003,
+          "actualObjectAnglesRad": {
+            "centerSource": -2.7052603405912112,
+            "centerStaff": -63.87905062299246,
+            "cannonPinion": -65.64619649063671,
+            "minuteDrive": -63.87905062299246,
+            "minuteWheel": 33.510321638291124,
+            "minutePinion": 33.1176225565924,
+            "hourWheel": -6.894050545377601,
+            "hourPipe": -5.323254218582704,
+            "minuteHand": -63.87905062299246,
+            "hourHand": -5.323254218582704
+          },
+          "drive": {
+            "inputQ": -2.7052603405912112,
+            "sourceZero": 61.17379028240125,
+            "sourceDelta": -63.87905062299246,
+            "members": {
+              "centerSource": {
+                "id": "centerSource",
+                "angleRad": -2.7052603405912112,
+                "angleDeg": -155.00000000000003,
+                "kinematicAngleRad": -2.7052603405912112,
+                "localPhaseRad": 0,
+                "ratioToCenter": 1
+              },
+              "centerStaff": {
+                "id": "centerStaff",
+                "angleRad": -63.87905062299246,
+                "angleDeg": -3660,
+                "kinematicAngleRad": -63.87905062299246,
+                "localPhaseRad": 0,
+                "ratioToCenter": 1
+              },
+              "cannonPinion": {
+                "id": "cannonPinion",
+                "angleRad": -65.64619649063671,
+                "angleDeg": -3761.2499999999995,
+                "kinematicAngleRad": -63.87905062299246,
+                "localPhaseRad": -1.7671458676442586,
+                "ratioToCenter": 1
+              },
+              "minuteDrive": {
+                "id": "minuteDrive",
+                "angleRad": -63.87905062299246,
+                "angleDeg": -3660,
+                "kinematicAngleRad": -63.87905062299246,
+                "localPhaseRad": 0,
+                "ratioToCenter": 1
+              },
+              "minuteWheel": {
+                "id": "minuteWheel",
+                "angleRad": 33.510321638291124,
+                "angleDeg": 1919.9999999999998,
+                "kinematicAngleRad": 31.93952531149623,
+                "localPhaseRad": 1.5707963267948966,
+                "ratioToCenter": -0.5
+              },
+              "minutePinion": {
+                "id": "minutePinion",
+                "angleRad": 33.1176225565924,
+                "angleDeg": 1897.5,
+                "kinematicAngleRad": 31.93952531149623,
+                "localPhaseRad": 1.1780972450961724,
+                "ratioToCenter": -0.5
+              },
+              "hourWheel": {
+                "id": "hourWheel",
+                "angleRad": -6.894050545377601,
+                "angleDeg": -394.99999999999994,
+                "kinematicAngleRad": -5.323254218582704,
+                "localPhaseRad": -1.5707963267948966,
+                "ratioToCenter": 0.08333333333333333
+              },
+              "hourPipe": {
+                "id": "hourPipe",
+                "angleRad": -5.323254218582704,
+                "angleDeg": -304.99999999999994,
+                "kinematicAngleRad": -5.323254218582704,
+                "localPhaseRad": 0,
+                "ratioToCenter": 0.08333333333333333
+              },
+              "minuteHand": {
+                "id": "minuteHand",
+                "angleRad": -63.87905062299246,
+                "angleDeg": -3660,
+                "kinematicAngleRad": -63.87905062299246,
+                "localPhaseRad": 0,
+                "ratioToCenter": 1
+              },
+              "hourHand": {
+                "id": "hourHand",
+                "angleRad": -5.323254218582704,
+                "angleDeg": -304.99999999999994,
+                "kinematicAngleRad": -5.323254218582704,
+                "localPhaseRad": 0,
+                "ratioToCenter": 0.08333333333333333
+              }
+            }
+          }
+        },
+        {
+          "time": 60,
+          "sourceAngleRad": -2.391101075232232,
+          "sourceAngleDeg": -137.00000000000003,
+          "actualObjectAnglesRad": {
+            "centerSource": -2.391101075232232,
+            "centerStaff": -63.564891357633485,
+            "cannonPinion": -65.33203722527774,
+            "minuteDrive": -63.564891357633485,
+            "minuteWheel": 33.35324200561164,
+            "minutePinion": 32.96054292391292,
+            "hourWheel": -6.867870606597687,
+            "hourPipe": -5.29707427980279,
+            "minuteHand": -63.564891357633485,
+            "hourHand": -5.29707427980279
+          },
+          "drive": {
+            "inputQ": -2.391101075232232,
+            "sourceZero": 61.17379028240125,
+            "sourceDelta": -63.564891357633485,
+            "members": {
+              "centerSource": {
+                "id": "centerSource",
+                "angleRad": -2.391101075232232,
+                "angleDeg": -137.00000000000003,
+                "kinematicAngleRad": -2.391101075232232,
+                "localPhaseRad": 0,
+                "ratioToCenter": 1
+              },
+              "centerStaff": {
+                "id": "centerStaff",
+                "angleRad": -63.564891357633485,
+                "angleDeg": -3642,
+                "kinematicAngleRad": -63.564891357633485,
+                "localPhaseRad": 0,
+                "ratioToCenter": 1
+              },
+              "cannonPinion": {
+                "id": "cannonPinion",
+                "angleRad": -65.33203722527774,
+                "angleDeg": -3743.2500000000005,
+                "kinematicAngleRad": -63.564891357633485,
+                "localPhaseRad": -1.7671458676442586,
+                "ratioToCenter": 1
+              },
+              "minuteDrive": {
+                "id": "minuteDrive",
+                "angleRad": -63.564891357633485,
+                "angleDeg": -3642,
+                "kinematicAngleRad": -63.564891357633485,
+                "localPhaseRad": 0,
+                "ratioToCenter": 1
+              },
+              "minuteWheel": {
+                "id": "minuteWheel",
+                "angleRad": 33.35324200561164,
+                "angleDeg": 1911.0000000000002,
+                "kinematicAngleRad": 31.782445678816742,
+                "localPhaseRad": 1.5707963267948966,
+                "ratioToCenter": -0.5
+              },
+              "minutePinion": {
+                "id": "minutePinion",
+                "angleRad": 32.96054292391292,
+                "angleDeg": 1888.5000000000002,
+                "kinematicAngleRad": 31.782445678816742,
+                "localPhaseRad": 1.1780972450961724,
+                "ratioToCenter": -0.5
+              },
+              "hourWheel": {
+                "id": "hourWheel",
+                "angleRad": -6.867870606597687,
+                "angleDeg": -393.5,
+                "kinematicAngleRad": -5.29707427980279,
+                "localPhaseRad": -1.5707963267948966,
+                "ratioToCenter": 0.08333333333333333
+              },
+              "hourPipe": {
+                "id": "hourPipe",
+                "angleRad": -5.29707427980279,
+                "angleDeg": -303.5,
+                "kinematicAngleRad": -5.29707427980279,
+                "localPhaseRad": 0,
+                "ratioToCenter": 0.08333333333333333
+              },
+              "minuteHand": {
+                "id": "minuteHand",
+                "angleRad": -63.564891357633485,
+                "angleDeg": -3642,
+                "kinematicAngleRad": -63.564891357633485,
+                "localPhaseRad": 0,
+                "ratioToCenter": 1
+              },
+              "hourHand": {
+                "id": "hourHand",
+                "angleRad": -5.29707427980279,
+                "angleDeg": -303.5,
+                "kinematicAngleRad": -5.29707427980279,
+                "localPhaseRad": 0,
+                "ratioToCenter": 0.08333333333333333
+              }
+            }
+          }
+        }
+      ],
+      "intervals": [
+        {
+          "fromTime": 0,
+          "toTime": 60,
+          "from": {
+            "inputQ": -2.7052603405912112,
+            "sourceZero": 61.17379028240125,
+            "sourceDelta": -63.87905062299246,
+            "members": {
+              "centerSource": {
+                "id": "centerSource",
+                "angleRad": -2.7052603405912112,
+                "angleDeg": -155.00000000000003,
+                "kinematicAngleRad": -2.7052603405912112,
+                "localPhaseRad": 0,
+                "ratioToCenter": 1
+              },
+              "centerStaff": {
+                "id": "centerStaff",
+                "angleRad": -63.87905062299246,
+                "angleDeg": -3660,
+                "kinematicAngleRad": -63.87905062299246,
+                "localPhaseRad": 0,
+                "ratioToCenter": 1
+              },
+              "cannonPinion": {
+                "id": "cannonPinion",
+                "angleRad": -65.64619649063671,
+                "angleDeg": -3761.2499999999995,
+                "kinematicAngleRad": -63.87905062299246,
+                "localPhaseRad": -1.7671458676442586,
+                "ratioToCenter": 1
+              },
+              "minuteDrive": {
+                "id": "minuteDrive",
+                "angleRad": -63.87905062299246,
+                "angleDeg": -3660,
+                "kinematicAngleRad": -63.87905062299246,
+                "localPhaseRad": 0,
+                "ratioToCenter": 1
+              },
+              "minuteWheel": {
+                "id": "minuteWheel",
+                "angleRad": 33.510321638291124,
+                "angleDeg": 1919.9999999999998,
+                "kinematicAngleRad": 31.93952531149623,
+                "localPhaseRad": 1.5707963267948966,
+                "ratioToCenter": -0.5
+              },
+              "minutePinion": {
+                "id": "minutePinion",
+                "angleRad": 33.1176225565924,
+                "angleDeg": 1897.5,
+                "kinematicAngleRad": 31.93952531149623,
+                "localPhaseRad": 1.1780972450961724,
+                "ratioToCenter": -0.5
+              },
+              "hourWheel": {
+                "id": "hourWheel",
+                "angleRad": -6.894050545377601,
+                "angleDeg": -394.99999999999994,
+                "kinematicAngleRad": -5.323254218582704,
+                "localPhaseRad": -1.5707963267948966,
+                "ratioToCenter": 0.08333333333333333
+              },
+              "hourPipe": {
+                "id": "hourPipe",
+                "angleRad": -5.323254218582704,
+                "angleDeg": -304.99999999999994,
+                "kinematicAngleRad": -5.323254218582704,
+                "localPhaseRad": 0,
+                "ratioToCenter": 0.08333333333333333
+              },
+              "minuteHand": {
+                "id": "minuteHand",
+                "angleRad": -63.87905062299246,
+                "angleDeg": -3660,
+                "kinematicAngleRad": -63.87905062299246,
+                "localPhaseRad": 0,
+                "ratioToCenter": 1
+              },
+              "hourHand": {
+                "id": "hourHand",
+                "angleRad": -5.323254218582704,
+                "angleDeg": -304.99999999999994,
+                "kinematicAngleRad": -5.323254218582704,
+                "localPhaseRad": 0,
+                "ratioToCenter": 0.08333333333333333
+              }
+            }
+          },
+          "to": {
+            "inputQ": -2.391101075232232,
+            "sourceZero": 61.17379028240125,
+            "sourceDelta": -63.564891357633485,
+            "members": {
+              "centerSource": {
+                "id": "centerSource",
+                "angleRad": -2.391101075232232,
+                "angleDeg": -137.00000000000003,
+                "kinematicAngleRad": -2.391101075232232,
+                "localPhaseRad": 0,
+                "ratioToCenter": 1
+              },
+              "centerStaff": {
+                "id": "centerStaff",
+                "angleRad": -63.564891357633485,
+                "angleDeg": -3642,
+                "kinematicAngleRad": -63.564891357633485,
+                "localPhaseRad": 0,
+                "ratioToCenter": 1
+              },
+              "cannonPinion": {
+                "id": "cannonPinion",
+                "angleRad": -65.33203722527774,
+                "angleDeg": -3743.2500000000005,
+                "kinematicAngleRad": -63.564891357633485,
+                "localPhaseRad": -1.7671458676442586,
+                "ratioToCenter": 1
+              },
+              "minuteDrive": {
+                "id": "minuteDrive",
+                "angleRad": -63.564891357633485,
+                "angleDeg": -3642,
+                "kinematicAngleRad": -63.564891357633485,
+                "localPhaseRad": 0,
+                "ratioToCenter": 1
+              },
+              "minuteWheel": {
+                "id": "minuteWheel",
+                "angleRad": 33.35324200561164,
+                "angleDeg": 1911.0000000000002,
+                "kinematicAngleRad": 31.782445678816742,
+                "localPhaseRad": 1.5707963267948966,
+                "ratioToCenter": -0.5
+              },
+              "minutePinion": {
+                "id": "minutePinion",
+                "angleRad": 32.96054292391292,
+                "angleDeg": 1888.5000000000002,
+                "kinematicAngleRad": 31.782445678816742,
+                "localPhaseRad": 1.1780972450961724,
+                "ratioToCenter": -0.5
+              },
+              "hourWheel": {
+                "id": "hourWheel",
+                "angleRad": -6.867870606597687,
+                "angleDeg": -393.5,
+                "kinematicAngleRad": -5.29707427980279,
+                "localPhaseRad": -1.5707963267948966,
+                "ratioToCenter": 0.08333333333333333
+              },
+              "hourPipe": {
+                "id": "hourPipe",
+                "angleRad": -5.29707427980279,
+                "angleDeg": -303.5,
+                "kinematicAngleRad": -5.29707427980279,
+                "localPhaseRad": 0,
+                "ratioToCenter": 0.08333333333333333
+              },
+              "minuteHand": {
+                "id": "minuteHand",
+                "angleRad": -63.564891357633485,
+                "angleDeg": -3642,
+                "kinematicAngleRad": -63.564891357633485,
+                "localPhaseRad": 0,
+                "ratioToCenter": 1
+              },
+              "hourHand": {
+                "id": "hourHand",
+                "angleRad": -5.29707427980279,
+                "angleDeg": -303.5,
+                "kinematicAngleRad": -5.29707427980279,
+                "localPhaseRad": 0,
+                "ratioToCenter": 0.08333333333333333
+              }
+            }
+          },
+          "sourceDeltaRad": 0.3141592653589793,
+          "sourceDeltaDeg": 18,
+          "deltas": {
+            "centerSource": {
+              "angleRad": 0.3141592653589793,
+              "angleDeg": 18,
+              "measuredRatioToCenter": 1
+            },
+            "centerStaff": {
+              "angleRad": 0.314159265358974,
+              "angleDeg": 17.999999999999694,
+              "measuredRatioToCenter": 0.999999999999983
+            },
+            "cannonPinion": {
+              "angleRad": 0.3141592653589669,
+              "angleDeg": 17.999999999999286,
+              "measuredRatioToCenter": 0.9999999999999604
+            },
+            "minuteDrive": {
+              "angleRad": 0.314159265358974,
+              "angleDeg": 17.999999999999694,
+              "measuredRatioToCenter": 0.999999999999983
+            },
+            "minuteWheel": {
+              "angleRad": -0.15707963267948344,
+              "angleDeg": -8.999999999999643,
+              "measuredRatioToCenter": -0.4999999999999802
+            },
+            "minutePinion": {
+              "angleRad": -0.15707963267948344,
+              "angleDeg": -8.999999999999643,
+              "measuredRatioToCenter": -0.4999999999999802
+            },
+            "hourWheel": {
+              "angleRad": 0.026179938779914202,
+              "angleDeg": 1.4999999999999576,
+              "measuredRatioToCenter": 0.08333333333333098
+            },
+            "hourPipe": {
+              "angleRad": 0.026179938779914202,
+              "angleDeg": 1.4999999999999576,
+              "measuredRatioToCenter": 0.08333333333333098
+            },
+            "minuteHand": {
+              "angleRad": 0.314159265358974,
+              "angleDeg": 17.999999999999694,
+              "measuredRatioToCenter": 0.999999999999983
+            },
+            "hourHand": {
+              "angleRad": 0.026179938779914202,
+              "angleDeg": 1.4999999999999576,
+              "measuredRatioToCenter": 0.08333333333333098
+            }
+          }
+        }
+      ],
+      "sixtySecondProof": {
+        "method": "measured from actual scene-owner/object rotations at t0 and t0+60; analytic samples retained separately",
+        "centerDeltaDeg": 18,
+        "staffDeltaDeg": 17.999999999999694,
+        "cannonPinionDeltaDeg": 17.999999999999286,
+        "minuteDriveDeltaDeg": 17.999999999999694,
+        "minuteHandDeltaDeg": 17.999999999999694,
+        "minuteWheelDeltaDeg": -8.999999999999645,
+        "minutePinionDeltaDeg": -8.999999999999645,
+        "hourWheelDeltaDeg": 1.4999999999999576,
+        "hourPipeDeltaDeg": 1.4999999999999576,
+        "hourHandDeltaDeg": 1.4999999999999576,
+        "minuteToCenter": 0.999999999999983,
+        "compoundToMinute": -0.4999999999999888,
+        "hourToCompound": -0.16666666666666852,
+        "hourToMinute": 0.08333333333333239,
+        "displayedDirectionsAgree": true,
+        "analyticAgreement": true
+      },
+      "centerPassage": {
+        "axis": {
+          "x": 0,
+          "y": 0
+        },
+        "axisDrift": 0,
+        "stationaryBores": [
+          {
+            "id": "pendantSupport",
+            "path": "structure:root/structure:pose/trainBridge/struct:trainBridge:centerSupport",
+            "metadataBoreRadius": 0.082,
+            "measuredMinimumBoreRadius": 0.08200000009484676,
+            "boreRadius": 0.08200000009484676,
+            "rotatingRadius": 0.075,
+            "radialClearance": 0.007000000094846762,
+            "clear": true
+          },
+          {
+            "id": "bridgeBody",
+            "path": "structure:root/structure:pose/trainBridge/struct:trainBridge:body",
+            "metadataBoreRadius": 0.08200199901250066,
+            "measuredMinimumBoreRadius": 0.08200199901250066,
+            "boreRadius": 0.08200199901250066,
+            "rotatingRadius": 0.075,
+            "radialClearance": 0.007001999012500662,
+            "clear": true
+          },
+          {
+            "id": "upperBoss",
+            "path": "structure:root/structure:pose/trainBridge/struct:boss:center:upper",
+            "metadataBoreRadius": 0.08200199741295788,
+            "measuredMinimumBoreRadius": 0.08200199741295788,
+            "boreRadius": 0.08200199741295788,
+            "rotatingRadius": 0.075,
+            "radialClearance": 0.007001997412957886,
+            "clear": true
+          },
+          {
+            "id": "upperJewel",
+            "path": "assembly:root/assembly:pose/assembly:bearing:center:upper/assembly:bearing:center:upper:jewel",
+            "metadataBoreRadius": 0.136,
+            "measuredMinimumBoreRadius": 0.12799034629689832,
+            "boreRadius": 0.12799034629689832,
+            "rotatingRadius": 0.075,
+            "radialClearance": 0.05299034629689832,
+            "clear": true
+          },
+          {
+            "id": "upperSetting",
+            "path": "assembly:root/assembly:pose/assembly:bearing:center:upper/assembly:bearing:center:upper:setting",
+            "metadataBoreRadius": null,
+            "measuredMinimumBoreRadius": 0.23254901654936588,
+            "boreRadius": 0.23254901654936588,
+            "rotatingRadius": 0.075,
+            "radialClearance": 0.15754901654936587,
+            "clear": true
+          },
+          {
+            "id": "displayInterface",
+            "path": "DisplayRoot/DisplayStackPose/display:stack/display:interfaceCarrier",
+            "metadataBoreRadius": 0.1,
+            "measuredMinimumBoreRadius": 0.09999999711705669,
+            "boreRadius": 0.09999999711705669,
+            "rotatingRadius": 0.085,
+            "radialClearance": 0.014999997117056685,
+            "clear": true
+          }
+        ],
+        "noStationaryIntersection": true,
+        "joins": [
+          {
+            "from": "existing center upper tip",
+            "to": "center staff lower coupling",
+            "fromBounds": {
+              "name": "center:arbor:upperTip",
+              "path": "calibre/center:pose/center:motion/center:geom/center:arbor/center:arbor:upperTip",
+              "minX": -0.059146384121396965,
+              "maxX": 0.05914638412139695,
+              "minY": -0.06049529734847308,
+              "maxY": 0.06049529734847313,
+              "minZ": 1.7090000005960464,
+              "maxZ": 1.9289999994039535
+            },
+            "toBounds": {
+              "name": "phase4b:centerStaff:lowerCoupling",
+              "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:owner:minuteDrive/phase4b:centerStaff:stepped/phase4b:centerStaff:lowerCoupling",
+              "minX": -0.052000000084431244,
+              "maxX": 0.052000000084431244,
+              "minY": -0.05200000008443124,
+              "maxY": 0.05200000008443124,
+              "minZ": 1.8200000013411044,
+              "maxZ": 1.9399999986588954
+            },
+            "axialOverlap": 0.1089999980628491
+          },
+          {
+            "from": "lower coupling",
+            "to": "running journal",
+            "fromBounds": {
+              "name": "phase4b:centerStaff:lowerCoupling",
+              "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:owner:minuteDrive/phase4b:centerStaff:stepped/phase4b:centerStaff:lowerCoupling",
+              "minX": -0.052000000084431244,
+              "maxX": 0.052000000084431244,
+              "minY": -0.05200000008443124,
+              "maxY": 0.05200000008443124,
+              "minZ": 1.8200000013411044,
+              "maxZ": 1.9399999986588954
+            },
+            "toBounds": {
+              "name": "phase4b:centerStaff:runningJournal",
+              "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:owner:minuteDrive/phase4b:centerStaff:stepped/phase4b:centerStaff:runningJournal",
+              "minX": -0.07483941784343856,
+              "maxX": 0.07483941784343856,
+              "minY": -0.07483941784343853,
+              "maxY": 0.07483941784343853,
+              "minZ": 1.8999999952316284,
+              "maxZ": 2.6400000047683716
+            },
+            "axialOverlap": 0.04000000342726695
+          },
+          {
+            "from": "running journal",
+            "to": "upper core",
+            "fromBounds": {
+              "name": "phase4b:centerStaff:runningJournal",
+              "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:owner:minuteDrive/phase4b:centerStaff:stepped/phase4b:centerStaff:runningJournal",
+              "minX": -0.07483941784343856,
+              "maxX": 0.07483941784343856,
+              "minY": -0.07483941784343853,
+              "maxY": 0.07483941784343853,
+              "minZ": 1.8999999952316284,
+              "maxZ": 2.6400000047683716
+            },
+            "toBounds": {
+              "name": "phase4b:centerStaff:upperCore",
+              "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:owner:minuteDrive/phase4b:centerStaff:stepped/phase4b:centerStaff:upperCore",
+              "minX": -0.08481801046359788,
+              "maxX": 0.08481801046359788,
+              "minY": -0.08481801046359788,
+              "maxY": 0.08481801046359788,
+              "minZ": 2.5999999982118607,
+              "maxZ": 2.9400000017881394
+            },
+            "axialOverlap": 0.040000006556510925
+          },
+          {
+            "from": "upper core",
+            "to": "rigid minute shoulder/cannon",
+            "fromBounds": {
+              "name": "phase4b:centerStaff:upperCore",
+              "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:owner:minuteDrive/phase4b:centerStaff:stepped/phase4b:centerStaff:upperCore",
+              "minX": -0.08481801046359788,
+              "maxX": 0.08481801046359788,
+              "minY": -0.08481801046359788,
+              "maxY": 0.08481801046359788,
+              "minZ": 2.5999999982118607,
+              "maxZ": 2.9400000017881394
+            },
+            "toBounds": {
+              "name": "phase4b:minuteDrive:rigidShoulder",
+              "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:owner:minuteDrive/phase4b:minuteDrive:rigidShoulder",
+              "minX": -0.1398081339403059,
+              "maxX": 0.1398081339403059,
+              "minY": -0.13980813394030586,
+              "maxY": 0.13980813394030586,
+              "minZ": 2.884000001221895,
+              "maxZ": 2.9599999987781045
+            },
+            "axialOverlap": 0.056000000566244434
+          },
+          {
+            "from": "rigid minute shoulder/cannon",
+            "to": "continuous minute tube/stem",
+            "fromBounds": {
+              "name": "phase4b:minuteDrive:rigidShoulder",
+              "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:owner:minuteDrive/phase4b:minuteDrive:rigidShoulder",
+              "minX": -0.1398081339403059,
+              "maxX": 0.1398081339403059,
+              "minY": -0.13980813394030586,
+              "maxY": 0.13980813394030586,
+              "minZ": 2.884000001221895,
+              "maxZ": 2.9599999987781045
+            },
+            "toBounds": {
+              "name": "phase4b:minuteDrive:continuousTubeStem",
+              "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:owner:minuteDrive/phase4b:minuteDrive:continuousTubeStem",
+              "minX": -0.14000000213588276,
+              "maxX": 0.1400000021358827,
+              "minY": -0.14000000213588265,
+              "maxY": 0.14000000213588262,
+              "minZ": 2.8839999702453616,
+              "maxZ": 5.151600029754639
+            },
+            "axialOverlap": 0.07599999755620956
+          }
+        ],
+        "continuousCenterOwnedPath": true,
+        "bridgeExteriorBounds": {
+          "name": "struct:trainBridge:body",
+          "path": "structure:root/structure:pose/trainBridge/struct:trainBridge:body",
+          "minX": -0.3335999846458435,
+          "maxX": 7.151249885559082,
+          "minY": -4.398916721343994,
+          "maxY": 5.459681034088135,
+          "minZ": 2.1640000051259998,
+          "maxZ": 2.5240000045299533
+        },
+        "bossExteriorBounds": {
+          "name": "struct:boss:center:upper",
+          "path": "structure:root/structure:pose/trainBridge/struct:boss:center:upper",
+          "minX": -0.6048343181610107,
+          "maxX": 0.6048343181610107,
+          "minY": -0.6048343181610107,
+          "maxY": 0.6048343181610107,
+          "minZ": 2.1640000051259998,
+          "maxZ": 2.5240000045299533
+        },
+        "supportExteriorBounds": {
+          "name": "struct:trainBridge:centerSupport",
+          "path": "structure:root/structure:pose/trainBridge/struct:trainBridge:centerSupport",
+          "minX": -0.36505600810050964,
+          "maxX": 0.36505600810050964,
+          "minY": -0.3650560081005096,
+          "maxY": 0.3650560081005097,
+          "minZ": 1.800000002384186,
+          "maxZ": 2.1799999976158144
+        },
+        "upperJewelBounds": {
+          "name": "assembly:bearing:center:upper:jewel",
+          "path": "assembly:root/assembly:pose/assembly:bearing:center:upper/assembly:bearing:center:upper:jewel",
+          "minX": -0.25600963830947876,
+          "maxX": 0.25600963830947876,
+          "minY": -0.25600963830947876,
+          "maxY": 0.25600963830947876,
+          "minZ": 2.5240000002384186,
+          "maxZ": 2.5977088000661137
+        },
+        "upperSettingBounds": {
+          "name": "assembly:bearing:center:upper:setting",
+          "path": "assembly:root/assembly:pose/assembly:bearing:center:upper/assembly:bearing:center:upper:setting",
+          "minX": -0.3330109715461731,
+          "maxX": 0.3330109715461731,
+          "minY": -0.3330109715461731,
+          "maxY": 0.3330109715461731,
+          "minZ": 2.5319999978244305,
+          "maxZ": 2.5879999995529652
+        }
+      },
+      "collision": {
+        "motionWorksClearances": {
+          "lowerMeshAboveInterface": 0.055999999999999606,
+          "lowerMeshToUpperMesh": 0.10000000000000009,
+          "upperMeshToChapter": 1.1616000001162292,
+          "upperMeshToHourHand": 1.4576000001162295,
+          "minuteToHourRadial": 0.09999999999999998,
+          "minuteToHourHubRadial": 0.06999999999999999,
+          "hourHandBoreToMinute": 0.07999999999999999,
+          "compoundFootInsideInterface": 0.019999999999999907
+        },
+        "representativePoses": [
+          {
+            "id": "840",
+            "hours": 8,
+            "minutes": 40,
+            "method": "actual owner pose sampled; collision certificate uses the frozen all-azimuth hand sweeps, axial plane separation, and enclosure clearance",
+            "hourAngleRad": -4.537856055185256,
+            "minuteAngleRad": -4.1887902047863905,
+            "actualHourOwnerAngleRad": -4.537856055185256,
+            "actualMinuteOwnerAngleRad": -54.454272662223076,
+            "poseErrorRad": {
+              "hour": 0,
+              "minute": 9.064862236236767e-15
+            },
+            "bounds": {
+              "hour": {
+                "name": "HourHandMount",
+                "path": "Phase4BDisplayDriveRoot/phase4b:owner:hourMotion/phase4b:claims:hour/HourHandMount",
+                "minX": -4.866651221825088,
+                "maxX": 0.8344741736005985,
+                "minY": -0.89714853246919,
+                "maxY": 0.3167754039613544,
+                "minZ": 4.72159999653995,
+                "maxZ": 4.869599998447299
+              },
+              "minute": {
+                "name": "MinuteHandMount",
+                "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:claims:minute/MinuteHandMount",
+                "minX": -6.105403278492496,
+                "maxX": 0.6383385007041694,
+                "minY": -3.5249562263489076,
+                "maxY": 0.4296347166006423,
+                "minZ": 5.043599997135996,
+                "maxZ": 5.161599997851252
+              }
+            },
+            "handSweepContained": true,
+            "clearanceCertificate": {
+              "hourAboveChapter": 0.16199999999999992,
+              "minuteAboveHour": 0.1739999999999995,
+              "hourTipToNearestMarker": 2.6071851415318266,
+              "minuteTipToNearestMarker": 0.4989996338818292,
+              "supportToSweep": 2.0546038423273316,
+              "calibreToLowerMotionWorks": 0.1259999999999999,
+              "upperMotionWorksToHour": 1.4576000001162295
+            },
+            "sapphireRemaining": 0.8619999997913848,
+            "noCollision": true
+          },
+          {
+            "id": "945",
+            "hours": 9,
+            "minutes": 45,
+            "method": "actual owner pose sampled; collision certificate uses the frozen all-azimuth hand sweeps, axial plane separation, and enclosure clearance",
+            "hourAngleRad": -5.105088062083413,
+            "minuteAngleRad": -4.71238898038469,
+            "actualHourOwnerAngleRad": -5.105088062083413,
+            "actualMinuteOwnerAngleRad": -61.261056745000964,
+            "poseErrorRad": {
+              "hour": 0,
+              "minute": 2.204364238465236e-15
+            },
+            "bounds": {
+              "hour": {
+                "name": "HourHandMount",
+                "path": "Phase4BDisplayDriveRoot/phase4b:owner:hourMotion/phase4b:claims:hour/HourHandMount",
+                "minX": -4.565560579679463,
+                "maxX": 0.8219189007348495,
+                "minY": -0.4765163884610046,
+                "maxY": 1.8911171119391998,
+                "minZ": 4.72159999653995,
+                "maxZ": 4.869599998447299
+              },
+              "minute": {
+                "name": "MinuteHandMount",
+                "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:claims:minute/MinuteHandMount",
+                "minX": -7.049912452697753,
+                "maxX": 0.6759999990463258,
+                "minY": -0.18616560101510676,
+                "maxY": 0.18616560101507507,
+                "minZ": 5.043599997135996,
+                "maxZ": 5.161599997851252
+              }
+            },
+            "handSweepContained": true,
+            "clearanceCertificate": {
+              "hourAboveChapter": 0.16199999999999992,
+              "minuteAboveHour": 0.1739999999999995,
+              "hourTipToNearestMarker": 2.6071851415318266,
+              "minuteTipToNearestMarker": 0.4989996338818292,
+              "supportToSweep": 2.0546038423273316,
+              "calibreToLowerMotionWorks": 0.1259999999999999,
+              "upperMotionWorksToHour": 1.4576000001162295
+            },
+            "sapphireRemaining": 0.8619999997913848,
+            "noCollision": true
+          },
+          {
+            "id": "1010",
+            "hours": 10,
+            "minutes": 10,
+            "method": "actual owner pose sampled; collision certificate uses the frozen all-azimuth hand sweeps, axial plane separation, and enclosure clearance",
+            "hourAngleRad": -5.323254218582704,
+            "minuteAngleRad": -1.0471975511965976,
+            "actualHourOwnerAngleRad": -5.323254218582704,
+            "actualMinuteOwnerAngleRad": -63.87905062299246,
+            "poseErrorRad": {
+              "hour": 0,
+              "minute": 2.4492935982947065e-15
+            },
+            "bounds": {
+              "hour": {
+                "name": "HourHandMount",
+                "path": "Phase4BDisplayDriveRoot/phase4b:owner:hourMotion/phase4b:claims:hour/HourHandMount",
+                "minX": -4.0480259065853685,
+                "maxX": 0.7703981083270788,
+                "minY": -0.6136666908020266,
+                "maxY": 2.8344582546592645,
+                "minZ": 4.72159999653995,
+                "maxZ": 4.869599998447299
+              },
+              "minute": {
+                "name": "MinuteHandMount",
+                "path": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:claims:minute/MinuteHandMount",
+                "minX": -0.6383385007041703,
+                "maxX": 6.105403278492507,
+                "minY": -0.4296347166006406,
+                "maxY": 3.5249562263488885,
+                "minZ": 5.043599997135996,
+                "maxZ": 5.161599997851252
+              }
+            },
+            "handSweepContained": true,
+            "clearanceCertificate": {
+              "hourAboveChapter": 0.16199999999999992,
+              "minuteAboveHour": 0.1739999999999995,
+              "hourTipToNearestMarker": 2.6071851415318266,
+              "minuteTipToNearestMarker": 0.4989996338818292,
+              "supportToSweep": 2.0546038423273316,
+              "calibreToLowerMotionWorks": 0.1259999999999999,
+              "upperMotionWorksToHour": 1.4576000001162295
+            },
+            "sapphireRemaining": 0.8619999997913848,
+            "noCollision": true
+          }
+        ],
+        "collisionFree": true,
+        "method": "rendered gear/bore extrema plus frozen all-azimuth hand sweeps and positive axial/radial separation certificates",
+        "containmentOk": true,
+        "renderedGearClear": true,
+        "meshGeometryExact": true,
+        "calibreSweepClearance": {
+          "hour": {
+            "id": "sweep:hour",
+            "method": "sampled-frozen-calibre-vertices-in-sweep-disk-all-ACC-phases",
+            "notExactTriangle": true,
+            "samplesInDisk": 2888980,
+            "nearest": "assembly:bearing:balance:upper:retainer",
+            "nearestXy": {
+              "x": 1.4167612663611848,
+              "y": 6.345002317312325
+            },
+            "nearestZ": 3.781600000116229,
+            "minClearance": 0.9400000000000004
+          },
+          "minute": {
+            "id": "sweep:minute",
+            "method": "sampled-frozen-calibre-vertices-in-sweep-disk-all-ACC-phases",
+            "notExactTriangle": true,
+            "samplesInDisk": 2888980,
+            "nearest": "assembly:bearing:balance:upper:retainer",
+            "nearestXy": {
+              "x": 1.4167612663611848,
+              "y": 6.345002317312325
+            },
+            "nearestZ": 3.781600000116229,
+            "minClearance": 1.2599999999999998
+          }
+        },
+        "enclosure": {
+          "visibleMaxZ": 5.199600000324844,
+          "plannedMaxZ": 5.199600000116228,
+          "innerZ": 6.061600000116229,
+          "remaining": 0.8619999997913848,
+          "authorized": 0.8600000000000003,
+          "ok": true
+        }
+      },
+      "displayPackage": {
+        "minutePipeAuthority": {
+          "id": "minutePipeReserve",
+          "role": "frozen Phase-3B minute-pipe authority consumed by the Phase-4B driven minute member",
+          "innerR": 0.1,
+          "outerR": 0.2,
+          "z0": 2.8840000000000003,
+          "z1": 5.041600000116229
+        },
+        "hourPipeAuthority": {
+          "id": "hourPipeReserve",
+          "role": "frozen Phase-3B hour-pipe authority consumed by the Phase-4B driven hour member",
+          "innerR": 0.24000000000000002,
+          "outerR": 0.5,
+          "z0": 2.8840000000000003,
+          "z1": 4.721600000116229
+        },
+        "handPlanes": {
+          "hour": [
+            4.737600000116229,
+            4.885600000116229
+          ],
+          "minute": [
+            5.0596000001162285,
+            5.177600000116229
+          ]
+        },
+        "hub": {
+          "maxR": 0.5,
+          "measuredR": 0.500000015082328,
+          "minZ": 4.743600000473857,
+          "maxZ": 5.199600000324844,
+          "frozenInterfaceR": 0.58,
+          "frozenZ": [
+            2.7640000000000002,
+            5.201600000116229
+          ],
+          "contained": true,
+          "reasons": [],
+          "collars": {
+            "hour": {
+              "innerR": 0.22,
+              "outerR": 0.5,
+              "z0": 4.7436000001162295,
+              "z1": 4.875600000116229
+            },
+            "minute": {
+              "r": 0.255,
+              "z0": 5.063600000116228,
+              "z1": 5.151600000116228
+            },
+            "cap": {
+              "r": 0.152,
+              "z0": 5.151600000116228,
+              "z1": 5.199600000116228
+            }
+          }
+        },
+        "actualMinuteMember": {
+          "reservedAnnulus": {
+            "innerR": 0.1,
+            "outerR": 0.14,
+            "z0": 2.884,
+            "z1": 4.8756
+          },
+          "integralStemInExistingHub": {
+            "visibleSection": {
+              "outerR": 0.11,
+              "z0": 4.8756,
+              "z1": 5.0436
+            },
+            "handTenon": {
+              "outerR": 0.08,
+              "z0": 5.0436,
+              "z1": 5.1516
+            }
+          }
+        },
+        "actualHourMember": {
+          "reservedPipe": {
+            "innerR": 0.24,
+            "outerR": 0.3,
+            "z0": 3.16,
+            "z1": 4.7216
+          },
+          "colletInExistingHub": {
+            "innerR": 0.18,
+            "shoulderOuterR": 0.3,
+            "neckOuterR": 0.22,
+            "z0": 4.7016,
+            "shoulderZ1": 4.7216,
+            "z1": 4.8
+          }
+        },
+        "sapphireRemaining": 0.8619999997913848,
+        "sapphireRequirement": 0.86
+      },
+      "physicalOwnership": {
+        "ownershipComplete": true,
+        "physicalHubConnections": true,
+        "mountBoresClear": true,
+        "mountBoreProof": {
+          "hourHand": {
+            "targetR": 0.22,
+            "profileR": 0.23620144201260806,
+            "measuredMinimumR": 0.22000199556350708
+          },
+          "hourCollar": {
+            "targetR": 0.22,
+            "profileR": 0.22,
+            "measuredMinimumR": 0.22
+          },
+          "minuteHand": {
+            "targetR": 0.08,
+            "profileR": 0.09620144201260805,
+            "measuredMinimumR": 0.08000200055811309
+          },
+          "minuteCollar": {
+            "targetR": 0.08,
+            "profileR": 0.08,
+            "measuredMinimumR": 0.08
+          }
+        },
+        "placeholderMinuteStemRemoved": true,
+        "connections": {
+          "minuteAnnulusToIntegralStem": {
+            "commonMesh": "calibre/center:pose/center:motion/phase4b:centerOutput/phase4b:owner:minuteDrive/phase4b:minuteDrive:continuousTubeStem",
+            "transitionZ": 4.8756,
+            "continuous": true
+          },
+          "minuteStemToCollar": {
+            "claimed": true,
+            "axialEngagement": 0.08799999952316284,
+            "matchingRadius": 0.08
+          },
+          "minuteStemToHand": {
+            "claimed": true,
+            "axialEngagement": 0.10800000000000054,
+            "matchingRadius": 0.08
+          },
+          "hourPipeToHubCoupling": {
+            "commonOwner": "Phase4BDisplayDriveRoot/phase4b:owner:hourMotion",
+            "axialOverlap": 0.019999999999999574,
+            "radialOverlap": 0.06
+          },
+          "hourCouplingToCollar": {
+            "claimed": true,
+            "axialEngagement": 0.05639999952614261,
+            "matchingRadius": 0.22
+          },
+          "hourCouplingToHand": {
+            "claimed": true,
+            "axialEngagement": 0.07840000346004938,
+            "matchingRadius": 0.22
+          },
+          "coaxialRunningGap": 0.03999999999999998,
+          "interpretation": "rigid runtime press/collet fits; hand-setting and slip torque are not claimed"
+        }
+      },
+      "presentationOverride": {
+        "active": false
+      },
+      "explicitRatios": {
+        "meshA": -0.5,
+        "meshB": -0.16666666666666666,
+        "traversedNet": 0.08333333333333333
+      },
+      "phase5DStarted": false
+    },
+    "packageReportHashes": {
+      "structure": "76cc0dd581b595eb001506b21d2736b517a56e768157e8c0d99d16066eee08de",
+      "accommodation": "299d57543d7c688c1c6954cafccdbca9782e7fca41aa8ae97efb6c999d710f42",
+      "enclosure": "4c1e7890d94113edb6d2bac7fc0e249a936bb5b71ffb9cba7cc0cdb30ecf203f",
+      "exterior": "df637a15735971c01b8e2ed57f80abab16793603dc983857c7e53fbd1aaf41fe"
+    }
+  },
+  "sourceHashes": {
+    "movement": "9f2e49aaff2505fb4e3c93c55e6728c91454f1923401eb3f44acef0d4dc9a188",
+    "geometry": "4da93cbd7cd7c3f749eadf23c9a02d0548da7e5817a0e70c874e9e20c99cd1f9",
+    "spec": "af79512a7e192ea77d502035f43429f78418f01a537e32eec128b2fa580e0c62"
+  }
+}

@@ -13,16 +13,36 @@
         color: #ddd;
         font: 13px/1.4 ui-sans-serif, system-ui, sans-serif;
       }
-      #hint {
+      canvas {
+        display: block;
+      }
+      #hud {
         position: fixed;
         left: 12px;
         bottom: 12px;
-        opacity: 0.8;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-width: min(42rem, calc(100vw - 24px));
+      }
+      #orient {
+        width: fit-content;
+        border: 1px solid #555;
+        background: #1c1c1c;
+        color: #eee;
+        padding: 6px 10px;
+        cursor: pointer;
+      }
+      #hint {
+        opacity: 0.85;
       }
     </style>
   </head>
   <body>
-    <div id="hint">B1 viewer stub — Agent should load the vendor GLB here. Press R later for 0/180.</div>
+    <div id="hud">
+      <button type="button" id="orient">Orientation: 180° product (6 at −Y)</button>
+      <div id="hint">Loading vendor going-train-core.glb… R = 0°/180°. 1 = top-down from +Z.</div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

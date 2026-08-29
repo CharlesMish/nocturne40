@@ -1,0 +1,47 @@
+{
+  "schema": "watch.going-train-core-source-authority.v1",
+  "package": "watch-going-train-core-v1",
+  "mechanicalAuthority": "RC1",
+  "rc1Manifest": {
+    "path": "captures/rc1/executable-source-manifest.json",
+    "sha256": "4fbc28c8a9d231252ac366ce30298d2cf2b4202e15520b57b737f0b58d64575d",
+    "aggregateSha256": "52ce1c16963945487a3dcd5772abb03d33683595e28f8b3d9aba7083cf1c6681"
+  },
+  "exactRc1Files": [
+    {
+      "packagedAs": "source/escapementContact.ts",
+      "authorityPath": "src/escapementContact.ts",
+      "bytes": 9236,
+      "sha256": "b916c59b9f2e0034d1522467b8187cbd16856e2cae7cd4f74f1d85f1bbef2edb"
+    },
+    {
+      "packagedAs": "source/geometry.ts",
+      "authorityPath": "src/geometry.ts",
+      "bytes": 40551,
+      "sha256": "4da93cbd7cd7c3f749eadf23c9a02d0548da7e5817a0e70c874e9e20c99cd1f9"
+    },
+    {
+      "packagedAs": "source/materials.ts",
+      "authorityPath": "src/materials.ts",
+      "bytes": 4701,
+      "sha256": "c48a8b46bf7b07bb3f8cc9e058cb82a000410af9ce7fd346652bf4fc9b168b1d"
+    },
+    {
+      "packagedAs": "source/movement.ts",
+      "authorityPath": "src/movement.ts",
+      "bytes": 10546,
+      "sha256": "9f2e49aaff2505fb4e3c93c55e6728c91454f1923401eb3f44acef0d4dc9a188"
+    },
+    {
+      "packagedAs": "source/spec.ts",
+      "authorityPath": "src/spec.ts",
+      "bytes": 6240,
+      "sha256": "af79512a7e192ea77d502035f43429f78418f01a537e32eec128b2fa580e0c62"
+    }
+  ],
+  "addedHandoffFiles": [
+    "source/goingTrainCore.ts",
+    "source/index.ts"
+  ],
+  "note": "Added handoff helpers select exact RC1 objects; they are not themselves RC1 authority files."
+}

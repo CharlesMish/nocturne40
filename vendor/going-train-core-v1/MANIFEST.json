@@ -1,0 +1,129 @@
+{
+  "schema": "watch.going-train-core-package-manifest.v1",
+  "package": "watch-going-train-core-v1",
+  "generatedUtc": "2026-08-29T00:00:00.000Z",
+  "authority": "RC1 going-train mechanical closure",
+  "fileCount": 24,
+  "files": [
+    {
+      "file": "assets/going-train-core-report.json",
+      "bytes": 779,
+      "sha256": "d26942bb81612d5f3f12b2ce503cf66c86dc7fc54ec8cbebf753d2593ec83260"
+    },
+    {
+      "file": "assets/going-train-core.glb",
+      "bytes": 5931268,
+      "sha256": "e8c950e5d89df308aa30fe978254320952dea10f8bf2bec72f22f65e88437b6b"
+    },
+    {
+      "file": "CORE_SPEC.json",
+      "bytes": 6888,
+      "sha256": "320ae0d609f62f1d1dc50cad9029ffab87959714fcb6b71a05455de6498bf0d0"
+    },
+    {
+      "file": "evidence/mechanical/a1-barrel80-center12-mesh-report.json",
+      "bytes": 71214,
+      "sha256": "d13718440ae6a950130fe3e004e6a9aa1c2450f28151c938e544a4792c228040"
+    },
+    {
+      "file": "evidence/mechanical/a2-fourth56-escape7-mesh-report.json",
+      "bytes": 71236,
+      "sha256": "4c57ab0d649449054976e766a01983b42891671680ae2c48c9f2f32ba6c62d1a"
+    },
+    {
+      "file": "evidence/mechanical/center64-third10-mesh-report.json",
+      "bytes": 71217,
+      "sha256": "0a0b75f21454eee60c509eb6d8c4f489405013f5ef1acfb98382e4c9f3454a18"
+    },
+    {
+      "file": "evidence/mechanical/consolidated-train-matrix.json",
+      "bytes": 18778,
+      "sha256": "ce9cb78e367c2cbecc680649b0587eae2a8452e39f69a32b29b842695c58b34c"
+    },
+    {
+      "file": "evidence/mechanical/third60-fourth8-mesh-report.json",
+      "bytes": 71246,
+      "sha256": "301524059002a3743feb066307653e7224b8c8bffc99effae8d1dac9de42f7fa"
+    },
+    {
+      "file": "INTEGRATION.md",
+      "bytes": 2370,
+      "sha256": "7443930eae7dbdc1c23603db638e35f40f58dc2986e6613674d638cf6684557a"
+    },
+    {
+      "file": "package.json",
+      "bytes": 404,
+      "sha256": "2dd32f20f5ad4687d5687d7452b8fa57eb650e919a3ec8f4515c1f116fa2d6b7"
+    },
+    {
+      "file": "PROJECT_RIGHTS.txt",
+      "bytes": 593,
+      "sha256": "8f6eff9f4688f9064bed2656a4640c7598a601c212cdb6ae2660110b0acdcbad"
+    },
+    {
+      "file": "README.md",
+      "bytes": 2757,
+      "sha256": "593c554a702ed70ce969882c3f5a064701c388a769d0f3446a725758cecbc454"
+    },
+    {
+      "file": "scripts/validate-glb.mjs",
+      "bytes": 1663,
+      "sha256": "2b2cc0aae69576b93475b2e63e998937ce128b56de9cf7be5a14fd10069acf4c"
+    },
+    {
+      "file": "source/escapementContact.ts",
+      "bytes": 9236,
+      "sha256": "b916c59b9f2e0034d1522467b8187cbd16856e2cae7cd4f74f1d85f1bbef2edb"
+    },
+    {
+      "file": "source/geometry.ts",
+      "bytes": 40551,
+      "sha256": "4da93cbd7cd7c3f749eadf23c9a02d0548da7e5817a0e70c874e9e20c99cd1f9"
+    },
+    {
+      "file": "source/goingTrainCore.ts",
+      "bytes": 1020,
+      "sha256": "3574b02b2d62d9fe8110190c178712f8d23a804110ca69c50b85ff4783c1710a"
+    },
+    {
+      "file": "source/index.ts",
+      "bytes": 376,
+      "sha256": "6837eaa4c6a15ed43faa67ef2f7d6c9ad15940112bb89c46a7e87664e4a3baed"
+    },
+    {
+      "file": "source/materials.ts",
+      "bytes": 4701,
+      "sha256": "c48a8b46bf7b07bb3f8cc9e058cb82a000410af9ce7fd346652bf4fc9b168b1d"
+    },
+    {
+      "file": "source/movement.ts",
+      "bytes": 10546,
+      "sha256": "9f2e49aaff2505fb4e3c93c55e6728c91454f1923401eb3f44acef0d4dc9a188"
+    },
+    {
+      "file": "source/spec.ts",
+      "bytes": 6240,
+      "sha256": "af79512a7e192ea77d502035f43429f78418f01a537e32eec128b2fa580e0c62"
+    },
+    {
+      "file": "SOURCE_AUTHORITY.json",
+      "bytes": 1625,
+      "sha256": "00f47c2c63d6ea054704d36c395a6cce3fc9a0119b9d7249cc82cc2f913d1c1d"
+    },
+    {
+      "file": "THIRD_PARTY_NOTICES.txt",
+      "bytes": 1368,
+      "sha256": "20ed920e7c6c3515bf58a1652ce6b9b0c9bf02ed78caf617df7794c407ea2584"
+    },
+    {
+      "file": "tools/export-glb.ts",
+      "bytes": 4649,
+      "sha256": "f0f29488271ddde73dee9a0321b1ac078d243ba121962b5a82cf72e686a90399"
+    },
+    {
+      "file": "tsconfig.json",
+      "bytes": 249,
+      "sha256": "0cdb98037e1c4ee03677b38ec3bda8afbabd6cf87611961ad42eec8a7215ee7c"
+    }
+  ]
+}

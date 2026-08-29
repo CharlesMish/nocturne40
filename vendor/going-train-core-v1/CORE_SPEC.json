@@ -1,0 +1,288 @@
+{
+  "schema": "watch.going-train-core-spec.v1",
+  "package": "watch-going-train-core-v1",
+  "authority": "RC1",
+  "coordinateSystem": {
+    "sourceUnit": "millimetre",
+    "plane": "XY",
+    "depthAxis": "+Z toward dial",
+    "axes": "+X = 3 o'clock; +Y = 12 o'clock"
+  },
+  "includedCompoundArbors": [
+    "barrel",
+    "center",
+    "third",
+    "fourth",
+    "escape"
+  ],
+  "excludedAssemblies": [
+    "pallet",
+    "balance",
+    "hairspring",
+    "plates",
+    "bridges",
+    "case",
+    "display",
+    "strap"
+  ],
+  "partAxesMm": {
+    "barrel": [
+      -6.045072939534456,
+      -2.818863805810464,
+      0
+    ],
+    "center": [
+      0,
+      0,
+      1.24
+    ],
+    "third": [
+      4.549778035879225,
+      2.843016852611144,
+      1.66
+    ],
+    "fourth": [
+      0.14362218235134794,
+      5.054507434644454,
+      1.003
+    ],
+    "escape": [
+      -4.035822753424774,
+      3.2121458309370468,
+      2.08
+    ]
+  },
+  "pairs": [
+    {
+      "pairId": "barrel80-center12",
+      "participants": [
+        "barrel:wheel",
+        "center:pinion"
+      ],
+      "toothCounts": {
+        "primary": 80,
+        "secondary": 12
+      },
+      "moduleMm": 0.145,
+      "axesMm": {
+        "primary": [
+          -6.045072939534456,
+          -2.818863805810464,
+          0
+        ],
+        "secondary": [
+          0,
+          0,
+          1.24
+        ]
+      },
+      "centerDistanceMm": 6.67,
+      "requiredPitchSumMm": 6.67,
+      "axialOverlapMm": 0.25999999791383743,
+      "ratio": "secondaryDelta = -primaryDelta * 80/12",
+      "localClockingDeg": {
+        "primary": 0,
+        "secondary": 0
+      },
+      "fullCycle": {
+        "sampleCount": 8193,
+        "collisionSamples": 0,
+        "maximumIntersectionAreaMm2": 0,
+        "minimumPositiveClearanceMm": 0.0029000327921249796
+      },
+      "localRefinement": {
+        "sampleCount": 2049,
+        "collisionSamples": 0,
+        "maximumIntersectionAreaMm2": 0,
+        "minimumPositiveClearanceMm": 0.0029000327921249796,
+        "rangeDeg": [
+          -0.00054931640625,
+          0.00054931640625
+        ]
+      },
+      "accepted": true
+    },
+    {
+      "pairId": "center64-third10",
+      "participants": [
+        "center:wheel",
+        "third:pinion"
+      ],
+      "toothCounts": {
+        "primary": 64,
+        "secondary": 10
+      },
+      "moduleMm": 0.145,
+      "axesMm": {
+        "primary": [
+          0,
+          0,
+          1.24
+        ],
+        "secondary": [
+          4.549778035879225,
+          2.843016852611144,
+          1.66
+        ]
+      },
+      "centerDistanceMm": 5.364999999999999,
+      "requiredPitchSumMm": 5.364999999999999,
+      "axialOverlapMm": 0.14499999210238457,
+      "ratio": "secondaryDelta = -primaryDelta * 64/10",
+      "localClockingDeg": {
+        "primary": 0,
+        "secondary": -9.2
+      },
+      "fullCycle": {
+        "sampleCount": 8193,
+        "collisionSamples": 0,
+        "maximumIntersectionAreaMm2": 0,
+        "minimumPositiveClearanceMm": 0.0028999784086632375
+      },
+      "localRefinement": {
+        "sampleCount": 2049,
+        "collisionSamples": 0,
+        "maximumIntersectionAreaMm2": 0,
+        "minimumPositiveClearanceMm": 0.002899969460626895,
+        "rangeDeg": [
+          4.186477661132813,
+          4.187850952148437
+        ]
+      },
+      "accepted": true
+    },
+    {
+      "pairId": "third60-fourth8",
+      "participants": [
+        "third:wheel",
+        "fourth:pinion"
+      ],
+      "toothCounts": {
+        "primary": 60,
+        "secondary": 8
+      },
+      "moduleMm": 0.145,
+      "axesMm": {
+        "primary": [
+          4.549778035879225,
+          2.843016852611144,
+          1.66
+        ],
+        "secondary": [
+          0.14362218235134794,
+          5.054507434644454,
+          1.003
+        ]
+      },
+      "centerDistanceMm": 4.930000000000001,
+      "requiredPitchSumMm": 4.93,
+      "axialOverlapMm": 0.14499999210238457,
+      "ratio": "secondaryDelta = -primaryDelta * 60/8",
+      "localClockingDeg": {
+        "primary": 0,
+        "secondary": -12.05
+      },
+      "fullCycle": {
+        "sampleCount": 8193,
+        "collisionSamples": 0,
+        "maximumIntersectionAreaMm2": 0,
+        "minimumPositiveClearanceMm": 0.0017533677649936015
+      },
+      "localRefinement": {
+        "sampleCount": 2049,
+        "collisionSamples": 0,
+        "maximumIntersectionAreaMm2": 0,
+        "minimumPositiveClearanceMm": 0.0017507888083532288,
+        "rangeDeg": [
+          -0.000732421875,
+          0.000732421875
+        ]
+      },
+      "accepted": true
+    },
+    {
+      "pairId": "fourth56-escape7",
+      "participants": [
+        "fourth:wheel",
+        "escape:pinion"
+      ],
+      "toothCounts": {
+        "primary": 56,
+        "secondary": 7
+      },
+      "moduleMm": 0.145,
+      "axesMm": {
+        "primary": [
+          0.14362218235134794,
+          5.054507434644454,
+          1.003
+        ],
+        "secondary": [
+          -4.035822753424774,
+          3.2121458309370468,
+          2.08
+        ]
+      },
+      "centerDistanceMm": 4.5675,
+      "requiredPitchSumMm": 4.5675,
+      "axialOverlapMm": 0.09999999776482582,
+      "ratio": "secondaryDelta = -primaryDelta * 56/7",
+      "localClockingDeg": {
+        "primary": 0,
+        "secondary": 17.78571428571428
+      },
+      "fullCycle": {
+        "sampleCount": 8193,
+        "collisionSamples": 0,
+        "maximumIntersectionAreaMm2": 0,
+        "minimumPositiveClearanceMm": 0.002900455842027069
+      },
+      "localRefinement": {
+        "sampleCount": 2049,
+        "collisionSamples": 0,
+        "maximumIntersectionAreaMm2": 0,
+        "minimumPositiveClearanceMm": 0.002900455817617382,
+        "rangeDeg": [
+          2.2176688058035716,
+          2.21923828125
+        ]
+      },
+      "accepted": true
+    }
+  ],
+  "policy": "Nominal analytic pitch/root/tip radii stay frozen. Pair-specific prismatic tooth slabs remove only legacy expanding-bevel rendered excess; no rendered radial growth is permitted.",
+  "asset": {
+    "schema": "watch.going-train-core-asset.v1",
+    "accepted": true,
+    "poseTimeSeconds": 0,
+    "sourceUnit": "millimetre",
+    "assetWorldUnit": "metre",
+    "rootScale": 0.001,
+    "materialMode": "portable texture-free PBR; exact browser material source is included separately",
+    "includedParts": [
+      "barrel",
+      "center",
+      "third",
+      "fourth",
+      "escape"
+    ],
+    "nodes": 54,
+    "meshes": 33,
+    "vertices": 175674,
+    "triangles": 61848,
+    "boundsMetres": {
+      "min": [
+        -0.013807575199958056,
+        -0.010581366066234065,
+        -0.0007589999994039536
+      ],
+      "max": [
+        0.010723761098983608,
+        0.010679506613000041,
+        0.002748999999403954
+      ]
+    },
+    "bytes": 5931268,
+    "sha256": "e8c950e5d89df308aa30fe978254320952dea10f8bf2bec72f22f65e88437b6b"
+  }
+}

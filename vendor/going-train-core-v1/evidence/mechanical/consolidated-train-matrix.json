@@ -1,0 +1,548 @@
+{
+  "schema": "rc1-consolidated-going-train-mechanical-v1",
+  "accepted": true,
+  "disposition": "RC1 mechanical closure: all four rendered going-train meshes clear; escapement contact law, motion, package, and foreign-solid gates preserved",
+  "policy": "Nominal analytic pitch/root/tip radii stay frozen. Pair-specific prismatic tooth slabs remove only legacy expanding-bevel rendered excess; no rendered radial growth is permitted.",
+  "pairRows": [
+    {
+      "pairId": "barrel80-center12",
+      "accepted": true,
+      "report": {
+        "path": "captures/rc1/mechanical/a1-barrel80-center12-mesh-report.json",
+        "sha256": "d13718440ae6a950130fe3e004e6a9aa1c2450f28151c938e544a4792c228040"
+      },
+      "primary": "barrel:wheel",
+      "secondary": "center:pinion",
+      "toothCounts": {
+        "primary": 80,
+        "secondary": 12
+      },
+      "moduleMm": 0.145,
+      "ratio": "secondaryDelta = -primaryDelta * 80/12",
+      "axes": {
+        "primary": [
+          -6.045072939534456,
+          -2.818863805810464,
+          0
+        ],
+        "secondary": [
+          0,
+          0,
+          1.24
+        ]
+      },
+      "centerDistanceMm": 6.67,
+      "requiredPitchSumMm": 6.67,
+      "axialOverlapMm": 0.25999999791383743,
+      "sampleCount": 8193,
+      "collisionSamples": 0,
+      "maximumIntersectionAreaMm2": 0,
+      "minimumPositiveClearanceMm": 0.0029000327921249796,
+      "localRefinement": {
+        "sampleCount": 2049,
+        "collisionSamples": 0,
+        "maximumIntersectionAreaMm2": 0,
+        "minimumPositiveClearanceMm": 0.0029000327921249796,
+        "rangeDeg": [
+          -0.00054931640625,
+          0.00054931640625
+        ]
+      },
+      "localClockingDeg": {
+        "primary": 0,
+        "secondary": 0
+      },
+      "radialEnvelope": {
+        "policy": "frozen analytic pitch/root/tip radii preserved; the authorized rendered contraction removes only the legacy expanding-bevel overshoot",
+        "primary": {
+          "pitchRadiusMm": 5.8,
+          "rootRadiusMm": 5.6376,
+          "tipRadiusMm": 5.930499999999999,
+          "gate0RenderedMaxRadiusMm": 5.946525840584782,
+          "currentRenderedMaxRadiusMm": 5.930500234396588,
+          "renderedDeltaFromGate0Mm": -0.01602560618819382,
+          "noRenderedGrowth": true
+        },
+        "secondary": {
+          "pitchRadiusMm": 0.8699999999999999,
+          "rootRadiusMm": 0.6887499999999999,
+          "tipRadiusMm": 1.0294999999999999,
+          "gate0RenderedMaxRadiusMm": 1.0457883713900649,
+          "currentRenderedMaxRadiusMm": 1.0295000529410605,
+          "renderedDeltaFromGate0Mm": -0.016288318449004358,
+          "noRenderedGrowth": true
+        }
+      },
+      "sourceHashes": {
+        "movement": "9f2e49aaff2505fb4e3c93c55e6728c91454f1923401eb3f44acef0d4dc9a188",
+        "geometry": "4da93cbd7cd7c3f749eadf23c9a02d0548da7e5817a0e70c874e9e20c99cd1f9",
+        "spec": "af79512a7e192ea77d502035f43429f78418f01a537e32eec128b2fa580e0c62"
+      },
+      "sourceExact": true
+    },
+    {
+      "pairId": "center64-third10",
+      "accepted": true,
+      "report": {
+        "path": "captures/rc1/mechanical/center64-third10-mesh-report.json",
+        "sha256": "0a0b75f21454eee60c509eb6d8c4f489405013f5ef1acfb98382e4c9f3454a18"
+      },
+      "primary": "center:wheel",
+      "secondary": "third:pinion",
+      "toothCounts": {
+        "primary": 64,
+        "secondary": 10
+      },
+      "moduleMm": 0.145,
+      "ratio": "secondaryDelta = -primaryDelta * 64/10",
+      "axes": {
+        "primary": [
+          0,
+          0,
+          1.24
+        ],
+        "secondary": [
+          4.549778035879225,
+          2.843016852611144,
+          1.66
+        ]
+      },
+      "centerDistanceMm": 5.364999999999999,
+      "requiredPitchSumMm": 5.364999999999999,
+      "axialOverlapMm": 0.14499999210238457,
+      "sampleCount": 8193,
+      "collisionSamples": 0,
+      "maximumIntersectionAreaMm2": 0,
+      "minimumPositiveClearanceMm": 0.0028999784086632375,
+      "localRefinement": {
+        "sampleCount": 2049,
+        "collisionSamples": 0,
+        "maximumIntersectionAreaMm2": 0,
+        "minimumPositiveClearanceMm": 0.002899969460626895,
+        "rangeDeg": [
+          4.186477661132813,
+          4.187850952148437
+        ]
+      },
+      "localClockingDeg": {
+        "primary": 0,
+        "secondary": -9.2
+      },
+      "radialEnvelope": {
+        "policy": "frozen analytic pitch/root/tip radii preserved; the authorized rendered contraction removes only the legacy expanding-bevel overshoot",
+        "primary": {
+          "pitchRadiusMm": 4.64,
+          "rootRadiusMm": 4.4776,
+          "tipRadiusMm": 4.770499999999999,
+          "gate0RenderedMaxRadiusMm": null,
+          "currentRenderedMaxRadiusMm": 4.7705002049600145,
+          "renderedDeltaFromGate0Mm": null,
+          "noRenderedGrowth": true
+        },
+        "secondary": {
+          "pitchRadiusMm": 0.725,
+          "rootRadiusMm": 0.54375,
+          "tipRadiusMm": 0.8845,
+          "gate0RenderedMaxRadiusMm": null,
+          "currentRenderedMaxRadiusMm": 0.8845000267028809,
+          "renderedDeltaFromGate0Mm": null,
+          "noRenderedGrowth": true
+        }
+      },
+      "sourceHashes": {
+        "movement": "9f2e49aaff2505fb4e3c93c55e6728c91454f1923401eb3f44acef0d4dc9a188",
+        "geometry": "4da93cbd7cd7c3f749eadf23c9a02d0548da7e5817a0e70c874e9e20c99cd1f9",
+        "spec": "af79512a7e192ea77d502035f43429f78418f01a537e32eec128b2fa580e0c62"
+      },
+      "sourceExact": true
+    },
+    {
+      "pairId": "third60-fourth8",
+      "accepted": true,
+      "report": {
+        "path": "captures/rc1/mechanical/third60-fourth8-mesh-report.json",
+        "sha256": "301524059002a3743feb066307653e7224b8c8bffc99effae8d1dac9de42f7fa"
+      },
+      "primary": "third:wheel",
+      "secondary": "fourth:pinion",
+      "toothCounts": {
+        "primary": 60,
+        "secondary": 8
+      },
+      "moduleMm": 0.145,
+      "ratio": "secondaryDelta = -primaryDelta * 60/8",
+      "axes": {
+        "primary": [
+          4.549778035879225,
+          2.843016852611144,
+          1.66
+        ],
+        "secondary": [
+          0.14362218235134794,
+          5.054507434644454,
+          1.003
+        ]
+      },
+      "centerDistanceMm": 4.930000000000001,
+      "requiredPitchSumMm": 4.93,
+      "axialOverlapMm": 0.14499999210238457,
+      "sampleCount": 8193,
+      "collisionSamples": 0,
+      "maximumIntersectionAreaMm2": 0,
+      "minimumPositiveClearanceMm": 0.0017533677649936015,
+      "localRefinement": {
+        "sampleCount": 2049,
+        "collisionSamples": 0,
+        "maximumIntersectionAreaMm2": 0,
+        "minimumPositiveClearanceMm": 0.0017507888083532288,
+        "rangeDeg": [
+          -0.000732421875,
+          0.000732421875
+        ]
+      },
+      "localClockingDeg": {
+        "primary": 0,
+        "secondary": -12.05
+      },
+      "radialEnvelope": {
+        "policy": "frozen analytic pitch/root/tip radii preserved; the authorized rendered contraction removes only the legacy expanding-bevel overshoot",
+        "primary": {
+          "pitchRadiusMm": 4.35,
+          "rootRadiusMm": 4.1876,
+          "tipRadiusMm": 4.480499999999999,
+          "gate0RenderedMaxRadiusMm": null,
+          "currentRenderedMaxRadiusMm": 4.480500234808576,
+          "renderedDeltaFromGate0Mm": null,
+          "noRenderedGrowth": true
+        },
+        "secondary": {
+          "pitchRadiusMm": 0.58,
+          "rootRadiusMm": 0.39874999999999994,
+          "tipRadiusMm": 0.7394999999999999,
+          "gate0RenderedMaxRadiusMm": null,
+          "currentRenderedMaxRadiusMm": 0.7395000079917621,
+          "renderedDeltaFromGate0Mm": null,
+          "noRenderedGrowth": true
+        }
+      },
+      "sourceHashes": {
+        "movement": "9f2e49aaff2505fb4e3c93c55e6728c91454f1923401eb3f44acef0d4dc9a188",
+        "geometry": "4da93cbd7cd7c3f749eadf23c9a02d0548da7e5817a0e70c874e9e20c99cd1f9",
+        "spec": "af79512a7e192ea77d502035f43429f78418f01a537e32eec128b2fa580e0c62"
+      },
+      "sourceExact": true
+    },
+    {
+      "pairId": "fourth56-escape7",
+      "accepted": true,
+      "report": {
+        "path": "captures/rc1/mechanical/a2-fourth56-escape7-mesh-report.json",
+        "sha256": "4c57ab0d649449054976e766a01983b42891671680ae2c48c9f2f32ba6c62d1a"
+      },
+      "primary": "fourth:wheel",
+      "secondary": "escape:pinion",
+      "toothCounts": {
+        "primary": 56,
+        "secondary": 7
+      },
+      "moduleMm": 0.145,
+      "ratio": "secondaryDelta = -primaryDelta * 56/7",
+      "axes": {
+        "primary": [
+          0.14362218235134794,
+          5.054507434644454,
+          1.003
+        ],
+        "secondary": [
+          -4.035822753424774,
+          3.2121458309370468,
+          2.08
+        ]
+      },
+      "centerDistanceMm": 4.5675,
+      "requiredPitchSumMm": 4.5675,
+      "axialOverlapMm": 0.09999999776482582,
+      "sampleCount": 8193,
+      "collisionSamples": 0,
+      "maximumIntersectionAreaMm2": 0,
+      "minimumPositiveClearanceMm": 0.002900455842027069,
+      "localRefinement": {
+        "sampleCount": 2049,
+        "collisionSamples": 0,
+        "maximumIntersectionAreaMm2": 0,
+        "minimumPositiveClearanceMm": 0.002900455817617382,
+        "rangeDeg": [
+          2.2176688058035716,
+          2.21923828125
+        ]
+      },
+      "localClockingDeg": {
+        "primary": 0,
+        "secondary": 17.78571428571428
+      },
+      "radialEnvelope": {
+        "policy": "frozen analytic pitch/root/tip radii preserved; the authorized rendered contraction removes only the legacy expanding-bevel overshoot",
+        "primary": {
+          "pitchRadiusMm": 4.06,
+          "rootRadiusMm": 3.8975999999999997,
+          "tipRadiusMm": 4.190499999999999,
+          "gate0RenderedMaxRadiusMm": 4.206536598765909,
+          "currentRenderedMaxRadiusMm": 4.190500189443963,
+          "renderedDeltaFromGate0Mm": -0.016036409321945833,
+          "noRenderedGrowth": true
+        },
+        "secondary": {
+          "pitchRadiusMm": 0.5075,
+          "rootRadiusMm": 0.32624999999999993,
+          "tipRadiusMm": 0.6669999999999999,
+          "gate0RenderedMaxRadiusMm": 0.683470902471993,
+          "currentRenderedMaxRadiusMm": 0.6670000301320853,
+          "renderedDeltaFromGate0Mm": -0.01647087233990774,
+          "noRenderedGrowth": true
+        }
+      },
+      "sourceHashes": {
+        "movement": "9f2e49aaff2505fb4e3c93c55e6728c91454f1923401eb3f44acef0d4dc9a188",
+        "geometry": "4da93cbd7cd7c3f749eadf23c9a02d0548da7e5817a0e70c874e9e20c99cd1f9",
+        "spec": "af79512a7e192ea77d502035f43429f78418f01a537e32eec128b2fa580e0c62"
+      },
+      "sourceExact": true
+    }
+  ],
+  "escapement": {
+    "contactLaw": {
+      "accepted": true,
+      "gate0": {
+        "runtime": {
+          "path": "captures/post5d-newer-827-followup/runtime-regression.json",
+          "sha256": "e9fef1072f79e44aa3480c0ee7cdf08388120518bbbc88d742db4cbcb5feeb04"
+        },
+        "canonicalContactSha256": "da126d343b04c80386526e3c961ca4c2b480c69f123e69a3cd520d5885b2d058"
+      },
+      "final": {
+        "runtime": {
+          "path": "captures/rc1/mechanical/a2-runtime-regression.json",
+          "sha256": "4c97edf08753aef4d994038b0d135eeffebcad8c1b4be0820d6fae29ae55f40e"
+        },
+        "canonicalContactSha256": "da126d343b04c80386526e3c961ca4c2b480c69f123e69a3cd520d5885b2d058"
+      },
+      "renderedClub": {
+        "vertexCount": 9792,
+        "maximumRadius": 2.852312488461148,
+        "maximumVertex": {
+          "x": -1.2648539543151855,
+          "y": -2.5565271377563477,
+          "z": -0.08250000327825546
+        },
+        "maximumAngleModuloPitch": 0.06415616141507124,
+        "measuredGate0DeficitToContactSeed": 0.06319033605085211
+      },
+      "tracesExact": true,
+      "facesExact": true
+    },
+    "escapePalletSweep": {
+      "accepted": true,
+      "report": {
+        "path": "captures/rc1/mechanical/a2-escape-pallet-sweep-report.json",
+        "sha256": "c8a5ed7fa9c657a12ed7616441edbb544a4685a75f66c5a6f85d24f5bee62147"
+      },
+      "sampleCount": 2049,
+      "collisionSamples": {
+        "pallet:stone:entry": 0,
+        "pallet:stone:exit": 0,
+        "pallet:lowerArm:entry": 0,
+        "pallet:lowerArm:exit": 0,
+        "pallet:lowerBoss": 0,
+        "pallet:lowerLever": 0,
+        "pallet:bankingLug": 0
+      },
+      "rubyFacesHash": {
+        "accepted": "ead3f084e2f236c669395b030279382fee3683cb08f794202a5d6db68c82f037",
+        "current": "ead3f084e2f236c669395b030279382fee3683cb08f794202a5d6db68c82f037"
+      },
+      "contactSequenceHash": {
+        "accepted": "4f0b9f53b7bc59f2a9e837d9ff4e9edf9c1514406927cb196e26a9df3e370ceb",
+        "current": "4f0b9f53b7bc59f2a9e837d9ff4e9edf9c1514406927cb196e26a9df3e370ceb"
+      }
+    },
+    "escapePhaseSeparation": {
+      "accepted": true,
+      "pinionLocalClockingDeg": 17.78571428571428,
+      "scope": "escape:pinion local rendered clocking only",
+      "escapeClubMotion": "unchanged; independently owned by escape:motion plus the frozen club index",
+      "evidence": {
+        "contactLawExact": true,
+        "goingTrainExact": true
+      }
+    }
+  },
+  "regressions": {
+    "goingTrain": {
+      "accepted": true,
+      "gate0Sha256": "e3ae9191e8ce1c20eb25f0bc62092668413bb7d36bb897a8de2be9674aa71da2",
+      "finalSha256": "e3ae9191e8ce1c20eb25f0bc62092668413bb7d36bb897a8de2be9674aa71da2"
+    },
+    "packageZ": {
+      "gate0": {
+        "top": 7.4616000001162295,
+        "bottom": -2.596000005245209
+      },
+      "final": {
+        "top": 7.4616000001162295,
+        "bottom": -2.596000005245209
+      },
+      "accepted": true
+    },
+    "foreignSolidRegression": {
+      "accepted": true,
+      "gate0": {
+        "runtime": {
+          "path": "captures/post5d-newer-827-followup/runtime-regression.json",
+          "sha256": "e9fef1072f79e44aa3480c0ee7cdf08388120518bbbc88d742db4cbcb5feeb04"
+        },
+        "canonicalForeignSolidsSha256": "35e1222c943a3e0068f506077ae2d8aac6b92366d6e1dd3cb4e4491bd04eb7a2"
+      },
+      "final": {
+        "runtime": {
+          "path": "captures/rc1/mechanical/a2-runtime-regression.json",
+          "sha256": "4c97edf08753aef4d994038b0d135eeffebcad8c1b4be0820d6fae29ae55f40e"
+        },
+        "canonicalForeignSolidsSha256": "e13585e38b6f934c906ca80f70f0dfa71a84ac8178a85b91aca04766fb905233"
+      },
+      "rows": [
+        {
+          "a": "center wheel",
+          "b": "fourth arbor",
+          "gateMm": 0.1,
+          "gate0MinimumClearanceMm": 0.1760473043712722,
+          "finalMinimumClearanceMm": 0.1760473043712722,
+          "deltaMm": 0,
+          "accepted": true
+        },
+        {
+          "a": "fourth wheel",
+          "b": "center arbor",
+          "gateMm": 0.1,
+          "gate0MinimumClearanceMm": 0.7400109105653774,
+          "finalMinimumClearanceMm": 0.7560473198873232,
+          "deltaMm": 0.016036409321945833,
+          "accepted": true
+        },
+        {
+          "a": "center wheel",
+          "b": "escape arbor",
+          "gateMm": 0.1,
+          "gate0MinimumClearanceMm": 0.28757560765690715,
+          "finalMinimumClearanceMm": 0.28757560765690715,
+          "deltaMm": 0,
+          "accepted": true
+        },
+        {
+          "a": "third wheel",
+          "b": "escape arbor",
+          "gateMm": 0.1,
+          "gate0MinimumClearanceMm": 4.013032044568439,
+          "finalMinimumClearanceMm": 4.013032044568439,
+          "deltaMm": 0,
+          "accepted": true
+        },
+        {
+          "a": "barrel wheel",
+          "b": "escape arbor",
+          "gateMm": 0.1,
+          "gate0MinimumClearanceMm": 0.3103730488348775,
+          "finalMinimumClearanceMm": 0.3263986550230704,
+          "deltaMm": 0.01602560618819293,
+          "accepted": true
+        },
+        {
+          "a": "barrel drum",
+          "b": "escape pinion",
+          "gateMm": 0.1,
+          "gate0MinimumClearanceMm": 0.16017781940076037,
+          "finalMinimumClearanceMm": 0.17664869174066833,
+          "deltaMm": 0.01647087233990796,
+          "accepted": true
+        },
+        {
+          "a": "escape wheel",
+          "b": "full pallet staff and tips",
+          "gateMm": 0.1,
+          "gate0MinimumClearanceMm": 0.16000750987857776,
+          "finalMinimumClearanceMm": 0.16000750987857776,
+          "deltaMm": 0,
+          "accepted": true
+        },
+        {
+          "a": "complete balance assembly",
+          "b": "pallet upper bearing boss",
+          "gateMm": 0.1,
+          "gate0MinimumClearanceMm": 0.1599815612227909,
+          "finalMinimumClearanceMm": 0.1599815612227909,
+          "deltaMm": 0,
+          "accepted": true
+        },
+        {
+          "a": "balance roller",
+          "b": "fourth upper bearing boss",
+          "gateMm": 0.1,
+          "gate0MinimumClearanceMm": 0.1813806808206957,
+          "finalMinimumClearanceMm": 0.1813806808206957,
+          "deltaMm": 0,
+          "accepted": true
+        },
+        {
+          "a": "fourth wheel",
+          "b": "escape shaft",
+          "gateMm": 0.1,
+          "gate0MinimumClearanceMm": 0.26096339662348966,
+          "finalMinimumClearanceMm": 0.2769998059454355,
+          "deltaMm": 0.016036409321945833,
+          "accepted": true
+        },
+        {
+          "a": "third wheel",
+          "b": "balance lower pivot tip",
+          "gateMm": 0.1,
+          "gate0MinimumClearanceMm": 0.3294569937531373,
+          "finalMinimumClearanceMm": 0.3294569937531373,
+          "deltaMm": 0,
+          "accepted": true
+        },
+        {
+          "a": "third wheel",
+          "b": "fourth shaft",
+          "gateMm": 0.1,
+          "gate0MinimumClearanceMm": 0.33949976281678257,
+          "finalMinimumClearanceMm": 0.33949976281678257,
+          "deltaMm": 0,
+          "accepted": true
+        },
+        {
+          "a": "escape finger",
+          "b": "raised fork",
+          "gateMm": 0.1,
+          "gate0MinimumClearanceMm": 0.10200000305473811,
+          "finalMinimumClearanceMm": 0.10200000305473811,
+          "deltaMm": 0,
+          "accepted": true
+        },
+        {
+          "a": "escape wheel",
+          "b": "Phase-4B center staff",
+          "gateMm": 0.1,
+          "gate0MinimumClearanceMm": 2.2207633260292914,
+          "finalMinimumClearanceMm": 2.2207633260292914,
+          "deltaMm": 0,
+          "accepted": true
+        }
+      ]
+    }
+  },
+  "sourceHashes": {
+    "movement": "9f2e49aaff2505fb4e3c93c55e6728c91454f1923401eb3f44acef0d4dc9a188",
+    "geometry": "4da93cbd7cd7c3f749eadf23c9a02d0548da7e5817a0e70c874e9e20c99cd1f9",
+    "spec": "af79512a7e192ea77d502035f43429f78418f01a537e32eec128b2fa580e0c62",
+    "escapementContact": "b916c59b9f2e0034d1522467b8187cbd16856e2cae7cd4f74f1d85f1bbef2edb"
+  }
+}

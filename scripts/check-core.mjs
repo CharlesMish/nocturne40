@@ -84,6 +84,26 @@ if (spec.asset?.rootScale !== 0.001) {
   fail(`asset.rootScale must stay 0.001 (got ${spec.asset?.rootScale})`);
 }
 
+const glb = readFileSync(glbPath);
+if (glb.toString("utf8", 0, 4) !== "glTF") fail("vendor asset is not a GLB");
+const jsonLen = glb.readUInt32LE(12);
+const jsonType = glb.toString("utf8", 16, 20);
+if (jsonType !== "JSON") fail("GLB JSON chunk missing");
+let gltf;
+try {
+  gltf = JSON.parse(glb.subarray(20, 20 + jsonLen).toString("utf8"));
+} catch (err) {
+  fail(`GLB JSON is not valid: ${err.message}`);
+}
+
+const nodeNames = new Set(
+  (gltf.nodes ?? []).map((node) => node.name).filter(Boolean),
+);
+for (const arbor of Object.keys(expectedAxes)) {
+  if (!nodeNames.has(`${arbor}_pose`)) fail(`GLB missing ${arbor}_pose`);
+  if (!nodeNames.has(`${arbor}_motion`)) fail(`GLB missing ${arbor}_motion`);
+}
+
 console.log("OK");
 console.log(`vendor GLB bytes: ${glbBytes}`);
 console.log("five arbor axes match CORE_SPEC authority");
