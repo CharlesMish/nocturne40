@@ -1,0 +1,16 @@
+---
+description: Nocturne 40 first-session rules
+alwaysApply: true
+---
+
+Read CONSTRAINTS.md and AGENTS.md.
+
+vendor/going-train-core-v1/ is read-only.
+
+This chat implements B0+B1 only: Vite + Three viewer, load the vendor GLB, 0/180 Z toggle (default 180), pivot check script.
+
+Do not build case, dial, hands, plates, bridges, or extra gears.
+
+Do not re-export or edit the vendor GLB.
+
+If the user has not asked for a later burst, refuse scope expansion.
