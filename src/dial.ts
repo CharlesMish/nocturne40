@@ -19,7 +19,10 @@ export const SECONDS_FLOOR = DIAL_SURFACE + FIELD_LIFT - SECONDS_STEP;
 const STANDING = 0.32;
 const fourth = PART_AXES_MM.fourth;
 
-function creamTexture() {
+export type CreamLook = "current" | "light";
+export type MarkerLook = "current" | "gun";
+
+function creamTexture(look: CreamLook = "current") {
   const size = 2048;
   const canvas = document.createElement("canvas");
   canvas.width = size;
@@ -27,9 +30,15 @@ function creamTexture() {
   const ctx = canvas.getContext("2d");
   if (!ctx) return null;
   const g = ctx.createRadialGradient(size / 2, size / 2, 24, size / 2, size / 2, size * 0.5);
-  g.addColorStop(0, "#f6efe4");
-  g.addColorStop(0.55, "#eadcc8");
-  g.addColorStop(1, "#dcc9ae");
+  if (look === "light") {
+    g.addColorStop(0, "#f8f2ea");
+    g.addColorStop(0.55, "#f0e3d1");
+    g.addColorStop(1, "#e5d3bd");
+  } else {
+    g.addColorStop(0, "#f6efe4");
+    g.addColorStop(0.55, "#eadcc8");
+    g.addColorStop(1, "#dcc9ae");
+  }
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, size, size);
   for (let i = 0; i < 720; i++) {
@@ -101,13 +110,13 @@ function creamFloorTexture() {
   return tex;
 }
 
-function steelAccent() {
+function steelAccent(look: MarkerLook = "current") {
   return new THREE.MeshPhysicalMaterial({
-    color: 0x5a564f,
-    metalness: 0.9,
-    roughness: 0.2,
-    clearcoat: 0.08,
-    clearcoatRoughness: 0.32,
+    color: look === "gun" ? 0x2a333c : 0x5a564f,
+    metalness: look === "gun" ? 0.88 : 0.9,
+    roughness: look === "gun" ? 0.24 : 0.2,
+    clearcoat: look === "gun" ? 0.14 : 0.08,
+    clearcoatRoughness: look === "gun" ? 0.28 : 0.32,
   });
 }
 
@@ -228,13 +237,17 @@ function indexGeom(style: MarkerStyle, width: number, len: number, standing: num
   }
 }
 
-export function createDial(markers: MarkerStyle = "curve"): THREE.Group {
+export function createDial(
+  markers: MarkerStyle = "curve",
+  cream: CreamLook = "current",
+  appliedLook: MarkerLook = "current",
+): THREE.Group {
   const root = new THREE.Group();
   root.name = "dial";
 
-  const map = creamTexture();
+  const map = creamTexture(cream);
   const faceMat = new THREE.MeshPhysicalMaterial({
-    color: 0xf4ebe0,
+    color: cream === "light" ? 0xf7f0e6 : 0xf4ebe0,
     map: map ?? undefined,
     metalness: 0.03,
     roughness: 0.48,
@@ -337,7 +350,7 @@ export function createDial(markers: MarkerStyle = "curve"): THREE.Group {
   rehaut.name = "rehaut";
   root.add(rehaut);
 
-  const applied = steelAccent();
+  const applied = steelAccent(appliedLook);
   const facet = steelPolish();
   const withFacet = markers === "baton" || markers === "slim" || markers === "curve";
   for (let k = 0; k < 12; k++) {
@@ -371,7 +384,7 @@ export function createDial(markers: MarkerStyle = "curve"): THREE.Group {
     root.add(baton);
   }
 
-  const cannonMat = steelAccent();
+  const cannonMat = steelAccent(appliedLook);
   const cannon = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.14, 0.1, 20), cannonMat);
   cannon.rotation.x = Math.PI / 2;
   cannon.position.set(0, 0, fieldTop + 0.02);

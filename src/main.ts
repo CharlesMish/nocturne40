@@ -6,16 +6,11 @@ import * as THREE from "three";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { applySteelIbl, createCase } from "./case";
-import { createDial, MARKER_LANES, type MarkerStyle } from "./dial";
+import { applySteelIbl, createCase, type SteelGrade } from "./case";
+import { createDial, MARKER_LANES, type CreamLook, type MarkerLook, type MarkerStyle } from "./dial";
 import { attachHands, HAND_LANES, type HandStyle } from "./hands";
 import { createPlates } from "./plate";
-
-const glbModules = import.meta.glob(
-  "../vendor/going-train-core-v1/assets/going-train-core.glb",
-  { eager: true, query: "?url", import: "default" },
-) as Record<string, string>;
-const glbUrl = Object.values(glbModules)[0];
+import glbUrl from "../vendor/going-train-core-v1/assets/going-train-core.glb?url";
 
 const MM = 0.001;
 const PRODUCT_Z = Math.PI;
@@ -153,8 +148,14 @@ const bridgeCluster = plates.getObjectByName("bridge_cluster");
 if (plateCluster) explode.plate.attach(plateCluster);
 if (bridgeCluster) explode.bridge.attach(bridgeCluster);
 
-const casing = createCase();
-applySteelIbl(casing, steelEnv);
+const studyParam = new URLSearchParams(location.search).get("study");
+const study = studyParam === "2" || studyParam === "3" || studyParam === "4" ? Number(studyParam) : 1;
+const steelGrade: SteelGrade = study === 1 ? "pale" : "steel";
+const creamLook: CreamLook = study === 3 ? "light" : "current";
+const markerLook: MarkerLook = study === 4 ? "gun" : "current";
+
+const casing = createCase(steelGrade);
+applySteelIbl(casing, steelEnv, steelGrade);
 wrapper.add(casing);
 wrapper.updateMatrixWorld(true);
 const crystal = casing.getObjectByName("crystal");
@@ -167,7 +168,7 @@ let markerStyle: MarkerStyle = "curve";
 const startMarkers = MARKER_LANES.find((lane) => lane === new URLSearchParams(location.search).get("markers"));
 if (startMarkers) markerStyle = startMarkers;
 
-let dial = createDial(markerStyle);
+let dial = createDial(markerStyle, creamLook, markerLook);
 applyDialIbl(dial);
 wrapper.add(dial);
 wrapper.updateMatrixWorld(true);
@@ -182,7 +183,7 @@ if (startCw === "open" || startHands === "open") handStyle = "open";
 let product = true;
 let faceVisible = true;
 let exploded = false;
-type CamView = "dial" | "back" | "side" | "wrist" | "oblique" | "seconds";
+type CamView = "dial" | "back" | "side" | "wrist" | "oblique" | "seconds" | "center" | "lug";
 let camView: CamView = "dial";
 const startView = new URLSearchParams(location.search).get("view");
 if (
@@ -191,7 +192,9 @@ if (
   startView === "dial" ||
   startView === "wrist" ||
   startView === "oblique" ||
-  startView === "seconds"
+  startView === "seconds" ||
+  startView === "center" ||
+  startView === "lug"
 ) {
   camView = startView;
 }
@@ -232,8 +235,8 @@ function applyViewLights() {
   key.intensity = onBack ? 0.22 : lightMode === "cool" ? 0.82 : 0.92;
   fill.visible = !onBack;
   fill.intensity = onSide ? 0.16 : lightMode === "cool" ? 0.32 : 0.26;
-  sideFill.visible = exploded || onSide || camView === "oblique";
-  sideFill.intensity = exploded ? 0.4 : camView === "oblique" ? 0.28 : 0.5;
+  sideFill.visible = exploded || onSide || camView === "oblique" || camView === "lug";
+  sideFill.intensity = exploded ? 0.4 : camView === "lug" ? 0.62 : camView === "oblique" ? 0.32 : 0.5;
   backKey.visible = onBack;
   backFill.visible = onBack;
   peekLight.visible = onBack;
@@ -249,6 +252,7 @@ function applyOrientation() {
       exploded ? "X assembled." : "X explode.",
       `H ${handStyle}.`,
       `F ${markerStyle}.`,
+      `M${study}.`,
       "R · 1 dial · 2 wrist · 3 3/4 · 4 seconds · B caseback · S side · P plates · D face · G grid",
     ].join(" ");
   }
@@ -276,12 +280,13 @@ function applyDialIbl(root: THREE.Object3D) {
     const named =
       obj.name === "rehaut" ||
       obj.name === "center_cannon" ||
-      obj.name === "seconds_pipe";
+      obj.name === "seconds_pipe" ||
+      obj.name.startsWith("index_");
     if (!facet && !named) return;
     for (const mat of mats) {
       if (!(mat instanceof THREE.MeshStandardMaterial)) continue;
       mat.envMap = steelEnv;
-      mat.envMapIntensity = facet ? 0.7 : 0.38;
+      mat.envMapIntensity = facet ? 0.7 : obj.name.startsWith("index_") ? 0.52 : 0.38;
       mat.needsUpdate = true;
     }
   });
@@ -327,6 +332,14 @@ function applyCamera() {
     camera.fov = 24;
     camera.position.set(0, -5.05 * MM, 38 * MM);
     controls.target.set(0, -5.05 * MM, 3.6 * MM);
+  } else if (camView === "center") {
+    camera.fov = 20;
+    camera.position.set(0, 0, 44 * MM);
+    controls.target.set(0, 0, 3.7 * MM);
+  } else if (camView === "lug") {
+    camera.fov = 30;
+    camera.position.set(34 * MM, -18 * MM, -14 * MM);
+    controls.target.set(0, -19.4 * MM, -0.6 * MM);
   } else {
     camera.position.set(0, 0, CAM_DIST);
     controls.target.set(0, 0, 0);
@@ -356,7 +369,7 @@ function toggleOrientation() {
 
 function rebuildDial() {
   explode.dial.remove(dial);
-  dial = createDial(markerStyle);
+  dial = createDial(markerStyle, creamLook, markerLook);
   applyDialIbl(dial);
   explode.dial.add(dial);
   explode.dial.visible = faceVisible;
@@ -475,7 +488,12 @@ if (!glbUrl) {
       wrapper.updateMatrixWorld(true);
       explode.train.attach(gltf.scene);
       trainRoot = gltf.scene;
-      handMeshes = attachHands(trainRoot, handStyle);
+      try {
+        handMeshes = attachHands(trainRoot, handStyle);
+      } catch (err) {
+        console.error(err);
+        return;
+      }
       wrapper.updateMatrixWorld(true);
       for (const hand of handMeshes) explode.hands.attach(hand);
       applyNavyIbl(explode.hands);

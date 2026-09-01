@@ -15,13 +15,16 @@ const MID_Z1 = 3.95;
 const LUG_Y = 19.55;
 const LUG_TILT = -0.22;
 
+export type SteelGrade = "pale" | "steel";
+
 function steel(color: number, roughness: number) {
   return new THREE.MeshPhysicalMaterial({
     color,
-    metalness: 0.9,
+    metalness: 0.96,
     roughness,
-    clearcoat: roughness < 0.2 ? 0.06 : 0,
-    clearcoatRoughness: 0.55,
+    clearcoat: roughness < 0.14 ? 0.16 : 0,
+    clearcoatRoughness: roughness < 0.14 ? 0.2 : 0.55,
+    specularIntensity: 1,
   });
 }
 
@@ -157,7 +160,7 @@ function dressHorn(signX: 1 | -1, mat: THREE.Material) {
   return mesh;
 }
 
-function lugPair(signY: 1 | -1, mat: THREE.Material) {
+function lugPair(signY: 1 | -1, mat: THREE.Material, live: boolean) {
   const pair = new THREE.Group();
   pair.name = signY > 0 ? "lug_spec_plus_y" : "lug_spec_minus_y";
   pair.position.set(0, signY * LUG_Y, -0.55);
@@ -165,7 +168,7 @@ function lugPair(signY: 1 | -1, mat: THREE.Material) {
   const tilt = new THREE.Group();
   tilt.rotation.x = LUG_TILT;
   tilt.add(dressHorn(1, mat), dressHorn(-1, mat));
-  addStrapToLug(tilt, signY > 0);
+  addStrapToLug(tilt, signY > 0, live);
   pair.add(tilt);
   return pair;
 }
@@ -219,13 +222,14 @@ function createCrown(polished: THREE.Material, knurlMat: THREE.Material) {
   return crown;
 }
 
-export function createCase(): THREE.Group {
+export function createCase(grade: SteelGrade = "pale"): THREE.Group {
   const root = new THREE.Group();
   root.name = "case";
 
-  const brushed = steel(0xb7b8bc, 0.38);
-  const polish = steel(0xb7b8bc, 0.34);
-  const bezelTopMat = steel(0xc5c6c9, 0.16);
+  const live = grade === "steel";
+  const brushed = steel(live ? 0x6a6e73 : 0xb7b8bc, live ? 0.5 : 0.38);
+  const polish = steel(live ? 0x787c82 : 0xb7b8bc, live ? 0.16 : 0.34);
+  const bezelTopMat = steel(live ? 0x95989e : 0xc5c6c9, live ? 0.07 : 0.16);
   const lugMat = brushed;
   const midZ = (MID_Z0 + MID_Z1) / 2;
 
@@ -266,7 +270,7 @@ export function createCase(): THREE.Group {
 
   const back = new THREE.Group();
   back.name = "exhibition_back";
-  const brushedBack = steel(0xb5b6ba, 0.36);
+  const brushedBack = steel(live ? 0x686c71 : 0xb5b6ba, live ? 0.46 : 0.36);
   const peek = 8.6;
   const ring = annulus(CASE_OD - 0.18, peek + 0.6, 0.52, MID_Z0 - 0.52, brushedBack);
   const lip = annulus(peek + 0.6, peek, 0.22, MID_Z0 - 0.26, polish);
@@ -290,14 +294,14 @@ export function createCase(): THREE.Group {
   back.add(ring, lip, glass);
   const sign = backSignature();
   if (sign) back.add(sign);
-  const screwMat = steel(0xbabcbf, 0.24);
+  const screwMat = steel(live ? 0x7a7e84 : 0xbabcbf, live ? 0.2 : 0.24);
   for (let i = 0; i < 4; i++) {
     const a = (i * Math.PI) / 2 + Math.PI / 4;
     const geom = new THREE.CylinderGeometry(0.55, 0.55, 0.16, 16);
     geom.rotateX(Math.PI / 2);
     const screw = new THREE.Mesh(geom, screwMat);
     screw.position.set(Math.cos(a) * 14.2, Math.sin(a) * 14.2, MID_Z0 - 0.58);
-    const slot = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.12, 0.06), steel(0x9a9b9e, 0.35));
+    const slot = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.12, 0.06), steel(live ? 0x5e6268 : 0x9a9b9e, live ? 0.32 : 0.35));
     slot.position.z = -0.09;
     slot.rotation.z = a;
     screw.add(slot);
@@ -310,15 +314,16 @@ export function createCase(): THREE.Group {
   crystal.position.z = MID_Z1 + 0.14;
   root.add(crystal);
 
-  root.add(lugPair(1, lugMat), lugPair(-1, lugMat));
-  root.add(createCrown(polish, steel(0xb6b7bb, 0.42)));
+  root.add(lugPair(1, lugMat, live), lugPair(-1, lugMat, live));
+  root.add(createCrown(polish, steel(live ? 0x6e7278 : 0xb6b7bb, live ? 0.44 : 0.42)));
 
   root.scale.setScalar(MM_SCALE);
   return root;
 }
 
 /** Metals with metalness ≥ 0.5. Do not set scene.environment — that washed the cream. */
-export function applySteelIbl(root: THREE.Object3D, envMap: THREE.Texture) {
+export function applySteelIbl(root: THREE.Object3D, envMap: THREE.Texture, grade: SteelGrade = "pale") {
+  const live = grade === "steel";
   root.traverse((obj) => {
     if (!(obj instanceof THREE.Mesh)) return;
     const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
@@ -326,7 +331,11 @@ export function applySteelIbl(root: THREE.Object3D, envMap: THREE.Texture) {
       if (!(mat instanceof THREE.MeshStandardMaterial)) continue;
       if (mat.metalness < 0.5) continue;
       mat.envMap = envMap;
-      mat.envMapIntensity = mat.roughness < 0.18 ? 0.62 : mat.roughness < 0.33 ? 0.4 : 0.36;
+      if (live) {
+        mat.envMapIntensity = mat.roughness < 0.12 ? 1.28 : mat.roughness < 0.22 ? 0.92 : mat.roughness < 0.4 ? 0.48 : 0.34;
+      } else {
+        mat.envMapIntensity = mat.roughness < 0.18 ? 0.62 : mat.roughness < 0.33 ? 0.4 : 0.36;
+      }
       mat.needsUpdate = true;
     }
   });

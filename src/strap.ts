@@ -12,7 +12,7 @@ const SEGMENTS = 28;
 
 function spinePoints() {
   return [
-    new THREE.Vector3(0, 2.55, 0.02),
+    new THREE.Vector3(0, 5.05, -0.1),
     new THREE.Vector3(0, 6.4, -0.18),
     new THREE.Vector3(0, 11.2, -1.35),
     new THREE.Vector3(0, 16.4, -4.2),
@@ -90,11 +90,13 @@ export function leatherMat() {
   });
 }
 
-export function strapSteel() {
-  return new THREE.MeshStandardMaterial({
-    color: 0xb7b8bc,
-    metalness: 0.9,
-    roughness: 0.38,
+export function strapSteel(live = false) {
+  return new THREE.MeshPhysicalMaterial({
+    color: live ? 0x787c82 : 0xb7b8bc,
+    metalness: 0.96,
+    roughness: live ? 0.16 : 0.38,
+    clearcoat: live ? 0.12 : 0,
+    specularIntensity: 1,
   });
 }
 
@@ -111,8 +113,9 @@ function band(hide: THREE.Material) {
     const dz = b.z - a.z;
     const len = Math.hypot(dy, dz);
     const t = (i + 0.5) / (pts.length - 1);
-    const w = (W0 * (1 - t) + W1 * t) * 2;
-    const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, len * 1.12, THICK), hide);
+    const wRaw = (W0 * (1 - t) + W1 * t) * 2;
+    const w = mid.y < 6.6 ? Math.min(wRaw, 11.1) : wRaw;
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, len * 1.02, THICK), hide);
     mesh.position.copy(mid);
     mesh.rotation.x = Math.atan2(dz, dy);
     group.add(mesh);
@@ -155,11 +158,19 @@ function springBar(bar: THREE.Material) {
   return mesh;
 }
 
-function strapSeat(hide: THREE.Material) {
-  const mesh = new THREE.Mesh(new THREE.BoxGeometry(W0 * 2 - 0.5, 2.35, THICK + 0.16), hide);
-  mesh.position.set(0, 3.12, 0.03);
-  mesh.name = "strap_seat";
-  return mesh;
+/** Leather rolled on the spring bar, plus a narrow neck out of the well. */
+function strapStitch(hide: THREE.Material) {
+  const g = new THREE.Group();
+  g.name = "strap_stitch";
+  const wrap = new THREE.Mesh(new THREE.CylinderGeometry(0.82, 0.82, 10.2, 18), hide);
+  wrap.rotation.z = Math.PI / 2;
+  wrap.position.set(0, 3.12, 0.02);
+  wrap.name = "strap_wrap";
+  const neck = new THREE.Mesh(new THREE.BoxGeometry(7.4, 1.55, 0.9), hide);
+  neck.position.set(0, 4.32, -0.04);
+  neck.name = "strap_neck";
+  g.add(wrap, neck);
+  return g;
 }
 
 function buckle(bar: THREE.Material) {
@@ -197,12 +208,11 @@ function buckle(bar: THREE.Material) {
   return g;
 }
 
-export function addStrapToLug(tilt: THREE.Group, withBuckle: boolean) {
+export function addStrapToLug(tilt: THREE.Group, withBuckle: boolean, liveSteel = false) {
   const hide = leatherMat();
-  const bar = strapSteel();
+  const bar = strapSteel(liveSteel);
   tilt.add(band(hide));
-  tilt.add(strapSeat(hide));
-  tilt.add(keeper(hide, 9.4, -0.7, 0.12));
+  tilt.add(strapStitch(hide));
   if (withBuckle) tilt.add(keeper(hide, 20.2, -8.2, 0.55));
   tilt.add(springBar(bar));
   if (withBuckle) tilt.add(buckle(bar));

@@ -32,7 +32,7 @@ function hub(radius: number, thick: number, mat: THREE.Material) {
   const g = new THREE.Group();
   const disc = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, thick + 0.02, 24), mat);
   disc.rotation.x = Math.PI / 2;
-  const pit = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.28, radius * 0.28, thick + 0.03, 16), navy(0.34, 0x12243f));
+  const pit = new THREE.Mesh(new THREE.CylinderGeometry(radius * 0.2, radius * 0.2, thick + 0.028, 16), navy(0.3, 0x152a48));
   pit.rotation.x = Math.PI / 2;
   g.add(disc, pit);
   return g;
@@ -63,11 +63,11 @@ const MINUTE_SWELL: SwellSpec = {
 };
 
 const BALANCE_SWELL: SwellSpec = {
-  neckEnd: 0.18,
-  peak: 0.52,
-  neckW: 0.16,
-  maxW: 0.46,
-  tipW: 0.08,
+  neckEnd: 0.2,
+  peak: 0.5,
+  neckW: 0.14,
+  maxW: 0.4,
+  tipW: 0.06,
 };
 
 function lerp(a: number, b: number, t: number) {
@@ -92,16 +92,17 @@ function swellHalfWidth(t: number, spec: SwellSpec) {
 
 function swellShape(length: number, spec: SwellSpec, y0: number) {
   const shape = new THREE.Shape();
-  const n = 40;
+  const n = 48;
   const pts: THREE.Vector2[] = [];
-  for (let i = 0; i <= n; i++) {
-    const y = y0 + ((length - y0) * i) / n;
+  for (let i = 0; i < n; i++) {
+    const t = i / (n - 1);
+    const y = y0 + (length - y0) * t;
     const hw = swellHalfWidth(y / length, spec);
-    pts.push(new THREE.Vector2(hw, y));
+    pts.push(new THREE.Vector2(Math.max(spec.tipW * 0.45, hw), y));
   }
   shape.moveTo(pts[0].x, pts[0].y);
   for (let i = 1; i < pts.length; i++) shape.lineTo(pts[i].x, pts[i].y);
-  for (let i = pts.length - 1; i >= 0; i--) shape.lineTo(-pts[i].x, pts[i].y);
+  for (let i = pts.length - 2; i >= 0; i--) shape.lineTo(-pts[i].x, pts[i].y);
   shape.closePath();
   return shape;
 }
@@ -109,36 +110,33 @@ function swellShape(length: number, spec: SwellSpec, y0: number) {
 function extrudePlan(shape: THREE.Shape, thick: number) {
   const geom = new THREE.ExtrudeGeometry(shape, {
     depth: thick,
-    bevelEnabled: true,
-    bevelThickness: thick * 0.12,
-    bevelSize: Math.min(0.04, thick * 0.18),
-    bevelSegments: 2,
+    bevelEnabled: false,
     curveSegments: 1,
   });
   geom.translate(0, 0, -thick / 2);
   return geom;
 }
 
-function ridgeMesh(length: number, spec: SwellSpec, thick: number, mat: THREE.Material) {
-  const y0 = length * 0.15;
-  const y1 = length * 0.9;
+function ridgeMesh(length: number, spec: SwellSpec, thick: number) {
+  const y0 = length * 0.22;
+  const y1 = length * 0.52;
   const shape = new THREE.Shape();
-  const n = 24;
+  const n = 20;
   const pts: THREE.Vector2[] = [];
   for (let i = 0; i <= n; i++) {
-    const y = y0 + ((y1 - y0) * i) / n;
-    const fade = i === 0 || i === n ? 0.2 : 1;
-    const hw = swellHalfWidth(y / length, spec) * 0.22 * fade;
-    pts.push(new THREE.Vector2(Math.max(0.02, hw), y));
+    const u = i / n;
+    const y = y0 + (y1 - y0) * u;
+    const edge = u < 0.08 || u > 0.92 ? 0.35 : 1;
+    const hw = swellHalfWidth(y / length, spec) * 0.2 * edge;
+    pts.push(new THREE.Vector2(Math.max(0.018, hw), y));
   }
   shape.moveTo(pts[0].x, pts[0].y);
   for (let i = 1; i < pts.length; i++) shape.lineTo(pts[i].x, pts[i].y);
   for (let i = pts.length - 1; i >= 0; i--) shape.lineTo(-pts[i].x, pts[i].y);
   shape.closePath();
-  const mesh = new THREE.Mesh(extrudePlan(shape, thick * 0.28), navy(0.2, 0x244a78));
-  mesh.position.z = thick / 2 + 0.006;
+  const mesh = new THREE.Mesh(extrudePlan(shape, thick * 0.22), navy(0.2, 0x244a78));
+  mesh.position.z = thick / 2 + 0.004;
   mesh.name = "hand_ridge";
-  mesh.material = mat === mesh.material ? mesh.material : navy(0.2, 0x244a78);
   return mesh;
 }
 
@@ -151,31 +149,48 @@ function foldedLeaf(
   withRidge: boolean,
 ) {
   const g = new THREE.Group();
-  const y0 = hubR + 0.06;
-  g.add(hub(hubR, thick, mat));
+  const y0 = 0.02;
+  if (hubR > 0) g.add(hub(hubR, thick, mat));
   const blade = new THREE.Mesh(extrudePlan(swellShape(length, spec, y0), thick), mat);
   blade.name = "hand_blade";
   g.add(blade);
-  if (withRidge) g.add(ridgeMesh(length, spec, thick, mat));
+  if (withRidge) g.add(ridgeMesh(length, spec, thick));
   return g;
 }
 
 function secondsNeedle(length: number, mat: THREE.Material) {
-  const g = new THREE.Group();
-  const shaft = new THREE.Mesh(new THREE.BoxGeometry(0.065, length * 0.82, 0.05), mat);
-  shaft.position.y = 0.18 + (length * 0.82) / 2;
-  const tip = new THREE.Mesh(new THREE.ConeGeometry(0.045, 0.18, 8), mat);
-  tip.position.y = length + 0.02;
-  g.add(shaft, tip);
-  return g;
+  const shape = new THREE.Shape();
+  shape.moveTo(0.03, 0.1);
+  shape.lineTo(0.022, length * 0.6);
+  shape.lineTo(0.014, length);
+  shape.lineTo(-0.014, length);
+  shape.lineTo(-0.022, length * 0.6);
+  shape.lineTo(-0.03, 0.1);
+  shape.closePath();
+  return new THREE.Mesh(extrudePlan(shape, 0.05), mat);
 }
 
-function leafBalance(mat: THREE.Material) {
-  const len = 0.92;
-  const g = foldedLeaf(len, BALANCE_SWELL, 0.07, 0.12, mat, false);
-  g.rotation.z = Math.PI;
-  g.position.y = 0.02;
-  g.name = "seconds_balance";
+/** Needle, hub, and leaf counterweight as one outline so the subdial hand does not split. */
+function secondsLeaf(mat: THREE.Material) {
+  const L = 3.02;
+  const C = 0.66;
+  const shape = new THREE.Shape();
+  shape.moveTo(0, -C);
+  shape.lineTo(0.05, -C * 0.58);
+  shape.lineTo(0.19, -C * 0.22);
+  shape.lineTo(0.1, -0.04);
+  shape.lineTo(0.03, 0.1);
+  shape.lineTo(0.022, L * 0.6);
+  shape.lineTo(0.014, L);
+  shape.lineTo(-0.014, L);
+  shape.lineTo(-0.022, L * 0.6);
+  shape.lineTo(-0.03, 0.1);
+  shape.lineTo(-0.1, -0.04);
+  shape.lineTo(-0.19, -C * 0.22);
+  shape.lineTo(-0.05, -C * 0.58);
+  shape.closePath();
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(extrudePlan(shape, 0.05), mat), hub(0.1, 0.055, mat));
   return g;
 }
 
@@ -183,26 +198,28 @@ function leafBalance(mat: THREE.Material) {
 function openBalance(mat: THREE.Material) {
   const g = new THREE.Group();
   g.name = "seconds_balance";
-  const len = 0.88;
-  const y0 = 0.1;
+  const len = 0.78;
   const spec = BALANCE_SWELL;
-  const n = 28;
+  const n = 24;
   const makeLobe = (sign: 1 | -1) => {
     const shape = new THREE.Shape();
-    const gap = 0.045;
+    const gap = 0.03;
+    const y0 = 0.04;
     shape.moveTo(sign * gap, y0);
     for (let i = 0; i <= n; i++) {
-      const y = y0 + ((len - y0) * i) / n;
-      const hw = swellHalfWidth(y / len, spec);
+      const t = i / n;
+      const y = y0 + (len - y0) * t;
+      let hw = swellHalfWidth(y / len, spec);
+      if (t > 0.88) hw *= 1 - (t - 0.88) / 0.12;
       shape.lineTo(sign * (gap + hw), y);
     }
-    shape.lineTo(sign * gap, len * 0.92);
+    shape.lineTo(sign * gap, len);
     shape.closePath();
-    const mesh = new THREE.Mesh(extrudePlan(shape, 0.07), mat);
-    mesh.position.y = -len - 0.06;
+    const mesh = new THREE.Mesh(extrudePlan(shape, 0.065), mat);
+    mesh.rotation.z = Math.PI;
     return mesh;
   };
-  g.add(hub(0.12, 0.07, mat), makeLobe(1), makeLobe(-1));
+  g.add(hub(0.1, 0.065, mat), makeLobe(1), makeLobe(-1));
   return g;
 }
 
@@ -233,7 +250,7 @@ export function attachHands(trainRoot: THREE.Object3D, style: SecondsBalance = "
   const minuteLen = 12.35;
   const hourLen = 8.05;
 
-  const minute = foldedLeaf(minuteLen, MINUTE_SWELL, 0.14, 0.15, mat, true);
+  const minute = foldedLeaf(minuteLen, MINUTE_SWELL, 0.14, 0, mat, true);
   minute.name = "minute_hand";
   minute.rotation.z = THREE.MathUtils.degToRad(-(60 + 180));
   const minuteParent = centerMotion ?? centerPose;
@@ -242,7 +259,7 @@ export function attachHands(trainRoot: THREE.Object3D, style: SecondsBalance = "
     meshes.push(minute);
   }
 
-  const hour = foldedLeaf(hourLen, HOUR_SWELL, 0.16, 0.19, mat, true);
+  const hour = foldedLeaf(hourLen, HOUR_SWELL, 0.16, 0.24, mat, true);
   hour.name = "hour_hand";
   hour.rotation.z = THREE.MathUtils.degToRad(-(305 + 180));
   if (centerPose) {
@@ -252,8 +269,8 @@ export function attachHands(trainRoot: THREE.Object3D, style: SecondsBalance = "
 
   const seconds = new THREE.Group();
   seconds.name = "seconds_hand";
-  seconds.add(secondsNeedle(3.02, mat));
-  seconds.add(style === "open" ? openBalance(mat) : leafBalance(mat));
+  seconds.add(style === "open" ? openBalance(mat) : secondsLeaf(mat));
+  if (style === "open") seconds.add(secondsNeedle(3.02, mat));
   seconds.rotation.z = 0;
   if (fourthNode) {
     setLocalZForWorldMm(seconds, fourthNode, SECONDS_FLOOR + 0.14);
