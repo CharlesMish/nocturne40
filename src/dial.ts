@@ -6,14 +6,12 @@
 import * as THREE from "three";
 import { PART_AXES_MM } from "./plate";
 
-export const MARKER_LANES = ["baton", "slim", "dauphine", "curve", "infinity"] as const;
+export const MARKER_LANES = ["curve", "slim", "dauphine", "baton"] as const;
 export type MarkerStyle = (typeof MARKER_LANES)[number];
-export const FACE_LANES = ["cream", "nocturne", "n40"] as const;
-export type FaceStyle = (typeof FACE_LANES)[number];
 const MM_SCALE = 0.001;
 export const DIAL_Z = 3.52;
-const DIAL_R = 15.35;
-const SUB_R = 3.55;
+const DIAL_R = 15.7;
+const SUB_R = 4.0;
 const DIAL_SURFACE = DIAL_Z + 0.28;
 const STANDING = 0.32;
 const fourth = PART_AXES_MM.fourth;
@@ -26,9 +24,9 @@ function creamTexture() {
   const ctx = canvas.getContext("2d");
   if (!ctx) return null;
   const g = ctx.createRadialGradient(size / 2, size / 2, 24, size / 2, size / 2, size * 0.5);
-  g.addColorStop(0, "#f8f3ea");
-  g.addColorStop(0.55, "#f0e6d6");
-  g.addColorStop(1, "#e4d6c2");
+  g.addColorStop(0, "#f6efe4");
+  g.addColorStop(0.55, "#eadcc8");
+  g.addColorStop(1, "#dcc9ae");
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, size, size);
   for (let i = 0; i < 720; i++) {
@@ -37,36 +35,6 @@ function creamTexture() {
     ctx.beginPath();
     ctx.moveTo(size / 2, size / 2);
     ctx.lineTo(size / 2 + Math.cos(a) * size * 0.55, size / 2 + Math.sin(a) * size * 0.55);
-    ctx.stroke();
-  }
-  const toPx = (specX: number, specY: number) => {
-    const u = specX / (DIAL_R * 2) + 0.5;
-    const v = specY / (DIAL_R * 2) + 0.5;
-    return { x: u * size, y: (1 - v) * size };
-  };
-  const outer = DIAL_R - 0.22;
-  const innerMin = DIAL_R - 0.52;
-  const innerHour = DIAL_R - 0.78;
-  ctx.strokeStyle = "rgba(86, 70, 54, 0.5)";
-  ctx.lineWidth = 3.2;
-  ctx.beginPath();
-  const ring = toPx(outer, 0);
-  ctx.arc(size / 2, size / 2, Math.hypot(ring.x - size / 2, ring.y - size / 2), 0, Math.PI * 2);
-  ctx.stroke();
-  for (let m = 0; m < 60; m++) {
-    const worldX = Math.sin((m * Math.PI) / 30);
-    const worldY = Math.cos((m * Math.PI) / 30);
-    const specX = -worldX;
-    const specY = -worldY;
-    const hour = m % 5 === 0;
-    const inner = hour ? innerHour : innerMin;
-    const a = toPx(specX * inner, specY * inner);
-    const b = toPx(specX * outer, specY * outer);
-    ctx.strokeStyle = hour ? "rgba(72, 56, 42, 0.68)" : "rgba(86, 70, 54, 0.48)";
-    ctx.lineWidth = hour ? 7.5 : 4.2;
-    ctx.beginPath();
-    ctx.moveTo(a.x, a.y);
-    ctx.lineTo(b.x, b.y);
     ctx.stroke();
   }
   const tex = new THREE.CanvasTexture(canvas);
@@ -104,87 +72,79 @@ const DIAL_UV = {
   },
 };
 
-function ink() {
-  return new THREE.MeshStandardMaterial({
-    color: 0x6a5848,
-    metalness: 0.06,
-    roughness: 0.7,
-  });
-}
-
-function sitMat(opacity: number) {
-  return new THREE.MeshBasicMaterial({
-    color: 0x3f352c,
-    transparent: true,
-    opacity,
-    depthWrite: false,
-  });
-}
-
-function wordmark(title: string, widthMm: number, subtitle?: string) {
-  const w = 2048;
-  const h = subtitle ? 720 : 512;
+function subdialTrack() {
+  const size = 1024;
   const canvas = document.createElement("canvas");
-  canvas.width = w;
-  canvas.height = h;
+  canvas.width = size;
+  canvas.height = size;
   const ctx = canvas.getContext("2d");
   if (!ctx) return null;
-  ctx.clearRect(0, 0, w, h);
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  const font = "Georgia, 'Palatino Linotype', 'Times New Roman', serif";
-  if (subtitle) {
-    ctx.fillStyle = "rgba(86, 70, 54, 0.48)";
-    ctx.font = `500 248px ${font}`;
-    ctx.fillText(title, w / 2, h * 0.34);
-    ctx.fillStyle = "rgba(86, 70, 54, 0.32)";
-    ctx.font = `300 132px ${font}`;
-    ctx.fillText(subtitle, w / 2, h * 0.7);
-  } else {
-    ctx.fillStyle = "rgba(86, 70, 54, 0.46)";
-    ctx.font = `400 300px ${font}`;
-    ctx.fillText(title, w / 2, h / 2 + 12);
+  ctx.fillStyle = "#e8dccb";
+  ctx.fillRect(0, 0, size, size);
+  const cx = size / 2;
+  const cy = size / 2;
+  const outer = size * 0.458;
+  const inner = outer - size * 0.062;
+  ctx.strokeStyle = "rgba(62, 48, 36, 0.58)";
+  ctx.lineWidth = 2.4;
+  ctx.beginPath();
+  ctx.arc(cx, cy, outer, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.lineWidth = 1.8;
+  ctx.beginPath();
+  ctx.arc(cx, cy, inner, 0, Math.PI * 2);
+  ctx.stroke();
+  for (let i = 0; i < 60; i++) {
+    const five = i % 5 === 0;
+    const a = (i * Math.PI) / 30 - Math.PI / 2;
+    ctx.strokeStyle = five ? "rgba(52, 40, 30, 0.78)" : "rgba(72, 56, 42, 0.5)";
+    ctx.lineWidth = five ? 2.6 : 1.25;
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(a) * inner, cy + Math.sin(a) * inner);
+    ctx.lineTo(cx + Math.cos(a) * outer, cy + Math.sin(a) * outer);
+    ctx.stroke();
   }
   const tex = new THREE.CanvasTexture(canvas);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.anisotropy = 8;
-  const mesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(widthMm, widthMm * (h / w)),
-    new THREE.MeshStandardMaterial({
-      map: tex,
-      color: 0x8d7b68,
-      transparent: true,
-      depthWrite: false,
-      metalness: 0,
-      roughness: 0.9,
-      envMapIntensity: 0,
-    }),
-  );
-  mesh.name = "wordmark";
-  return mesh;
+  return tex;
 }
 
 function steelAccent() {
   return new THREE.MeshPhysicalMaterial({
-    color: 0xc9c4bb,
-    metalness: 0.78,
-    roughness: 0.28,
+    color: 0x5a564f,
+    metalness: 0.9,
+    roughness: 0.2,
+    clearcoat: 0.08,
+    clearcoatRoughness: 0.32,
+  });
+}
+
+function rehautSteel() {
+  return new THREE.MeshPhysicalMaterial({
+    color: 0xc4c6ca,
+    metalness: 0.7,
+    roughness: 0.38,
   });
 }
 
 function steelPolish() {
   return new THREE.MeshPhysicalMaterial({
-    color: 0xd2cdc4,
-    metalness: 0.86,
-    roughness: 0.22,
+    color: 0xe2ded6,
+    metalness: 0.96,
+    roughness: 0.09,
+    clearcoat: 0.22,
+    clearcoatRoughness: 0.16,
   });
 }
 
 function roseGold() {
   return new THREE.MeshPhysicalMaterial({
-    color: 0xc4a07a,
-    metalness: 0.9,
-    roughness: 0.22,
+    color: 0xc4a070,
+    metalness: 0.58,
+    roughness: 0.28,
+    clearcoat: 0.1,
+    clearcoatRoughness: 0.3,
   });
 }
 
@@ -230,21 +190,7 @@ function stadiumGeom(width: number, len: number, standing: number) {
   shape.lineTo(r, hy);
   shape.absarc(0, hy, r, 0, Math.PI, false);
   shape.closePath();
-  return extrudeIndex(shape, standing, 0.045, 0.045);
-}
-
-/** Pinched almond — dauphine silhouette with the infinity waist, not a Möbius on every hour. */
-function infinityGeom(width: number, len: number, standing: number) {
-  const shape = new THREE.Shape();
-  const hw = width / 2;
-  const hl = len / 2;
-  shape.moveTo(0, -hl);
-  shape.bezierCurveTo(hw * 0.85, -hl * 0.68, hw * 1.08, -hl * 0.28, hw * 0.2, 0);
-  shape.bezierCurveTo(hw * 1.08, hl * 0.28, hw * 0.85, hl * 0.68, 0, hl);
-  shape.bezierCurveTo(-hw * 0.85, hl * 0.68, -hw * 1.08, hl * 0.28, -hw * 0.2, 0);
-  shape.bezierCurveTo(-hw * 1.08, -hl * 0.28, -hw * 0.85, -hl * 0.68, 0, -hl);
-  shape.closePath();
-  return extrudeIndex(shape, standing, 0.04, 0.035);
+  return extrudeIndex(shape, standing, 0.012, 0.01);
 }
 
 function extrudeIndex(shape: THREE.Shape, standing: number, bevelThickness: number, bevelSize: number) {
@@ -253,8 +199,8 @@ function extrudeIndex(shape: THREE.Shape, standing: number, bevelThickness: numb
     bevelEnabled: true,
     bevelThickness,
     bevelSize,
-    bevelSegments: 2,
-    curveSegments: 16,
+    bevelSegments: 3,
+    curveSegments: 24,
   });
   geom.translate(0, 0, -standing / 2);
   return geom;
@@ -267,11 +213,9 @@ function indexSize(style: MarkerStyle, isTwelve: boolean) {
     case "dauphine":
       return { len: isTwelve ? 2.55 : 1.62, width: isTwelve ? 0.7 : 0.52, standing: STANDING };
     case "curve":
-      return { len: isTwelve ? 2.72 : 1.72, width: isTwelve ? 0.56 : 0.42, standing: 0.42 };
-    case "infinity":
-      return { len: isTwelve ? 2.68 : 1.7, width: isTwelve ? 0.82 : 0.62, standing: 0.34 };
+      return { len: isTwelve ? 2.58 : 1.58, width: isTwelve ? 0.44 : 0.34, standing: 0.34 };
     case "baton":
-      return { len: isTwelve ? 2.55 : 1.62, width: isTwelve ? 0.72 : 0.58, standing: STANDING };
+      return { len: isTwelve ? 2.58 : 1.58, width: isTwelve ? 0.62 : 0.48, standing: STANDING };
   }
 }
 
@@ -279,8 +223,6 @@ function indexGeom(style: MarkerStyle, width: number, len: number, standing: num
   switch (style) {
     case "dauphine":
       return dauphineGeom(width, len, standing);
-    case "infinity":
-      return infinityGeom(width, len, standing);
     case "curve":
       return stadiumGeom(width, len, standing);
     case "baton":
@@ -289,27 +231,27 @@ function indexGeom(style: MarkerStyle, width: number, len: number, standing: num
   }
 }
 
-export function createDial(markers: MarkerStyle = "curve", faceStyle: FaceStyle = "n40"): THREE.Group {
+export function createDial(markers: MarkerStyle = "curve"): THREE.Group {
   const root = new THREE.Group();
   root.name = "dial";
 
   const map = creamTexture();
   const faceMat = new THREE.MeshPhysicalMaterial({
-    color: 0xf7f1e6,
+    color: 0xf4ebe0,
     map: map ?? undefined,
     metalness: 0.03,
-    roughness: 0.5,
+    roughness: 0.48,
   });
   const wellMat = new THREE.MeshPhysicalMaterial({
-    color: 0xeee4d4,
+    color: 0xe8dccb,
     metalness: 0.03,
-    roughness: 0.58,
+    roughness: 0.55,
   });
 
   const shape = new THREE.Shape();
   shape.absarc(0, 0, DIAL_R, 0, Math.PI * 2, false);
   const pipe = new THREE.Path();
-  pipe.absarc(0, 0, 0.82, 0, Math.PI * 2, true);
+  pipe.absarc(0, 0, 0.52, 0, Math.PI * 2, true);
   shape.holes.push(pipe);
   const sub = new THREE.Path();
   sub.absarc(fourth.x, fourth.y, SUB_R - 0.08, 0, Math.PI * 2, true);
@@ -334,19 +276,66 @@ export function createDial(markers: MarkerStyle = "curve", faceStyle: FaceStyle 
   face.name = "dial_face";
   root.add(face);
 
-  const well = new THREE.Mesh(new THREE.CylinderGeometry(SUB_R - 0.12, SUB_R - 0.12, 0.16, 48), wellMat);
-  well.rotation.x = Math.PI / 2;
-  well.position.set(fourth.x, fourth.y, DIAL_Z + 0.08);
-  well.name = "seconds_well";
-  root.add(well);
+  const FIELD_R = 12.2;
+  const padShape = new THREE.Shape();
+  padShape.absarc(0, 0, FIELD_R, 0, Math.PI * 2, false);
+  const padPipe = new THREE.Path();
+  padPipe.absarc(0, 0, 0.52, 0, Math.PI * 2, true);
+  padShape.holes.push(padPipe);
+  const padWell = new THREE.Path();
+  padWell.absarc(fourth.x, fourth.y, SUB_R + 0.18, 0, Math.PI * 2, true);
+  padShape.holes.push(padWell);
+  const padGeom = new THREE.ExtrudeGeometry(padShape, {
+    depth: 0.07,
+    bevelEnabled: false,
+    curveSegments: 64,
+    UVGenerator: DIAL_UV,
+  });
+  const pad = new THREE.Mesh(padGeom, faceMat);
+  pad.position.z = DIAL_SURFACE;
+  pad.name = "dial_field";
+  root.add(pad);
 
-  const rehaut = new THREE.Mesh(
-    new THREE.CylinderGeometry(DIAL_R + 0.08, DIAL_R - 0.15, 0.36, 64, 1, true),
-    steelAccent(),
+  const wellDepth = 0.42;
+  const track = subdialTrack();
+  const wellFloor = new THREE.Mesh(
+    new THREE.CircleGeometry(SUB_R - 0.14, 64),
+    new THREE.MeshPhysicalMaterial({
+      color: 0xe8dccb,
+      map: track ?? undefined,
+      metalness: 0.03,
+      roughness: 0.46,
+    }),
   );
-  rehaut.material.side = THREE.DoubleSide;
-  rehaut.rotation.x = Math.PI / 2;
-  rehaut.position.z = DIAL_SURFACE + 0.06;
+  wellFloor.position.set(fourth.x, fourth.y, DIAL_SURFACE - wellDepth + 0.03);
+  wellFloor.name = "seconds_well";
+  const wellWall = new THREE.Mesh(
+    new THREE.CylinderGeometry(SUB_R - 0.11, SUB_R - 0.11, wellDepth, 48, 1, true),
+    wellMat,
+  );
+  wellWall.material.side = THREE.DoubleSide;
+  wellWall.rotation.x = Math.PI / 2;
+  wellWall.position.set(fourth.x, fourth.y, DIAL_SURFACE - wellDepth / 2);
+  wellWall.name = "seconds_well_wall";
+  root.add(wellFloor, wellWall);
+
+  const rehautShape = new THREE.Shape();
+  rehautShape.absarc(0, 0, DIAL_R + 1.12, 0, Math.PI * 2, false);
+  const rehautHole = new THREE.Path();
+  rehautHole.absarc(0, 0, DIAL_R + 0.08, 0, Math.PI * 2, true);
+  rehautShape.holes.push(rehautHole);
+  const rehaut = new THREE.Mesh(
+    new THREE.ExtrudeGeometry(rehautShape, {
+      depth: 0.08,
+      bevelEnabled: true,
+      bevelThickness: 0.035,
+      bevelSize: 0.06,
+      bevelSegments: 2,
+      curveSegments: 64,
+    }),
+    rehautSteel(),
+  );
+  rehaut.position.z = DIAL_SURFACE - 0.01;
   rehaut.name = "rehaut";
   root.add(rehaut);
 
@@ -361,26 +350,17 @@ export function createDial(markers: MarkerStyle = "curve", faceStyle: FaceStyle 
     const specY = -worldY;
     const isTwelve = k === 0;
     const { len, width, standing } = indexSize(markers, isTwelve);
-    const midR = DIAL_R - 0.88 - len / 2;
+    const midR = DIAL_R - 0.38 - len / 2;
     const baton = new THREE.Mesh(indexGeom(markers, width, len, standing), applied);
-    baton.position.set(specX * midR, specY * midR, DIAL_SURFACE + standing / 2);
+    baton.position.set(specX * midR, specY * midR, DIAL_SURFACE + standing / 2 + 0.04);
     baton.rotation.z = Math.atan2(specX, specY);
     baton.name = `index_${k === 0 ? 12 : k}`;
-    const sit = new THREE.Mesh(
-      markers === "curve"
-        ? stadiumGeom(width * 1.14, len * 1.1, 0.02)
-        : indexGeom(markers, width * 1.12, len * 1.08, 0.02),
-      sitMat(0.17),
-    );
-    sit.position.z = -standing / 2 + 0.012;
-    sit.name = `${baton.name}_sit`;
-    baton.add(sit);
     if (withFacet) {
       const polish =
         markers === "curve"
-          ? new THREE.Mesh(stadiumGeom(width * 0.4, len * 0.64, 0.03), facet)
+          ? new THREE.Mesh(stadiumGeom(width * 0.72, len * 0.78, 0.022), facet)
           : new THREE.Mesh(
-              new THREE.BoxGeometry(width * (markers === "slim" ? 0.42 : 0.5), len * 0.68, 0.022),
+              new THREE.BoxGeometry(width * (markers === "slim" ? 0.62 : 0.68), len * 0.78, 0.022),
               facet,
             );
       polish.position.z = standing / 2;
@@ -391,56 +371,35 @@ export function createDial(markers: MarkerStyle = "curve", faceStyle: FaceStyle 
   }
 
   const ringShape = new THREE.Shape();
-  ringShape.absarc(0, 0, SUB_R - 0.12, 0, Math.PI * 2, false);
+  ringShape.absarc(0, 0, SUB_R + 0.06, 0, Math.PI * 2, false);
   const ringHole = new THREE.Path();
-  ringHole.absarc(0, 0, SUB_R - 0.38, 0, Math.PI * 2, true);
+  ringHole.absarc(0, 0, SUB_R - 0.34, 0, Math.PI * 2, true);
   ringShape.holes.push(ringHole);
   const chapter = new THREE.Mesh(
-    new THREE.ExtrudeGeometry(ringShape, { depth: 0.12, bevelEnabled: false, curveSegments: 48 }),
+    new THREE.ExtrudeGeometry(ringShape, {
+      depth: 0.07,
+      bevelEnabled: true,
+      bevelThickness: 0.012,
+      bevelSize: 0.01,
+      bevelSegments: 2,
+      curveSegments: 80,
+    }),
     roseGold(),
   );
-  chapter.position.set(fourth.x, fourth.y, DIAL_Z + 0.16);
+  chapter.position.set(fourth.x, fourth.y, DIAL_SURFACE + 0.02);
   chapter.name = "seconds_subdial_ring";
   root.add(chapter);
 
-  const tickMat = ink();
-  const ringInner = SUB_R - 0.4;
-  for (let i = 0; i < 60; i++) {
-    const a = (i * Math.PI) / 30;
-    const sx = Math.sin(a);
-    const sy = Math.cos(a);
-    const five = i % 5 === 0;
-    const len = five ? 0.36 : 0.18;
-    const tick = new THREE.Mesh(new THREE.BoxGeometry(five ? 0.05 : 0.028, len, 0.035), tickMat);
-    const r = ringInner - len / 2;
-    tick.position.set(fourth.x + sx * r, fourth.y + sy * r, DIAL_Z + 0.22);
-    tick.rotation.z = Math.atan2(sx, sy);
-    tick.name = `seconds_tick_${i}`;
-    root.add(tick);
-  }
-
-  const label =
-    faceStyle === "nocturne"
-      ? wordmark("Nocturne", 6.6)
-      : faceStyle === "n40"
-        ? wordmark("N.40", 5.6, "Nocturne")
-        : null;
-  if (label) {
-    label.position.set(fourth.x, fourth.y + SUB_R + 1.42, DIAL_SURFACE + 0.02);
-    label.rotation.z = Math.PI;
-    root.add(label);
-  }
-
   const cannonMat = steelAccent();
-  const cannon = new THREE.Mesh(new THREE.CylinderGeometry(0.46, 0.4, 0.3, 20), cannonMat);
+  const cannon = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.14, 0.1, 20), cannonMat);
   cannon.rotation.x = Math.PI / 2;
-  cannon.position.set(0, 0, DIAL_SURFACE + 0.12);
+  cannon.position.set(0, 0, DIAL_SURFACE + 0.05);
   cannon.name = "center_cannon";
   root.add(cannon);
 
-  const subPipe = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.24, 0.28, 16), cannonMat);
+  const subPipe = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.14, 0.08, 16), cannonMat);
   subPipe.rotation.x = Math.PI / 2;
-  subPipe.position.set(fourth.x, fourth.y, DIAL_Z + 0.22);
+  subPipe.position.set(fourth.x, fourth.y, DIAL_SURFACE - wellDepth + 0.08);
   subPipe.name = "seconds_pipe";
   root.add(subPipe);
 

@@ -263,6 +263,7 @@ export function createPlates(): THREE.Group {
   for (const c of all) {
     const isCenter = c.x === 0 && c.y === 0;
     if (isCenter) continue;
+    if (c === AXES.fourth) continue;
     plateCluster.add(jewel(c.x, c.y, plateTop - 0.12, plateTop + 0.18, ruby));
   }
   for (const c of bridgeCenters) {

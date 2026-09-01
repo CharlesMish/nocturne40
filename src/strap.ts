@@ -5,20 +5,21 @@
  */
 import * as THREE from "three";
 
-const THICK = 1.32;
+const THICK = 1.28;
 const W0 = 7.55;
-const W1 = 6.55;
-const SEGMENTS = 18;
+const W1 = 6.45;
+const SEGMENTS = 28;
 
 function spinePoints() {
   return [
-    new THREE.Vector3(0, 3.05, 0.05),
-    new THREE.Vector3(0, 7.2, -0.25),
-    new THREE.Vector3(0, 12.4, -1.6),
-    new THREE.Vector3(0, 17.6, -4.8),
-    new THREE.Vector3(0, 21.8, -9.6),
-    new THREE.Vector3(0, 24.4, -15.8),
-    new THREE.Vector3(0, 25.4, -22.5),
+    new THREE.Vector3(0, 2.55, 0.02),
+    new THREE.Vector3(0, 6.4, -0.18),
+    new THREE.Vector3(0, 11.2, -1.35),
+    new THREE.Vector3(0, 16.4, -4.2),
+    new THREE.Vector3(0, 20.8, -8.8),
+    new THREE.Vector3(0, 23.8, -14.6),
+    new THREE.Vector3(0, 25.2, -21.2),
+    new THREE.Vector3(0, 25.6, -24.0),
   ];
 }
 
@@ -28,55 +29,72 @@ function leatherMaps() {
   canvas.width = n;
   canvas.height = n;
   const ctx = canvas.getContext("2d");
-  if (!ctx) return { map: null as THREE.CanvasTexture | null };
-  ctx.fillStyle = "#7a5340";
+  if (!ctx) return { map: null as THREE.CanvasTexture | null, roughness: null as THREE.CanvasTexture | null };
+  ctx.fillStyle = "#5c3c32";
   ctx.fillRect(0, 0, n, n);
   for (let y = 0; y < n; y++) {
-    ctx.fillStyle = `rgba(20, 10, 6, ${0.04 + (y % 7) * 0.008})`;
+    ctx.fillStyle = `rgba(92, 58, 44, ${0.06 + (y % 11) * 0.01})`;
     ctx.fillRect(0, y, n, 1);
   }
-  for (let i = 0; i < 2800; i++) {
+  for (let i = 0; i < 2400; i++) {
     const x = Math.random() * n;
     const y = Math.random() * n;
-    ctx.fillStyle = `rgba(0,0,0,${0.05 + Math.random() * 0.12})`;
+    ctx.fillStyle = `rgba(${62 + Math.random() * 36}, ${36 + Math.random() * 20}, ${26 + Math.random() * 14}, ${0.07 + Math.random() * 0.14})`;
     ctx.beginPath();
-    ctx.ellipse(x, y, 0.6 + Math.random(), 0.4 + Math.random() * 0.8, 0, 0, Math.PI * 2);
+    ctx.ellipse(x, y, 0.8 + Math.random() * 1.2, 0.4 + Math.random() * 1.1, Math.random() * 0.6, 0, Math.PI * 2);
     ctx.fill();
   }
-  ctx.strokeStyle = "rgba(90, 70, 50, 0.35)";
-  ctx.lineWidth = 1.2;
-  for (const x of [70, n - 70]) {
-    ctx.setLineDash([3, 5.5]);
-    ctx.beginPath();
-    ctx.moveTo(x, 8);
-    ctx.lineTo(x, n - 8);
-    ctx.stroke();
-  }
-  ctx.setLineDash([]);
   const map = new THREE.CanvasTexture(canvas);
   map.wrapS = THREE.RepeatWrapping;
   map.wrapT = THREE.RepeatWrapping;
   map.repeat.set(1, 3.2);
   map.colorSpace = THREE.SRGBColorSpace;
   map.anisotropy = 8;
-  return { map };
+
+  const rCanvas = document.createElement("canvas");
+  rCanvas.width = n;
+  rCanvas.height = n;
+  const rctx = rCanvas.getContext("2d");
+  if (!rctx) return { map, roughness: null as THREE.CanvasTexture | null };
+  rctx.fillStyle = "#c8c8c8";
+  rctx.fillRect(0, 0, n, n);
+  for (let i = 0; i < 1800; i++) {
+    const x = Math.random() * n;
+    const y = Math.random() * n;
+    const g = 140 + Math.floor(Math.random() * 90);
+    rctx.fillStyle = `rgb(${g},${g},${g})`;
+    rctx.beginPath();
+    rctx.ellipse(x, y, 1.2 + Math.random() * 2, 0.6 + Math.random(), 0, 0, Math.PI * 2);
+    rctx.fill();
+  }
+  const roughness = new THREE.CanvasTexture(rCanvas);
+  roughness.wrapS = THREE.RepeatWrapping;
+  roughness.wrapT = THREE.RepeatWrapping;
+  roughness.repeat.set(1, 3.2);
+  roughness.colorSpace = THREE.NoColorSpace;
+  return { map, roughness };
 }
 
 export function leatherMat() {
-  const { map } = leatherMaps();
-  return new THREE.MeshStandardMaterial({
-    color: 0x7a5340,
+  const { map, roughness } = leatherMaps();
+  return new THREE.MeshPhysicalMaterial({
+    color: 0x6a4538,
     map: map ?? undefined,
-    roughness: 0.88,
+    roughnessMap: roughness ?? undefined,
+    roughness: 0.74,
     metalness: 0.02,
+    sheen: 0.28,
+    sheenColor: new THREE.Color(0x8a624e),
+    sheenRoughness: 0.78,
+    specularIntensity: 0.18,
   });
 }
 
 export function strapSteel() {
   return new THREE.MeshStandardMaterial({
-    color: 0xc5c6ca,
+    color: 0xb7b8bc,
     metalness: 0.9,
-    roughness: 0.22,
+    roughness: 0.38,
   });
 }
 
@@ -94,7 +112,7 @@ function band(hide: THREE.Material) {
     const len = Math.hypot(dy, dz);
     const t = (i + 0.5) / (pts.length - 1);
     const w = (W0 * (1 - t) + W1 * t) * 2;
-    const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, len * 1.08, THICK), hide);
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, len * 1.12, THICK), hide);
     mesh.position.copy(mid);
     mesh.rotation.x = Math.atan2(dz, dy);
     group.add(mesh);
@@ -129,11 +147,18 @@ function keeper(hide: THREE.Material, y: number, z: number, tilt: number) {
 }
 
 function springBar(bar: THREE.Material) {
-  const geom = new THREE.CylinderGeometry(0.38, 0.38, 15.6, 12);
+  const geom = new THREE.CylinderGeometry(0.36, 0.36, 15.2, 12);
   geom.rotateZ(Math.PI / 2);
   const mesh = new THREE.Mesh(geom, bar);
-  mesh.position.set(0, 3.15, 0.02);
+  mesh.position.set(0, 3.12, 0.02);
   mesh.name = "springbar";
+  return mesh;
+}
+
+function strapSeat(hide: THREE.Material) {
+  const mesh = new THREE.Mesh(new THREE.BoxGeometry(W0 * 2 - 0.5, 2.35, THICK + 0.16), hide);
+  mesh.position.set(0, 3.12, 0.03);
+  mesh.name = "strap_seat";
   return mesh;
 }
 
@@ -176,6 +201,7 @@ export function addStrapToLug(tilt: THREE.Group, withBuckle: boolean) {
   const hide = leatherMat();
   const bar = strapSteel();
   tilt.add(band(hide));
+  tilt.add(strapSeat(hide));
   tilt.add(keeper(hide, 9.4, -0.7, 0.12));
   if (withBuckle) tilt.add(keeper(hide, 20.2, -8.2, 0.55));
   tilt.add(springBar(bar));

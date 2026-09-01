@@ -3,10 +3,11 @@
  * Do not import vendor source — only the GLB asset URL.
  */
 import * as THREE from "three";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { createCase } from "./case";
-import { createDial, FACE_LANES, MARKER_LANES, type FaceStyle, type MarkerStyle } from "./dial";
+import { applySteelIbl, createCase } from "./case";
+import { createDial, MARKER_LANES, type MarkerStyle } from "./dial";
 import { attachHands, HAND_LANES, type HandStyle } from "./hands";
 import { createPlates } from "./plate";
 
@@ -39,6 +40,10 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 0.98;
 canvasHost.prepend(renderer.domElement);
+
+const pmrem = new THREE.PMREMGenerator(renderer);
+const steelEnv = pmrem.fromScene(new RoomEnvironment(), 0.08).texture;
+pmrem.dispose();
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x141414);
@@ -149,6 +154,7 @@ if (plateCluster) explode.plate.attach(plateCluster);
 if (bridgeCluster) explode.bridge.attach(bridgeCluster);
 
 const casing = createCase();
+applySteelIbl(casing, steelEnv);
 wrapper.add(casing);
 wrapper.updateMatrixWorld(true);
 const crystal = casing.getObjectByName("crystal");
@@ -160,11 +166,9 @@ explode.case.attach(casing);
 let markerStyle: MarkerStyle = "curve";
 const startMarkers = MARKER_LANES.find((lane) => lane === new URLSearchParams(location.search).get("markers"));
 if (startMarkers) markerStyle = startMarkers;
-let faceStyle: FaceStyle = "n40";
-const startFace = FACE_LANES.find((lane) => lane === new URLSearchParams(location.search).get("face"));
-if (startFace) faceStyle = startFace;
 
-let dial = createDial(markerStyle, faceStyle);
+let dial = createDial(markerStyle);
+applyDialIbl(dial);
 wrapper.add(dial);
 wrapper.updateMatrixWorld(true);
 explode.dial.attach(dial);
@@ -205,10 +209,28 @@ function applyOrientation() {
       exploded ? "X assembled." : "X explode.",
       `H ${handStyle}.`,
       `F ${markerStyle}.`,
-      `C ${faceStyle}.`,
       "R · 1 dial · B caseback · S side · P plates · D face · G grid",
     ].join(" ");
   }
+}
+
+function applyDialIbl(root: THREE.Object3D) {
+  root.traverse((obj) => {
+    if (!(obj instanceof THREE.Mesh)) return;
+    const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+    const facet = obj.name.endsWith("_facet");
+    const named =
+      obj.name === "rehaut" ||
+      obj.name === "center_cannon" ||
+      obj.name === "seconds_pipe";
+    if (!facet && !named) return;
+    for (const mat of mats) {
+      if (!(mat instanceof THREE.MeshStandardMaterial)) continue;
+      mat.envMap = steelEnv;
+      mat.envMapIntensity = facet ? 0.7 : 0.38;
+      mat.needsUpdate = true;
+    }
+  });
 }
 
 function setFaceVisible(visible: boolean) {
@@ -247,7 +269,8 @@ function toggleOrientation() {
 
 function rebuildDial() {
   explode.dial.remove(dial);
-  dial = createDial(markerStyle, faceStyle);
+  dial = createDial(markerStyle);
+  applyDialIbl(dial);
   explode.dial.add(dial);
   explode.dial.visible = faceVisible;
   applyOrientation();
@@ -261,6 +284,7 @@ function rebuildHands() {
   handMeshes = attachHands(trainRoot, handStyle);
   wrapper.updateMatrixWorld(true);
   for (const hand of handMeshes) explode.hands.attach(hand);
+  applySteelIbl(explode.hands, steelEnv);
   applyOrientation();
 }
 
@@ -269,11 +293,6 @@ window.addEventListener("keydown", (event) => {
   if (event.key === "f" || event.key === "F") {
     const i = MARKER_LANES.indexOf(markerStyle);
     markerStyle = MARKER_LANES[(i + 1) % MARKER_LANES.length];
-    rebuildDial();
-  }
-  if (event.key === "c" || event.key === "C") {
-    const i = FACE_LANES.indexOf(faceStyle);
-    faceStyle = FACE_LANES[(i + 1) % FACE_LANES.length];
     rebuildDial();
   }
   if (event.key === "h" || event.key === "H") {
@@ -359,6 +378,7 @@ if (!glbUrl) {
       handMeshes = attachHands(trainRoot, handStyle);
       wrapper.updateMatrixWorld(true);
       for (const hand of handMeshes) explode.hands.attach(hand);
+      applySteelIbl(explode.hands, steelEnv);
       setFaceVisible(true);
     },
     undefined,
