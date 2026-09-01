@@ -175,25 +175,65 @@ explode.dial.attach(dial);
 
 let handMeshes: THREE.Object3D[] = [];
 let trainRoot: THREE.Object3D | null = null;
-let handStyle: HandStyle = "fine";
+let handStyle: HandStyle = "leaf";
 const startHands = new URLSearchParams(location.search).get("hands");
-if (startHands === "leaf" || startHands === "open" || startHands === "fine") handStyle = startHands;
+const startCw = new URLSearchParams(location.search).get("cw");
+if (startCw === "open" || startHands === "open") handStyle = "open";
 let product = true;
 let faceVisible = true;
 let exploded = false;
-type CamView = "dial" | "back" | "side";
+type CamView = "dial" | "back" | "side" | "wrist" | "oblique" | "seconds";
 let camView: CamView = "dial";
 const startView = new URLSearchParams(location.search).get("view");
-if (startView === "side" || startView === "back" || startView === "dial") camView = startView;
+if (
+  startView === "side" ||
+  startView === "back" ||
+  startView === "dial" ||
+  startView === "wrist" ||
+  startView === "oblique" ||
+  startView === "seconds"
+) {
+  camView = startView;
+}
+
+type LightMode = "warm" | "cool";
+let lightMode: LightMode = new URLSearchParams(location.search).get("light") === "cool" ? "cool" : "warm";
+
+function parseMinuteClock(): number | null {
+  const v = new URLSearchParams(location.search).get("min");
+  if (v === "6") return 6;
+  if (v === "5.5" || v === "530") return 5.5;
+  if (v === "6.5" || v === "630") return 6.5;
+  return null;
+}
+
+function applyLightPalette() {
+  if (lightMode === "cool") {
+    scene.background.set(0x16181a);
+    hemi.color.set(0xd5dce2);
+    hemi.groundColor.set(0x1c2024);
+    key.color.set(0xe4eef4);
+    fill.color.set(0xd8dee4);
+    renderer.toneMappingExposure = 0.94;
+  } else {
+    scene.background.set(0x141414);
+    hemi.color.set(0xe4e3e0);
+    hemi.groundColor.set(0x2a2826);
+    key.color.set(0xfff3e4);
+    fill.color.set(0xe8ebe8);
+    renderer.toneMappingExposure = 0.98;
+  }
+}
 
 function applyViewLights() {
+  applyLightPalette();
   const onBack = camView === "back";
   const onSide = camView === "side";
-  key.intensity = onBack ? 0.22 : 0.92;
+  key.intensity = onBack ? 0.22 : lightMode === "cool" ? 0.82 : 0.92;
   fill.visible = !onBack;
-  fill.intensity = onSide ? 0.16 : 0.26;
-  sideFill.visible = exploded || onSide;
-  sideFill.intensity = exploded ? 0.4 : 0.5;
+  fill.intensity = onSide ? 0.16 : lightMode === "cool" ? 0.32 : 0.26;
+  sideFill.visible = exploded || onSide || camView === "oblique";
+  sideFill.intensity = exploded ? 0.4 : camView === "oblique" ? 0.28 : 0.5;
   backKey.visible = onBack;
   backFill.visible = onBack;
   peekLight.visible = onBack;
@@ -209,9 +249,23 @@ function applyOrientation() {
       exploded ? "X assembled." : "X explode.",
       `H ${handStyle}.`,
       `F ${markerStyle}.`,
-      "R · 1 dial · B caseback · S side · P plates · D face · G grid",
+      "R · 1 dial · 2 wrist · 3 3/4 · 4 seconds · B caseback · S side · P plates · D face · G grid",
     ].join(" ");
   }
+}
+
+function applyNavyIbl(root: THREE.Object3D) {
+  root.traverse((obj) => {
+    if (!(obj instanceof THREE.Mesh)) return;
+    const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+    for (const mat of mats) {
+      if (!(mat instanceof THREE.MeshStandardMaterial)) continue;
+      if (mat.metalness >= 0.5) continue;
+      mat.envMap = steelEnv;
+      mat.envMapIntensity = 0.22;
+      mat.needsUpdate = true;
+    }
+  });
 }
 
 function applyDialIbl(root: THREE.Object3D) {
@@ -254,12 +308,45 @@ function applyExplode() {
 
 function applyCamera() {
   camera.up.set(0, 1, 0);
-  if (camView === "side") camera.position.set(CAM_DIST, 0, 8 * MM);
-  else camera.position.set(0, 0, camView === "dial" ? CAM_DIST : -CAM_DIST);
-  controls.target.set(0, 0, 0);
+  camera.fov = 32;
+  if (camView === "side") {
+    camera.position.set(CAM_DIST, 0, 8 * MM);
+    controls.target.set(0, 0, 0);
+  } else if (camView === "back") {
+    camera.position.set(0, 0, -CAM_DIST);
+    controls.target.set(0, 0, 0);
+  } else if (camView === "wrist") {
+    camera.fov = 28;
+    camera.position.set(0, 0, 205 * MM);
+    controls.target.set(0, 0, 0);
+  } else if (camView === "oblique") {
+    camera.fov = 32;
+    camera.position.set(36 * MM, -24 * MM, 98 * MM);
+    controls.target.set(0, -2.2 * MM, 2.2 * MM);
+  } else if (camView === "seconds") {
+    camera.fov = 24;
+    camera.position.set(0, -5.05 * MM, 38 * MM);
+    controls.target.set(0, -5.05 * MM, 3.6 * MM);
+  } else {
+    camera.position.set(0, 0, CAM_DIST);
+    controls.target.set(0, 0, 0);
+  }
+  camera.updateProjectionMatrix();
   camera.lookAt(controls.target);
+  const damping = controls.enableDamping;
+  controls.enableDamping = false;
   controls.update();
+  controls.enableDamping = damping;
   applyViewLights();
+}
+
+function applyMinuteClock() {
+  const clock = parseMinuteClock();
+  if (clock == null) return;
+  const z = THREE.MathUtils.degToRad(-(clock * 30 + 180));
+  for (const hand of handMeshes) {
+    if (hand.name === "minute_hand") hand.rotation.z = z;
+  }
 }
 
 function toggleOrientation() {
@@ -284,7 +371,8 @@ function rebuildHands() {
   handMeshes = attachHands(trainRoot, handStyle);
   wrapper.updateMatrixWorld(true);
   for (const hand of handMeshes) explode.hands.attach(hand);
-  applySteelIbl(explode.hands, steelEnv);
+  applyNavyIbl(explode.hands);
+  applyMinuteClock();
   applyOrientation();
 }
 
@@ -295,7 +383,7 @@ window.addEventListener("keydown", (event) => {
     markerStyle = MARKER_LANES[(i + 1) % MARKER_LANES.length];
     rebuildDial();
   }
-  if (event.key === "h" || event.key === "H") {
+  if (event.key === "h" || event.key === "H" || event.key === "c" || event.key === "C") {
     const i = HAND_LANES.indexOf(handStyle);
     handStyle = HAND_LANES[(i + 1) % HAND_LANES.length];
     rebuildHands();
@@ -303,6 +391,18 @@ window.addEventListener("keydown", (event) => {
   if (event.key === "r" || event.key === "R") toggleOrientation();
   if (event.key === "1") {
     camView = "dial";
+    applyCamera();
+  }
+  if (event.key === "2") {
+    camView = "wrist";
+    applyCamera();
+  }
+  if (event.key === "3") {
+    camView = "oblique";
+    applyCamera();
+  }
+  if (event.key === "4") {
+    camView = "seconds";
     applyCamera();
   }
   if (event.key === "b" || event.key === "B") {
@@ -378,7 +478,9 @@ if (!glbUrl) {
       handMeshes = attachHands(trainRoot, handStyle);
       wrapper.updateMatrixWorld(true);
       for (const hand of handMeshes) explode.hands.attach(hand);
-      applySteelIbl(explode.hands, steelEnv);
+      applyNavyIbl(explode.hands);
+      applyMinuteClock();
+      applyCamera();
       setFaceVisible(true);
     },
     undefined,
