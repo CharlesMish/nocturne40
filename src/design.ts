@@ -24,9 +24,12 @@ export const LUG_FAMILIES = {
   taper: {label:'Taper', description:'A fuller, straighter middle.'},
 } as const;
 export type LugFamily = keyof typeof LUG_FAMILIES;
+/** Selected Arc exterior; explicit family URLs retain the comparison studies. */
+export const SELECTED_ARC_LUG: LugFamily = 'flow';
 export function arcLugFamily(): LugFamily {
   const value=typeof location==='undefined'?null:new URLSearchParams(location.search).get('lug');
-  return arcStudy() && (value==='flow'||value==='crest'||value==='taper') ? value : 'arc';
+  if (!arcStudy()) return 'arc';
+  return value==='arc'||value==='flow'||value==='crest'||value==='taper' ? value : SELECTED_ARC_LUG;
 }
 
 /** Coordinated choices for the two opt-in studies, all dimensions in mm. */

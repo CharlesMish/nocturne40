@@ -20,9 +20,9 @@ See [strap construction and validation](docs/STRAP_CONSTRUCTION.md) for the fina
 
 ## Exploration branch
 
-Open `/explore.html` for a live comparison of the accepted watch and the first Arc study. See [Astra exploration notes](docs/ASTRA_EXPLORATION.md). The accepted baseline remains commit `154cb51` on `main`; the study is opt-in and does not touch the vendor train.
+Flow is the selected lug family for the Arc exterior. Open `/explore.html` for a live comparison of the accepted watch and Arc / Flow, or open `/?design=synthesis&finish=physical2&exploration=arc&lug=flow&view=oblique&light=neutral&pose=ten-ten` directly. See [Astra exploration notes](docs/ASTRA_EXPLORATION.md). The accepted baseline remains commit `154cb51` on `main`; the exploration is opt-in and does not touch the vendor train.
 
-Open `/lugs.html` for the related Arc lug families; see [lug-family notes](docs/ARC_LUG_FAMILIES.md).
+Open `/lugs.html` for the retained lug-family comparisons; see [lug-family notes](docs/ARC_LUG_FAMILIES.md). Arc defaults to Flow; `lug=arc` recalls the original Arc lugs.
 
 ## Historical starter instructions
 

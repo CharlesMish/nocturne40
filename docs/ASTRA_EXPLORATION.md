@@ -4,6 +4,8 @@ The accepted Nocturne40 baseline is commit `154cb51` on `main`. The user authori
 
 Run the viewer and open `/explore.html`. It compares the accepted finish with the opt-in `exploration=arc` study, both using `design=synthesis&finish=physical2`. The ordinary accepted-design URL remains unchanged. The comparison offers shared view presets, studio/neutral environments, fixed 10:10 hands and a synchronized reflection sweep.
 
+Flow is now the selected Arc lug family following user review. The comparison shows Arc / Flow; `lug=arc` recalls the original lugs described below. See [the lug-family selection](ARC_LUG_FAMILIES.md). Flow's reviewed geometry is locked without borrowing Taper's fuller middle.
+
 ## First design proposition
 
 Give the case, lugs and strap a more continuous side silhouette. Replace the broad cylindrical flank with a gentle outward curve rising toward the existing upper shoulder. Narrow the middle of each lug by up to 0.42 mm while retaining its inner strap boundary, then let the leather bend slightly earlier beyond the secured terminal.
