@@ -1,0 +1,15 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nocturne40 — Astra exploration</title>
+<style>body{margin:0;background:#202020;color:#e4ded3;font:15px system-ui}header{padding:18px 24px;max-width:1200px;margin:auto}p{line-height:1.45}select,button{font:inherit}label{margin-right:18px;display:inline-block}main{display:flex;overflow:auto;gap:8px;padding:0 12px}article{width:50%;min-width:420px}iframe{width:100%;height:72vh;min-height:500px;border:0;background:#151515}h2{font-size:15px;font-weight:500}a{color:#e8cba0}</style></head>
+<body><header><p><strong>Nocturne40 · Arc study</strong><br>A curved flank and narrower lug middle connect the case to the leather departure. This is the first exploration from accepted baseline <code>154cb51</code>.</p>
+<label>View <select id="view"><option value="oblique">Oblique</option><option value="dial">Front</option><option value="side">Profile</option><option value="lug">Lug underside</option><option value="loopside">Attachment</option><option value="rake">Case flank</option></select></label>
+<label>Environment <select id="env"><option value="studio">Studio</option><option value="bright">Neutral inspection</option></select></label><label><input id="sweep" type="checkbox"> Reflection sweep</label>
+<p>Both panels share the lighting, exposure, view and hand pose. Choose a view to reset any manual orbit.</p></header>
+<main><article><h2>Accepted baseline · <a id="baseLink">Open</a></h2><iframe id="base" title="Accepted baseline"></iframe></article><article><h2>Arc exploration · <a id="arcLink">Open</a></h2><iframe id="arc" title="Arc exploration"></iframe></article></main>
+<script type="module">
+const view=document.querySelector('#view'),env=document.querySelector('#env'),sweep=document.querySelector('#sweep');
+const settings=()=>({type:'nocturne:compare',view:view.value,light:'neutral',pose:'ten-ten',sweep:sweep.checked});
+function update(){for(const name of ['base','arc'])document.querySelector('#'+name).contentWindow?.postMessage(settings(),location.origin);}
+function load(){for(const name of ['base','arc']){const q=new URLSearchParams({design:'synthesis',finish:'physical2',view:view.value,environment:env.value,light:'neutral',pose:'ten-ten'});if(name==='arc')q.set('exploration','arc');document.querySelector('#'+name+'Link').href='./?'+q;q.set('embed','1');document.querySelector('#'+name).src='./?'+q;}}
+view.onchange=()=>{update();for(const name of ['base','arc']){const a=document.querySelector('#'+name+'Link'),u=new URL(a.href);u.searchParams.set('view',view.value);a.href=u;}};env.onchange=load;sweep.onchange=update;
+window.addEventListener('message',event=>{if(event.origin===location.origin&&event.data?.type==='nocturne:ready'&&['base','arc'].some(n=>document.querySelector('#'+n).contentWindow===event.source))update();});load();
+</script></body></html>

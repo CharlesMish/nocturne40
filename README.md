@@ -18,6 +18,10 @@ Add `&environment=bright` for neutral inspection. The bare URL intentionally ret
 
 See [strap construction and validation](docs/STRAP_CONSTRUCTION.md) for the final pass and preserved design decisions. The vendor train remains unchanged. Local `.review/` galleries and `PROGRESS.md` are excluded from Git; the source regenerates the live model, but saved review screenshots are local artifacts.
 
+## Exploration branch
+
+Open `/explore.html` for a live comparison of the accepted watch and the first Arc study. See [Astra exploration notes](docs/ASTRA_EXPLORATION.md). The accepted baseline remains commit `154cb51` on `main`; the study is opt-in and does not touch the vendor train.
+
 ## Historical starter instructions
 
 # Nocturne 40 — Cursor starter (B0 + B1 only)

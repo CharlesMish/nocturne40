@@ -15,6 +15,8 @@ export const executionFinish = () => typeof location !== 'undefined' && new URLS
 export const physicalFinish = () => typeof location !== 'undefined' && new URLSearchParams(location.search).get('finish') === 'physical' || seatingFinish();
 export const seatingFinish = () => typeof location !== 'undefined' && new URLSearchParams(location.search).get('finish') === 'physical2';
 
+export const arcStudy = () => seatingFinish() && new URLSearchParams(location.search).get('exploration') === 'arc';
+
 /** Coordinated choices for the two opt-in studies, all dimensions in mm. */
 export const DESIGN_STUDIES = {
   sculptural: {

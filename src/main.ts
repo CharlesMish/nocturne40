@@ -12,7 +12,7 @@ import { createDial, MARKER_LANES, tickLane, type CreamLook, type MarkerLook, ty
 import { attachHands, HAND_LANES, SECONDS_LANES, type HandStyle, type SecondsLane } from "./hands";
 import { leatherLane } from "./strap";
 import { createPlates } from "./plate";
-import { designStudy, executionFinish, seatingFinish, parseDesignVariant, corrected, designLabel } from "./design";
+import { designStudy, executionFinish, seatingFinish, arcStudy, parseDesignVariant, corrected, designLabel } from "./design";
 import { isComparisonSettings, COMPARISON_POSES, type ComparisonSettings } from "./comparison";
 import glbUrl from "../vendor/going-train-core-v1/assets/going-train-core.glb?url";
 
@@ -191,7 +191,7 @@ const rehautLook: RehautLook =
   study === 5 ? "quiet" : study === 4.6 ? "lift" : study === 4.5 ? "slope" : study === 4 ? "family" : "current";
 
 
-document.title = `${designLabel(design)} \u00b7 Nocturne 40`;
+document.title = `${arcStudy() ? "Arc exploration" : designLabel(design)} \u00b7 Nocturne 40`;
 const casing = createCase(steelGrade, design);
 applySteelIbl(casing, steelEnv, steelGrade);
 if (corrected(design)) {

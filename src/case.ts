@@ -6,7 +6,7 @@
 import * as THREE from "three";
 import { receiveSpringTip } from "./socket";
 import { addStrapToLug } from "./strap";
-import { designStudy, executionFinish, seatingFinish, corrected, physicalStudy, dressFamily, containment, type DesignVariant } from "./design";
+import { designStudy, executionFinish, seatingFinish, arcStudy, corrected, physicalStudy, dressFamily, containment, type DesignVariant } from "./design";
 
 import { refinedLathe, crystalShell, opticalGlass } from "./surfaces";
 
@@ -256,12 +256,40 @@ function dressHorn(signX: 1 | -1, mat: THREE.Material, design: DesignVariant) {
 
 /** Sampled rounded cross sections let the root and downward tip curve without
  * bending a few large cap triangles. The inner edge clears an 18 mm strap. */
+/** Monotone cubic exterior profile for the exploration branch, in mm.
+ * Interpolation is shared by the case surface and lug-root registration. */
+function arcRadius(z:number){
+  const zs=[-3.05,-2.6,-1.6,0,1.8,2.85,3.16,3.95];
+  const rs=[18.9,19.36,19.50,19.68,19.94,20,20,19.18];
+  if(z>=zs[zs.length-1])return rs[rs.length-1];
+  const slopes=zs.slice(1).map((v,i)=>(rs[i+1]-rs[i])/(v-zs[i]));
+  const tangent=(i:number)=>i===0?slopes[0]:i===zs.length-1?slopes[i-1]:slopes[i-1]*slopes[i]<=0?0:2/(1/slopes[i-1]+1/slopes[i]);
+  const j=Math.max(0,Math.min(zs.length-2,zs.findIndex(v=>v>=z)-1));
+  const h=zs[j+1]-zs[j],t=THREE.MathUtils.clamp((z-zs[j])/h,0,1);
+  return (2*t*t*t-3*t*t+1)*rs[j]+(t*t*t-2*t*t+t)*h*tangent(j)+(-2*t*t*t+3*t*t)*rs[j+1]+(t*t*t-t*t)*h*tangent(j+1);
+}
+
+function arcCaseGeometry(){
+  const n=128,points=[new THREE.Vector2(CASE_ID,MID_Z0),new THREE.Vector2(arcRadius(MID_Z0),MID_Z0)];
+  const meridians=[new THREE.Vector2(0,-1),new THREE.Vector2(0,-1)];
+  for(let i=0;i<=n;i++){
+    const z=MID_Z0+(MID_Z1-MID_Z0)*i/n;
+    const za=Math.max(MID_Z0,z-.0001),zb=Math.min(MID_Z1,z+.0001),slope=(arcRadius(zb)-arcRadius(za))/(zb-za);
+    points.push(new THREE.Vector2(arcRadius(z),z));meridians.push(new THREE.Vector2(1,-slope).normalize());
+  }
+  points.push(new THREE.Vector2(arcRadius(MID_Z1),MID_Z1),new THREE.Vector2(CASE_ID,MID_Z1),new THREE.Vector2(CASE_ID,MID_Z1),new THREE.Vector2(CASE_ID,MID_Z0));
+  meridians.push(new THREE.Vector2(0,1),new THREE.Vector2(0,1),new THREE.Vector2(-1,0),new THREE.Vector2(-1,0));
+  const g=new THREE.LatheGeometry(points,512);g.rotateX(Math.PI/2);const normals:number[]=[],tangents:number[]=[];
+  for(let i=0;i<=512;i++)for(const n of meridians){const a=i/512*Math.PI*2;normals.push(n.x*Math.sin(a),-n.x*Math.cos(a),n.y);tangents.push(Math.cos(a),Math.sin(a),0,1);}
+  g.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));g.setAttribute('tangent',new THREE.Float32BufferAttribute(tangents,4));return g;
+}
+
 function studyHorn(signX: 1 | -1, mat: THREE.Material, design: DesignVariant) {
   const soft = design === "sculptural";
   const rings = physicalStudy(design) ? 64 : 32, sides = physicalStudy(design) ? 64 : 24;
   const refined = physicalStudy(design);
   const section = (t: number, a: number) => {
-    const ease=t*t*(3-2*t), w=3.05*(1-ease)+1.7*ease;
+    const ease=t*t*(3-2*t), w=3.05*(1-ease)+1.7*ease-(arcStudy()?.42*Math.sin(Math.PI*t)**2:0);
     const c=Math.cos(a), s=Math.sin(a), exponent=.28+.22*(1-t)**3;
     return new THREE.Vector3(signX*(9.18+w/2+w/2*Math.sign(c)*Math.abs(c)**exponent),
       -3.9+8.05*t, .22*(1-t)-.26*t*t+(1.02*(1-t)+.47*t)*Math.sign(s)*Math.abs(s)**exponent);
@@ -274,10 +302,20 @@ function studyHorn(signX: 1 | -1, mat: THREE.Material, design: DesignVariant) {
     const tilt=designStudy(design)!.lugTilt, co=Math.cos(tilt), si=Math.sin(tilt);
     // Register every root sample to the cylindrical case wall, rather than
     // burying a flat lug end inside it. The first tangent lies on that wall.
-    const worldY=Math.sqrt(19.82**2-start.x**2);
+    let worldY=Math.sqrt(19.82**2-start.x**2);
     start.y=(worldY-19.1+start.z*si)/co-.002;
+    if(arcStudy())for(let i=0;i<8;i++){
+      const z=-.35+si*start.y+co*start.z;
+      worldY=Math.sqrt(arcRadius(z)**2-start.x**2);
+      start.y=(worldY-19.1+start.z*si)/co-.002;
+    }
     const dx=(end.x-start.x)*.7, dz=(end.z-start.z)*.7;
-    const c1=start.clone().add(new THREE.Vector3(dx,(-start.x/worldY*dx+si*dz)/co,dz));
+    let dy=(-start.x/worldY*dx+si*dz)/co;
+    if(arcStudy()){
+      const z=-.35+si*start.y+co*start.z,r=arcRadius(z),slope=(arcRadius(z+.0001)-arcRadius(z-.0001))/.0002;
+      dy=(worldY*si*dz+r*slope*co*dz-start.x*dx)/(worldY*co-r*slope*si);
+    }
+    const c1=start.clone().add(new THREE.Vector3(dx,dy,dz));
     const derivative=section(endT+.0001,a).sub(section(endT-.0001,a)).multiplyScalar(1/.0002);
     const c2=end.clone().addScaledVector(derivative,-endT/3);
     const u=t/endT;
@@ -478,7 +516,7 @@ export function createCase(grade: SteelGrade = "pale", design: DesignVariant = "
     ...midProfile.slice(-2),
   ] : midProfile;
   const mid = new THREE.Mesh(
-    corrected(design) ? refinedLathe(sculptedProfile,512,0.045,executionFinish()) : latheZ(sculptedProfile, study ? 192 : 64),
+    arcStudy() && physicalStudy(design) ? arcCaseGeometry() : corrected(design) ? refinedLathe(sculptedProfile,512,0.045,executionFinish()) : latheZ(sculptedProfile, study ? 192 : 64),
     brushed,
   );
   mid.name = "mid_case";
@@ -528,7 +566,7 @@ export function createCase(grade: SteelGrade = "pale", design: DesignVariant = "
   if (corrected(design)) {
     const seam = root.getObjectByName("case_lower_seam") as THREE.Mesh | undefined;
     if (seam) { seam.geometry.dispose(); seam.geometry = refinedLathe([
-      [18.75,-2.75],[19.46,-2.75],[19.46,-2.64],[18.75,-2.64],[18.75,-2.75]
+      [18.75,-2.75],[arcStudy()?arcRadius(-2.75)+.025:19.46,-2.75],[arcStudy()?arcRadius(-2.64)+.025:19.46,-2.64],[18.75,-2.64],[18.75,-2.75]
     ].map(([r,z])=>new THREE.Vector2(r,z)),512,0.018,executionFinish()); }
   }
   const back = new THREE.Group();

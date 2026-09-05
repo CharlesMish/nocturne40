@@ -1,10 +1,11 @@
 import * as THREE from "three";
+import { arcStudy } from "./design";
 
 /** Authored padded leather, with a continuous folded nose and a through bore.
  * Local Y follows the strap; local X is the spring-bar axis, all in mm. */
 export function paddedLeather(hide: THREE.Material, withBuckle = false, refined = false, constructed = false, seated = false) {
   const root = new THREE.Group(); root.name = 'strap_construction';
-  const points = (seated ? [[3.14,.02],[5.6,.02],[8,-.14],[10.8,-.75],[14.4,-2.5],[18.5,-5.6],[22.2,-10.1],[25.1,-16.6],[26.4,-24]] : constructed ? [[3.14,.02],[5.4,.02],[8,-.20],[11.5,-1.1],[15.5,-3.1],[19.6,-6.7],[23.1,-11.4],[25.4,-17.2],[26.4,-24]] : refined ? [[3.14,.02],[4.4,.02],[6.6,-.22],[9.2,-.8],[12.8,-2.2],
+  const points = (seated && arcStudy() ? [[3.14,.02],[5.1,.02],[7.6,-.22],[10.8,-1.10],[14.4,-2.85],[18.5,-5.9],[22.2,-10.3],[25.1,-16.6],[26.4,-24]] : seated ? [[3.14,.02],[5.6,.02],[8,-.14],[10.8,-.75],[14.4,-2.5],[18.5,-5.6],[22.2,-10.1],[25.1,-16.6],[26.4,-24]] : constructed ? [[3.14,.02],[5.4,.02],[8,-.20],[11.5,-1.1],[15.5,-3.1],[19.6,-6.7],[23.1,-11.4],[25.4,-17.2],[26.4,-24]] : refined ? [[3.14,.02],[4.4,.02],[6.6,-.22],[9.2,-.8],[12.8,-2.2],
     [17,-5.2],[20.8,-9.6],[23.8,-15],[25.6,-21],[26.1,-24]] : [[3.14,.02],[5.3,.02],[8,-.23],[12.6,-1.6],[17.6,-4.5],
     [22,-9.1],[25,-15],[26.5,-21],[26.8,-24]]).map(([y,z])=>new THREE.Vector3(0,y,z));
   const curve = new THREE.CatmullRomCurve3(points, false, 'centripetal');
