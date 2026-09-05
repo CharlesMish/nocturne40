@@ -17,6 +17,18 @@ export const seatingFinish = () => typeof location !== 'undefined' && new URLSea
 
 export const arcStudy = () => seatingFinish() && new URLSearchParams(location.search).get('exploration') === 'arc';
 
+export const LUG_FAMILIES = {
+  arc: {label:'Arc', description:'Current waist and root transition.'},
+  flow: {label:'Flow', description:'A longer sweep out of the case.'},
+  crest: {label:'Crest', description:'A gently arched upper surface.'},
+  taper: {label:'Taper', description:'A fuller, straighter middle.'},
+} as const;
+export type LugFamily = keyof typeof LUG_FAMILIES;
+export function arcLugFamily(): LugFamily {
+  const value=typeof location==='undefined'?null:new URLSearchParams(location.search).get('lug');
+  return arcStudy() && (value==='flow'||value==='crest'||value==='taper') ? value : 'arc';
+}
+
 /** Coordinated choices for the two opt-in studies, all dimensions in mm. */
 export const DESIGN_STUDIES = {
   sculptural: {

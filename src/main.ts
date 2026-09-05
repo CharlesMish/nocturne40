@@ -12,7 +12,7 @@ import { createDial, MARKER_LANES, tickLane, type CreamLook, type MarkerLook, ty
 import { attachHands, HAND_LANES, SECONDS_LANES, type HandStyle, type SecondsLane } from "./hands";
 import { leatherLane } from "./strap";
 import { createPlates } from "./plate";
-import { designStudy, executionFinish, seatingFinish, arcStudy, parseDesignVariant, corrected, designLabel } from "./design";
+import { designStudy, executionFinish, seatingFinish, arcStudy, arcLugFamily, LUG_FAMILIES, parseDesignVariant, corrected, designLabel } from "./design";
 import { isComparisonSettings, COMPARISON_POSES, type ComparisonSettings } from "./comparison";
 import glbUrl from "../vendor/going-train-core-v1/assets/going-train-core.glb?url";
 
@@ -191,7 +191,7 @@ const rehautLook: RehautLook =
   study === 5 ? "quiet" : study === 4.6 ? "lift" : study === 4.5 ? "slope" : study === 4 ? "family" : "current";
 
 
-document.title = `${arcStudy() ? "Arc exploration" : designLabel(design)} \u00b7 Nocturne 40`;
+document.title = `${arcStudy() ? `Arc / ${LUG_FAMILIES[arcLugFamily()].label} lugs` : designLabel(design)} \u00b7 Nocturne 40`;
 const casing = createCase(steelGrade, design);
 applySteelIbl(casing, steelEnv, steelGrade);
 if (corrected(design)) {
@@ -255,6 +255,7 @@ type CamView =
   | "oblique"
   | "seconds"
   | "center"
+  | "lugtop"
   | "lug"
   | "lug12"
   | "rake"
@@ -277,6 +278,7 @@ if (
   startView === "oblique" ||
   startView === "seconds" ||
   startView === "center" ||
+  startView === "lugtop" ||
   startView === "lug" ||
   startView === "lug12" ||
   startView === "rake" ||
@@ -348,6 +350,7 @@ function applyViewLights() {
   fill.visible = !onBack;
   fill.intensity = onSide ? 0.16 : lightMode === "cool" ? 0.32 : 0.26;
   const onLug =
+    camView === "lugtop" ||
     camView === "lug" ||
     camView === "lug12" ||
     camView === "lugunder" ||
@@ -498,6 +501,10 @@ function applyCamera() {
     camera.fov = 20;
     camera.position.set(0, 0, 44 * MM);
     controls.target.set(0, 0, 3.7 * MM);
+  } else if (camView === "lugtop") {
+    camera.fov = 34;
+    camera.position.set(24 * MM, -33 * MM, 32 * MM);
+    controls.target.set(0, -20.4 * MM, -0.2 * MM);
   } else if (camView === "lug") {
     camera.fov = 30;
     camera.position.set(34 * MM, -18 * MM, -14 * MM);

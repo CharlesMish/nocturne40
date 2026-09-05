@@ -6,7 +6,7 @@
 import * as THREE from "three";
 import { receiveSpringTip } from "./socket";
 import { addStrapToLug } from "./strap";
-import { designStudy, executionFinish, seatingFinish, arcStudy, corrected, physicalStudy, dressFamily, containment, type DesignVariant } from "./design";
+import { designStudy, executionFinish, seatingFinish, arcStudy, arcLugFamily, corrected, physicalStudy, dressFamily, containment, type DesignVariant } from "./design";
 
 import { refinedLathe, crystalShell, opticalGlass } from "./surfaces";
 
@@ -288,14 +288,17 @@ function studyHorn(signX: 1 | -1, mat: THREE.Material, design: DesignVariant) {
   const soft = design === "sculptural";
   const rings = physicalStudy(design) ? 64 : 32, sides = physicalStudy(design) ? 64 : 24;
   const refined = physicalStudy(design);
+  const family=arcLugFamily();
   const section = (t: number, a: number) => {
-    const ease=t*t*(3-2*t), w=3.05*(1-ease)+1.7*ease-(arcStudy()?.42*Math.sin(Math.PI*t)**2:0);
-    const c=Math.cos(a), s=Math.sin(a), exponent=.28+.22*(1-t)**3;
+    // Family edits fade completely before the spring-bar seat at t ~ .875.
+    const envelope=t<.78?Math.sin(Math.PI*t/.78)**2:0;
+    const ease=t*t*(3-2*t), w=3.05*(1-ease)+1.7*ease-(arcStudy()?.42*Math.sin(Math.PI*t)**2:0)+(family==='taper'?.28*envelope:0);
+    const c=Math.cos(a), s=Math.sin(a), exponent=.28+.22*(1-t)**3+(family==='crest'?.22*envelope:0);
     return new THREE.Vector3(signX*(9.18+w/2+w/2*Math.sign(c)*Math.abs(c)**exponent),
-      -3.9+8.05*t, .22*(1-t)-.26*t*t+(1.02*(1-t)+.47*t)*Math.sign(s)*Math.abs(s)**exponent);
+      -3.9+8.05*t, .22*(1-t)-.26*t*t+(1.02*(1-t)+.47*t)*Math.sign(s)*Math.abs(s)**exponent+(family==='crest'&&s>0?.10*envelope*s*s:0));
   };
   const rootBlend = (t: number, a: number) => {
-    const endT=.36;
+    const endT=family==='flow'?.50:family==='taper'?.42:.36;
     if(t>=endT) return section(t,a);
     const end=section(endT,a), start=section(0,a);
     start.x+=signX*.18*Math.cos(a); start.z+=.20*Math.sin(a);

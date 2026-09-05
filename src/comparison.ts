@@ -1,5 +1,5 @@
 /** Small same-origin protocol shared by the comparison page and its viewers. */
-export const COMPARISON_VIEWS = ["dial", "wrist", "oblique", "side", "lug", "seconds", "back", "rake", "strapedge", "loopside", "crown3"] as const;
+export const COMPARISON_VIEWS = ["dial", "wrist", "oblique", "side", "lugtop", "lug", "seconds", "back", "rake", "strapedge", "loopside", "crown3"] as const;
 export const COMPARISON_LIGHTS = ["warm", "neutral"] as const;
 export const COMPARISON_POSES = ["ten-ten", "ten-thirty-eight"] as const;
 export type ComparisonSettings = {

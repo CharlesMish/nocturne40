@@ -22,6 +22,8 @@ See [strap construction and validation](docs/STRAP_CONSTRUCTION.md) for the fina
 
 Open `/explore.html` for a live comparison of the accepted watch and the first Arc study. See [Astra exploration notes](docs/ASTRA_EXPLORATION.md). The accepted baseline remains commit `154cb51` on `main`; the study is opt-in and does not touch the vendor train.
 
+Open `/lugs.html` for the related Arc lug families; see [lug-family notes](docs/ARC_LUG_FAMILIES.md).
+
 ## Historical starter instructions
 
 # Nocturne 40 — Cursor starter (B0 + B1 only)
