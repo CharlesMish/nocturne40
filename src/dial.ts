@@ -5,6 +5,7 @@
  */
 import * as THREE from "three";
 import { PART_AXES_MM } from "./plate";
+import { designStudy, executionFinish, physicalFinish, preciseFamily, dressFamily, warmer, containment, type DesignVariant } from "./design";
 
 export const MARKER_LANES = ["curve", "slim", "dauphine", "baton"] as const;
 export type MarkerStyle = (typeof MARKER_LANES)[number];
@@ -21,8 +22,36 @@ const fourth = PART_AXES_MM.fourth;
 
 export type CreamLook = "current" | "light";
 export type MarkerLook = "current" | "gun";
+export type RehautLook = "current" | "family" | "quiet" | "slope" | "lift";
+export const TICK_LANES = ["t0", "t1"] as const;
+export type TickLane = (typeof TICK_LANES)[number];
 
-function creamTexture(look: CreamLook = "current") {
+export function tickLane(): TickLane {
+  const v = new URLSearchParams(location.search).get("ticks");
+  if (v === "t1" || v === "1") return "t1";
+  return "t0";
+}
+
+/** Interpolate opponent chroma in OKLab, retaining the base lightness.
+ * Lane 1's map is multiplied by its face tint before deriving the donor. */
+function warmColor(base: string, donor: string) {
+  const lab = (c: THREE.Color) => {
+    const l = Math.cbrt(.4122214708*c.r+.5363325363*c.g+.0514459929*c.b);
+    const m = Math.cbrt(.2119034982*c.r+.6806995451*c.g+.1073969566*c.b);
+    const s = Math.cbrt(.0883024619*c.r+.2817188376*c.g+.6299787005*c.b);
+    return [.2104542553*l+.793617785*m-.0040720468*s, 1.9779984951*l-2.428592205*m+.4505937099*s, .0259040371*l+.7827717662*m-.808675766*s];
+  };
+  const [L,a,b] = lab(new THREE.Color(base));
+  const [,da,db] = lab(new THREE.Color(donor).multiply(new THREE.Color(0xf4ebe0)));
+  const A = a*.75+da*.25, B = b*.75+db*.25;
+  const l = (L+.3963377774*A+.2158037573*B)**3;
+  const m = (L-.1055613458*A-.0638541728*B)**3;
+  const s = (L-.0894841775*A-1.291485548*B)**3;
+  return new THREE.Color().setRGB(4.0767416621*l-3.3077115913*m+.2309699292*s, -1.2684380046*l+2.6097574011*m-.3413193965*s, -.0041960863*l-.7034186147*m+1.707614701*s).getStyle();
+}
+
+function creamTexture(look: CreamLook = "current", design: DesignVariant = "baseline") {
+  const study = designStudy(design);
   const size = 2048;
   const canvas = document.createElement("canvas");
   canvas.width = size;
@@ -30,7 +59,10 @@ function creamTexture(look: CreamLook = "current") {
   const ctx = canvas.getContext("2d");
   if (!ctx) return null;
   const g = ctx.createRadialGradient(size / 2, size / 2, 24, size / 2, size / 2, size * 0.5);
-  if (look === "light") {
+  if (study) {
+    g.addColorStop(0, warmer(design) ? warmColor(study.dialCenter, "#f6efe4") : study.dialCenter);
+    g.addColorStop(1, warmer(design) ? warmColor(study.dialEdge, "#dcc9ae") : study.dialEdge);
+  } else if (look === "light") {
     g.addColorStop(0, "#f8f2ea");
     g.addColorStop(0.55, "#f0e3d1");
     g.addColorStop(1, "#e5d3bd");
@@ -43,7 +75,7 @@ function creamTexture(look: CreamLook = "current") {
   ctx.fillRect(0, 0, size, size);
   for (let i = 0; i < 720; i++) {
     const a = (i / 720) * Math.PI * 2;
-    ctx.strokeStyle = `rgba(92, 72, 52, ${0.012 + (i % 5) * 0.004})`;
+    ctx.strokeStyle = `rgba(92, 72, 52, ${study ? 0.002 + (i % 5) * 0.001 : 0.012 + (i % 5) * 0.004})`;
     ctx.beginPath();
     ctx.moveTo(size / 2, size / 2);
     ctx.lineTo(size / 2 + Math.cos(a) * size * 0.55, size / 2 + Math.sin(a) * size * 0.55);
@@ -120,7 +152,34 @@ function steelAccent(look: MarkerLook = "current") {
   });
 }
 
-function rehautSteel() {
+function rehautSteel(look: RehautLook = "current") {
+  if (look === "quiet") {
+    return new THREE.MeshPhysicalMaterial({
+      color: 0xf4ebe0,
+      metalness: 0.03,
+      roughness: 0.5,
+    });
+  }
+  if (look === "family") {
+    return new THREE.MeshPhysicalMaterial({
+      color: 0x7c8086,
+      metalness: 0.96,
+      roughness: 0.14,
+      clearcoat: 0.12,
+      clearcoatRoughness: 0.22,
+      specularIntensity: 1,
+    });
+  }
+  if (look === "slope" || look === "lift") {
+    return new THREE.MeshPhysicalMaterial({
+      color: look === "lift" ? 0x8c9096 : 0x7c8086,
+      metalness: 0.96,
+      roughness: 0.09,
+      clearcoat: 0.06,
+      clearcoatRoughness: 0.3,
+      specularIntensity: 1,
+    });
+  }
   return new THREE.MeshPhysicalMaterial({
     color: 0xc4c6ca,
     metalness: 0.7,
@@ -237,20 +296,41 @@ function indexGeom(style: MarkerStyle, width: number, len: number, standing: num
   }
 }
 
+function studyIndexGeom(width: number, len: number, standing: number, soft: boolean) {
+  const shape = new THREE.Shape();
+  const w = width / 2, h = len / 2;
+  shape.moveTo(-w * (soft ? 0.18 : 0.68), -h);
+  shape.lineTo(w * (soft ? 0.18 : 0.68), -h);
+  if (soft) {
+    shape.quadraticCurveTo(w * 0.7, -h * 0.5, w, h * 0.7);
+    shape.quadraticCurveTo(w, h, w * 0.6, h);
+    shape.lineTo(-w * 0.6, h);
+    shape.quadraticCurveTo(-w, h, -w, h * 0.7);
+    shape.quadraticCurveTo(-w * 0.7, -h * 0.5, -w * 0.18, -h);
+  } else {
+    shape.lineTo(w, h); shape.lineTo(-w, h);
+  }
+  shape.closePath();
+  return extrudeIndex(shape, standing, 0.012, 0.008);
+}
+
 export function createDial(
   markers: MarkerStyle = "curve",
   cream: CreamLook = "current",
   appliedLook: MarkerLook = "current",
+  rehautLook: RehautLook = "current",
+  design: DesignVariant = "baseline",
 ): THREE.Group {
+  const study = designStudy(design);
   const root = new THREE.Group();
   root.name = "dial";
 
-  const map = creamTexture(cream);
+  const map = creamTexture(cream, physicalFinish() && preciseFamily(design) ? "warm" : design);
   const faceMat = new THREE.MeshPhysicalMaterial({
-    color: cream === "light" ? 0xf7f0e6 : 0xf4ebe0,
+    color: study ? 0xffffff : cream === "light" ? 0xf7f0e6 : 0xf4ebe0,
     map: map ?? undefined,
-    metalness: 0.03,
-    roughness: 0.48,
+    metalness: study?.dialMetalness ?? 0.03,
+    roughness: study?.dialRoughness ?? 0.48,
   });
 
   const shape = new THREE.Shape();
@@ -281,7 +361,9 @@ export function createDial(
   face.name = "dial_face";
   root.add(face);
 
-  const FIELD_R = 12.2;
+  // The control has a 12.2 mm raised central disc. The new faces carry that
+  // surface through to the edge, removing the visible circular step by design.
+  const FIELD_R = study ? DIAL_R : 12.2;
   const padShape = new THREE.Shape();
   padShape.absarc(0, 0, FIELD_R, 0, Math.PI * 2, false);
   const padPipe = new THREE.Path();
@@ -306,8 +388,8 @@ export function createDial(
   const wellFloor = new THREE.Mesh(
     new THREE.CircleGeometry(SUB_R - 0.04, 64),
     new THREE.MeshPhysicalMaterial({
-      color: 0xf1e6d8,
-      map: floorMap ?? undefined,
+      color: warmer(design) && !physicalFinish() ? warmColor("#e7e2d5", "#f1e6d8") : study?.floor ?? 0xf1e6d8,
+      map: study ? undefined : floorMap ?? undefined,
       metalness: 0.03,
       roughness: 0.58,
     }),
@@ -315,6 +397,30 @@ export function createDial(
   wellFloor.position.set(fourth.x, fourth.y, SECONDS_FLOOR);
   wellFloor.name = "seconds_well";
   root.add(wellFloor);
+
+  if (tickLane() === "t1" || preciseFamily(design)) {
+    const tickMat = new THREE.MeshPhysicalMaterial({
+      color: 0x2a333c,
+      metalness: 0.28,
+      roughness: 0.46,
+      specularIntensity: 0.18,
+    });
+    const innerR = SUB_R - 0.055;
+    const z = SECONDS_FLOOR + 0.01;
+    for (let i = 0; i < 12; i++) {
+      const cardinal = i % 3 === 0;
+      const len = preciseFamily(design) ? (cardinal ? 0.34 : 0.2) : cardinal ? 0.2 : 0.13;
+      const tick = new THREE.Mesh(new THREE.BoxGeometry(preciseFamily(design) ? 0.048 : 0.032, len, 0.016), tickMat);
+      const a = Math.PI + (i * Math.PI) / 6;
+      const dirX = Math.sin(a);
+      const dirY = Math.cos(a);
+      const midR = innerR - len / 2;
+      tick.position.set(fourth.x + dirX * midR, fourth.y + dirY * midR, z);
+      tick.rotation.z = (study ? -1 : 1) * Math.atan2(dirX, dirY);
+      tick.name = `seconds_tick_${i * 5}`;
+      root.add(tick);
+    }
+  }
 
   const stepEdge = new THREE.Mesh(
     latheZ([
@@ -324,11 +430,48 @@ export function createDial(
       new THREE.Vector2(SUB_R - 0.02, fieldTop),
       new THREE.Vector2(SUB_R - 0.05, SECONDS_FLOOR),
     ]),
-    roseGold(),
+    design === "sculptural" ? new THREE.MeshPhysicalMaterial({color: 0xb4aea0, metalness: 0.45, roughness: 0.42}) : roseGold(),
   );
   stepEdge.position.set(fourth.x, fourth.y, 0);
   stepEdge.name = "seconds_step_edge";
   root.add(stepEdge);
+
+  if (design === "sculptural") {
+    // A stationary lower crescent surrounds the circular sweep. Local +Y is
+    // product six after the wrapper turn; its tapered tips never cover the well.
+    const crescent = new THREE.Shape();
+    const points: THREE.Vector2[] = [];
+    const inner = SUB_R + 0.04;
+    for (let i = 0; i <= 80; i++) {
+      const t = i / 80, a = -1.7 + 3.4 * t;
+      const radius = inner + 0.008 + 0.28 * Math.sin(Math.PI * t) ** 1.3;
+      points.push(new THREE.Vector2(Math.sin(a) * radius, Math.cos(a) * radius));
+    }
+    for (let i = 80; i >= 0; i--) {
+      const a = -1.7 + 3.4 * i / 80;
+      points.push(new THREE.Vector2(Math.sin(a) * inner, Math.cos(a) * inner));
+    }
+    crescent.setFromPoints(points);
+    crescent.closePath();
+    const accent = new THREE.Mesh(new THREE.ExtrudeGeometry(crescent, {depth: 0.018, bevelEnabled: false}), roseGold());
+    accent.position.set(fourth.x, fourth.y, fieldTop + 0.004);
+    accent.name = "seconds_crescent";
+    root.add(accent);
+  }
+
+  if (preciseFamily(design)) {
+    const ink = new THREE.MeshBasicMaterial({color: 0x525a5b});
+    for (let i = 0; i < 60; i++) {
+      const hour = i % 5 === 0, len = hour ? 0.42 : 0.25;
+      const a = Math.PI + i / 60 * Math.PI * 2;
+      const radius = 15.2 - len / 2;
+      const tick = new THREE.Mesh(new THREE.BoxGeometry(hour ? 0.052 : 0.032, len, 0.012), ink);
+      tick.position.set(Math.sin(a) * radius, Math.cos(a) * radius, fieldTop + 0.01);
+      tick.rotation.z = -a;
+      tick.name = `minute_tick_${i}`;
+      root.add(tick);
+    }
+  }
 
   const rehautShape = new THREE.Shape();
   rehautShape.absarc(0, 0, DIAL_R + 1.12, 0, Math.PI * 2, false);
@@ -344,14 +487,26 @@ export function createDial(
       bevelSegments: 2,
       curveSegments: 64,
     }),
-    rehautSteel(),
+    rehautSteel(rehautLook),
   );
   rehaut.position.z = DIAL_SURFACE - 0.01;
   rehaut.name = "rehaut";
+  if (study) {
+    const mat = rehaut.material;
+    mat.color.setHex(design === "sculptural" ? 0xe8e2d5 : 0xa3a6a4);
+    mat.metalness = design === "sculptural" ? 0.12 : 0.9;
+    mat.roughness = design === "sculptural" ? 0.34 : 0.21;
+  }
+  if (containment(design)) { rehaut.material.color.setHex(0x777b7a); rehaut.material.roughness = 0.32; }
   root.add(rehaut);
 
   const applied = steelAccent(appliedLook);
   const facet = steelPolish();
+  if (study) { applied.color.setHex(0x737c81); applied.roughness = 0.28; }
+  if (executionFinish() && preciseFamily(design)) {
+    applied.color.setHex(0x3b4750); applied.metalness=.75; applied.roughness=.36;
+    facet.color.setHex(0x8b949a); facet.roughness=.24;
+  }
   const withFacet = markers === "baton" || markers === "slim" || markers === "curve";
   for (let k = 0; k < 12; k++) {
     if (k === 6) continue;
@@ -361,17 +516,30 @@ export function createDial(
     const specY = -worldY;
     const isTwelve = k === 0;
     const yieldToSix = k === 5 || k === 7;
-    const { len, width, standing } = indexSize(markers, isTwelve);
+    const custom = study && markers === "curve";
+    const size = custom ? {
+      len: isTwelve ? study.twelveLength : study.markerLength,
+      width: study.markerWidth * (isTwelve ? 1.25 : 1), standing: 0.28,
+    } : indexSize(markers, isTwelve);
+    const refined = dressFamily(design) && markers === "curve";
+    // The full 15% at 12 enters the unchanged minute hand's swept radius.
+    // Cap only that marker to leave ~0.06 mm radial clearance, including bevel.
+    const len = refined && isTwelve ? 2.9 : size.len * (refined ? 1.15 : 1);
+    const width = size.width * (refined ? 1.1 : 1);
+    const standing = size.standing;
     const usedLen = yieldToSix ? len * 0.74 : len;
-    const outer = DIAL_R - 0.38;
+    const outer = custom ? study.markerOuter : DIAL_R - 0.38;
     const midR = outer - usedLen / 2;
-    const baton = new THREE.Mesh(indexGeom(markers, width, usedLen, standing), applied);
+    const markerGeometry = custom ? studyIndexGeom(width, usedLen, standing, design === "sculptural") : indexGeom(markers, width, usedLen, standing);
+    const baton = new THREE.Mesh(markerGeometry, applied);
     baton.position.set(specX * midR, specY * midR, fieldTop + standing / 2 + 0.02);
-    baton.rotation.z = Math.atan2(specX, specY);
+    baton.rotation.z = (study ? -1 : 1) * Math.atan2(specX, specY);
     baton.name = `index_${k === 0 ? 12 : k}`;
     if (withFacet) {
       const polish =
-        markers === "curve"
+        custom
+          ? new THREE.Mesh(studyIndexGeom(width * (executionFinish() ? 0.22 : 0.42), usedLen * 0.72, 0.022, design === "sculptural"), facet)
+          : markers === "curve"
           ? new THREE.Mesh(stadiumGeom(width * 0.72, usedLen * 0.78, 0.022), facet)
           : new THREE.Mesh(
               new THREE.BoxGeometry(width * (markers === "slim" ? 0.62 : 0.68), usedLen * 0.78, 0.022),

@@ -1,3 +1,25 @@
+# Nocturne 40 - accepted design baseline
+
+The accepted design uses the selected warm dial and the second physical-finish pass.
+
+```sh
+npm install
+npm run check
+npm run dev
+```
+
+Open the Vite URL with:
+
+```text
+/?design=synthesis&finish=physical2&view=oblique&light=neutral&pose=ten-ten
+```
+
+Add `&environment=bright` for neutral inspection. The bare URL intentionally retains the historical viewer default; it is not the accepted design shown above.
+
+See [strap construction and validation](docs/STRAP_CONSTRUCTION.md) for the final pass and preserved design decisions. The vendor train remains unchanged. Local `.review/` galleries and `PROGRESS.md` are excluded from Git; the source regenerates the live model, but saved review screenshots are local artifacts.
+
+## Historical starter instructions
+
 # Nocturne 40 — Cursor starter (B0 + B1 only)
 
 This folder is the **first session** of a new watch built around a frozen going-train core.

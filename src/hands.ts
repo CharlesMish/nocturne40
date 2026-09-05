@@ -2,15 +2,20 @@
  * Late-swell folded-leaf hands in spec millimetres.
  * Parent is a GLB arbor (already under root scale 0.001) — do not scale again.
  *
- * Default A: leaf counterweight. C / ?cw=open toggles two-lobe B.
+ * S0: current seconds leaf. S1: longer quiet-swell counterweight. C / ?seconds=s1.
+ * ?cw=open still toggles the two-lobe provenance balance.
  */
 import * as THREE from "three";
 import { DIAL_SURFACE, SECONDS_FLOOR } from "./dial";
+import { designStudy, preciseFamily, dressFamily, warmer, containment, type DesignVariant } from "./design";
 
 const MM = 0.001;
 
 export const SECONDS_BALANCES = ["leaf", "open"] as const;
 export type SecondsBalance = (typeof SECONDS_BALANCES)[number];
+
+export const SECONDS_LANES = ["s0", "s1"] as const;
+export type SecondsLane = (typeof SECONDS_LANES)[number];
 
 /** Kept so old ?hands= URLs do not crash; production geometry is the swell family. */
 export const HAND_LANES = SECONDS_BALANCES;
@@ -36,6 +41,15 @@ function hub(radius: number, thick: number, mat: THREE.Material) {
   pit.rotation.x = Math.PI / 2;
   g.add(disc, pit);
   return g;
+}
+
+/** Slender cannon pipe / collet. Axis along +Z; do not use for blade silhouette. */
+function stackCylinder(radius: number, height: number, z: number, name: string, mat: THREE.Material) {
+  const mesh = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, height, 20), mat);
+  mesh.rotation.x = Math.PI / 2;
+  mesh.position.z = z;
+  mesh.name = name;
+  return mesh;
 }
 
 type SwellSpec = {
@@ -194,6 +208,42 @@ function secondsLeaf(mat: THREE.Material) {
   return g;
 }
 
+/** Same needle as S0; counterweight uses a quieter late-swell, longer rather than wider. */
+function secondsLeafRefined(mat: THREE.Material) {
+  const L = 3.02;
+  const C = 1.08;
+  const spec: SwellSpec = {
+    neckEnd: 0.18,
+    peak: 0.48,
+    neckW: 0.12,
+    maxW: 0.28,
+    tipW: 0.05,
+  };
+  const y0 = 0.05;
+  const n = 28;
+  const cw: THREE.Vector2[] = [];
+  for (let i = 0; i < n; i++) {
+    const t = i / (n - 1);
+    const y = -(y0 + (C - y0) * t);
+    const hw = swellHalfWidth(t, spec);
+    cw.push(new THREE.Vector2(Math.max(spec.tipW * 0.45, hw), y));
+  }
+  const shape = new THREE.Shape();
+  shape.moveTo(0, -C);
+  for (let i = n - 2; i >= 0; i--) shape.lineTo(cw[i].x, cw[i].y);
+  shape.lineTo(0.03, 0.1);
+  shape.lineTo(0.022, L * 0.6);
+  shape.lineTo(0.014, L);
+  shape.lineTo(-0.014, L);
+  shape.lineTo(-0.022, L * 0.6);
+  shape.lineTo(-0.03, 0.1);
+  for (let i = 0; i < n - 1; i++) shape.lineTo(-cw[i].x, cw[i].y);
+  shape.closePath();
+  const g = new THREE.Group();
+  g.add(new THREE.Mesh(extrudePlan(shape, 0.05), mat), hub(0.1, 0.055, mat));
+  return g;
+}
+
 /** Two lobes from the same swell, slit on the centerline — not a moon graphic. */
 function openBalance(mat: THREE.Material) {
   const g = new THREE.Group();
@@ -240,7 +290,13 @@ function setLocalZForWorldMm(mesh: THREE.Object3D, parent: THREE.Object3D, world
   mesh.position.set(0, 0, (worldMm * MM - pos.z) / sz);
 }
 
-export function attachHands(trainRoot: THREE.Object3D, style: SecondsBalance = "leaf"): THREE.Object3D[] {
+export function attachHands(
+  trainRoot: THREE.Object3D,
+  style: SecondsBalance = "leaf",
+  secondsLane: SecondsLane = "s0",
+  design: DesignVariant = "baseline",
+): THREE.Object3D[] {
+  const study = designStudy(design);
   const mat = navy();
   const meshes: THREE.Object3D[] = [];
   const centerMotion = arborNode(trainRoot, "center");
@@ -250,16 +306,22 @@ export function attachHands(trainRoot: THREE.Object3D, style: SecondsBalance = "
   const minuteLen = 12.35;
   const hourLen = 8.05;
 
-  const minute = foldedLeaf(minuteLen, MINUTE_SWELL, 0.14, 0, mat, true);
+  const minuteShape = study ? {...MINUTE_SWELL, maxW: preciseFamily(design) ? 0.76 : 0.9, peak: preciseFamily(design) ? 0.48 : 0.58} : MINUTE_SWELL;
+  const minute = foldedLeaf(minuteLen, minuteShape, 0.14, 0, mat, true);
   minute.name = "minute_hand";
   minute.rotation.z = THREE.MathUtils.degToRad(-(60 + 180));
+  minute.add(
+    stackCylinder(0.1, 0.14, 0, "minute_collet", mat),
+    stackCylinder(0.1, 0.18, -0.16, "minute_pipe", mat),
+  );
   const minuteParent = centerMotion ?? centerPose;
   if (minuteParent) {
-    setLocalZForWorldMm(minute, minuteParent, DIAL_SURFACE + 0.7);
+    setLocalZForWorldMm(minute, minuteParent, DIAL_SURFACE + 0.49);
     meshes.push(minute);
   }
 
-  const hour = foldedLeaf(hourLen, HOUR_SWELL, 0.16, 0.24, mat, true);
+  const hourShape = study ? {...HOUR_SWELL, maxW: preciseFamily(design) ? 1.1 : 1.22, peak: preciseFamily(design) ? 0.45 : 0.52} : HOUR_SWELL;
+  const hour = foldedLeaf(hourLen, hourShape, 0.16, 0.24, mat, true);
   hour.name = "hour_hand";
   hour.rotation.z = THREE.MathUtils.degToRad(-(305 + 180));
   if (centerPose) {
@@ -269,7 +331,9 @@ export function attachHands(trainRoot: THREE.Object3D, style: SecondsBalance = "
 
   const seconds = new THREE.Group();
   seconds.name = "seconds_hand";
-  seconds.add(style === "open" ? openBalance(mat) : secondsLeaf(mat));
+  seconds.add(
+    style === "open" ? openBalance(mat) : secondsLane === "s1" ? secondsLeafRefined(mat) : secondsLeaf(mat),
+  );
   if (style === "open") seconds.add(secondsNeedle(3.02, mat));
   seconds.rotation.z = 0;
   if (fourthNode) {
@@ -277,5 +341,14 @@ export function attachHands(trainRoot: THREE.Object3D, style: SecondsBalance = "
     meshes.push(seconds);
   }
 
+  if (study) {
+    const painted = new Set<THREE.Material>();
+    for (const hand of meshes) hand.traverse(obj => {
+      if (!(obj instanceof THREE.Mesh) || !(obj.material instanceof THREE.MeshPhysicalMaterial) || painted.has(obj.material)) return;
+      painted.add(obj.material);
+      obj.material.color.setHex(study.handColor);
+      if (obj.name === "hand_ridge") obj.material.color.multiplyScalar(1.2);
+    });
+  }
   return meshes;
 }

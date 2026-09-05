@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nocturne 40 · Three directions</title>
+    <style>
+      * { box-sizing: border-box; }
+      :root { color-scheme: dark; font: 14px/1.5 system-ui, sans-serif; background: #141414; color: #e9e5de; }
+      body { margin: 0; }
+      header { padding: 28px 32px 20px; border-bottom: 1px solid #34332f; }
+      .eyebrow { font-size: 10px; letter-spacing: .22em; color: #b6a88e; text-transform: uppercase; }
+      h1 { font: 400 32px/1.2 Georgia, serif; margin: 9px 0; }
+      header p { margin: 0; color: #aaa79f; max-width: 780px; }
+      nav { display: flex; gap: 20px; flex-wrap: wrap; align-items: end; padding: 18px 32px; }
+      label { display: flex; flex-direction: column; gap: 5px; color: #bdb8af; font-size: 11px; }
+      select, button { font: inherit; font-size: 13px; background: #232323; color: #eee9df; border: 1px solid #4a4842; padding: 8px 12px; border-radius: 3px; }
+      button { cursor: pointer; } select:focus-visible, button:focus-visible, a:focus-visible { outline: 2px solid #d7b980; outline-offset: 3px; }
+      .scroll { overflow-x: auto; }
+      .watches { display: grid; grid-template-columns: repeat(3, minmax(340px, 1fr)); min-width: 1050px; padding: 0 20px; gap: 1px; }
+      article { min-width: 0; border: 1px solid #33322e; background: #141414; }
+      .caption { padding: 16px 20px 0; display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+      h2 { font: 400 23px/1.2 Georgia, serif; margin: 5px 0; }
+      .number { color: #928a7e; font-size: 10px; letter-spacing: .12em; }
+      a { color: #cbbb9b; text-underline-offset: 4px; font-size: 12px; }
+      iframe { display: block; width: 100%; height: clamp(420px, 47vw, 650px); border: 0; }
+      .detail { padding: 14px 20px 20px; border-top: 1px solid #292824; color: #aaa79f; min-height: 112px; }
+      .detail p { margin: 7px 0 0; font-size: 12px; max-width: 42ch; }
+      .swatches { display: flex; gap: 5px; align-items: center; }
+      .swatches i { width: 15px; height: 15px; border-radius: 50%; border: 1px solid #ffffff20; }
+      .status { font-size: 10px; color: #aaa08e; margin-left: auto; }
+      footer { padding: 20px 32px; color: #89867e; font-size: 11px; max-width: 1000px; }
+      @media (max-width: 700px) { header, nav, footer { padding-left: 18px; padding-right: 18px; } .watches { padding: 0 12px; } }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="eyebrow">Nocturne 40 · Design studies</div>
+      <h1>Character, examined.</h1>
+      <p>A synthesis study based on Lane 3. Separate inherited character from rendering artifacts, then compare warmth and containment under matched conditions.</p>
+    </header>
+    <nav aria-label="Shared watch controls">
+      <label>Study group<select id="group"><option value="character">Character</option><option value="execution">Execution</option><option value="archaeology">Archaeology</option><option value="historical">Historical lanes</option><option value="combined">Combined experiment</option></select></label>
+      <label>View<select id="view"><option value="dial">Front</option><option value="wrist">Wrist scale</option><option value="oblique">Three-quarter</option><option value="side">Side</option><option value="lug">Lug detail</option><option value="seconds">Small seconds</option><option value="back">Caseback</option><option value="rake">Crystal rake</option><option value="strapedge">Strap edge</option><option value="loopside">Attachment profile</option><option value="crown3">Crown detail</option></select></label>
+      <label>Environment<select id="environment"><option value="studio">Original studio</option><option value="bright">Bright neutral inspection</option></select></label>
+      <label>Light<select id="light"><option value="warm">Warm studio</option><option value="neutral">Neutral studio</option></select></label>
+      <label>Hand position<select id="pose"><option value="ten-ten">10:10</option><option value="ten-thirty-eight">10:38</option></select></label>
+      <button id="sweep" type="button" aria-pressed="false">Reflection sweep</button>
+      <button id="reset" type="button">Match views</button>
+    </nav>
+    <div class="scroll">
+      <main class="watches">
+        <article data-design="dress1">
+          <div class="caption"><div><span class="number">01 · CONTROL</span><h2>Dress 1</h2></div><a class="open" href="./?design=dress1" target="_blank" rel="noopener">Explore ↗</a></div>
+          <iframe title="Dress 1 control"></iframe>
+          <div class="detail"><div class="swatches" aria-label="Cream, blue, brown, steel"><i style="background:#eadcc8"></i><i style="background:#1a355c"></i><i style="background:#6a483c"></i><i style="background:#7c8086"></i><span class="status" role="status">Loading…</span></div><p>The familiar warm cream, folded leaf hands, and restrained seconds register. Kept as the reference.</p></div>
+        </article>
+        <article data-design="sculptural">
+          <div class="caption"><div><span class="number">02 · SOFT & SCULPTURAL</span><h2>Soft Sculptural</h2></div><a class="open" href="./?design=sculptural" target="_blank" rel="noopener">Explore ↗</a></div>
+          <iframe title="Soft Sculptural candidate"></iframe>
+          <div class="detail"><div class="swatches" aria-label="Ivory, ink blue, warm brown, steel"><i style="background:#fff9ed"></i><i style="background:#1b304b"></i><i style="background:#886047"></i><i style="background:#96999b"></i><span class="status" role="status">Loading…</span></div><p>Ivory, flowing lug roots, tapered markers, and supple brown leather. A fine crescent gathers light beneath the seconds hand.</p></div>
+        </article>
+        <article data-design="precise">
+          <div class="caption"><div><span class="number">03 · PRECISE & COMPOSED</span><h2>Precise Dress</h2></div><a class="open" href="./?design=precise" target="_blank" rel="noopener">Explore ↗</a></div>
+          <iframe title="Precise Dress candidate"></iframe>
+          <div class="detail"><div class="swatches" aria-label="Pale champagne, dark blue, umber, steel"><i style="background:#f0e9d9"></i><i style="background:#152c45"></i><i style="background:#5e483b"></i><i style="background:#858b90"></i><span class="status" role="status">Loading…</span></div><p>Pale champagne, crisp markers, fine scales, and dark umber leather. Defined case edges give the quiet face a firmer rhythm.</p></div>
+        </article>
+      </main>
+    </div>
+    <footer>Drag a watch to inspect it independently; “Match views” restores a common angle. All three share the same 40 mm case diameter and frozen going train. These are visual studies, with no change to the default design.</footer>
+    <script type="module" src="/src/compare.ts"></script>
+  </body>
+</html>
