@@ -6,7 +6,7 @@
 import * as THREE from "three";
 import { receiveSpringTip } from "./socket";
 import { addStrapToLug } from "./strap";
-import { designStudy, executionFinish, seatingFinish, arcStudy, arcLugFamily, corrected, physicalStudy, dressFamily, containment, type DesignVariant } from "./design";
+import { designStudy, executionFinish, seatingFinish, arcStudy, arcFinish, arcLugFamily, corrected, physicalStudy, dressFamily, containment, type DesignVariant } from "./design";
 
 import { refinedLathe, crystalShell, opticalGlass } from "./surfaces";
 
@@ -472,6 +472,102 @@ function createCrown(polished: THREE.Material, knurlMat: THREE.Material) {
   return crown;
 }
 
+/** Four shallow seats share a conforming underside. The exact inner/outer
+ * boundary vertices and every other ring triangle keep the existing finish. */
+function pocketCasebackRing(source: THREE.BufferGeometry) {
+  type V = {p: THREE.Vector3; n: THREE.Vector3; uv: THREE.Vector2; tangent: THREE.Vector4};
+  const faceZ=MID_Z0-.52, depth=.165, radius=.585, segments=64;
+  const centers=Array.from({length:4},(_,i)=>new THREE.Vector2(Math.cos(i*Math.PI/2+Math.PI/4)*14.2,Math.sin(i*Math.PI/2+Math.PI/4)*14.2));
+  const positions:number[]=[], normals:number[]=[], uvs:number[]=[], tangents:number[]=[];
+  const emit=(a:V,b:V,c:V)=>{for(const v of [a,b,c]){positions.push(...v.p.toArray());normals.push(...v.n.toArray());uvs.push(...v.uv.toArray());tangents.push(...v.tangent.toArray());}};
+  const pos=source.getAttribute('position'),nor=source.getAttribute('normal'),uv=source.getAttribute('uv'),tan=source.getAttribute('tangent'),index=source.index!;
+  const boundary=new Map<string,V>();
+  for(let i=0;i<index.count;i+=3){
+    const tri=Array.from({length:3},(_,j)=>{const k=index.getX(i+j);return {p:new THREE.Vector3().fromBufferAttribute(pos,k),n:new THREE.Vector3().fromBufferAttribute(nor,k),uv:new THREE.Vector2(uv.getX(k),uv.getY(k)),tangent:new THREE.Vector4(tan.getX(k),tan.getY(k),tan.getZ(k),tan.getW(k))};});
+    if(tri.every(v=>Math.abs(v.p.z-faceZ)<1e-6)){
+      for(const v of tri)boundary.set([v.p.x,v.p.y].map(x=>Math.round(x*1e6)).join(','),v);
+      const center=tri.reduce((p,v)=>p.add(v.p),new THREE.Vector3());
+      const sector=(Math.round(Math.atan2(center.y,center.x)/(Math.PI*2)*64)+64)%64;
+      if(sector%16!==8)emit(...tri as [V,V,V]);
+    }else emit(...tri as [V,V,V]);
+  }
+  const angleIndex=(v:V)=>(Math.round(Math.atan2(v.p.y,v.p.x)/(Math.PI*2)*512)+512)%512;
+  const outer=new Map([...boundary.values()].filter(v=>Math.hypot(v.p.x,v.p.y)>14.2).map(v=>[angleIndex(v),v]));
+  const inner=new Map([...boundary.values()].filter(v=>Math.hypot(v.p.x,v.p.y)<14.2).map(v=>[angleIndex(v),v]));
+  const innerSample=inner.get(0)!,outerSample=outer.get(0)!;
+  const innerRadius=Math.hypot(innerSample.p.x,innerSample.p.y),outerRadius=Math.hypot(outerSample.p.x,outerSample.p.y);
+  const vertex=(p:THREE.Vector3,n=new THREE.Vector3(0,0,-1)):V=>{
+    const r=Math.hypot(p.x,p.y),u=(Math.atan2(p.x,-p.y)/(Math.PI*2)+1)%1;
+    const v=THREE.MathUtils.lerp(innerSample.uv.y,outerSample.uv.y,(r-innerRadius)/(outerRadius-innerRadius));
+    return {p,n,uv:new THREE.Vector2(u,v),tangent:new THREE.Vector4(-p.y/r,p.x/r,0,1)};
+  };
+  const holes=centers.map(c=>Array.from({length:segments},(_,i)=>{const a=-i*Math.PI*2/segments;return vertex(new THREE.Vector3(c.x+radius*Math.cos(a),c.y+radius*Math.sin(a),faceZ));}));
+  // Narrow wedges keep the original azimuth tangent and radial grain field
+  // coherent across triangulation. Each pocket lies wholly inside one wedge.
+  for(let sector=0;sector<64;sector++){
+    if(sector%16!==8)continue; // All other underside triangles stay untouched.
+    const start=sector*8-4,at=(ring:Map<number,V>,i:number)=>ring.get((start+i+512)%512)!;
+    const contour=[...Array.from({length:9},(_,i)=>at(outer,i)),...Array.from({length:9},(_,i)=>at(inner,8-i))];
+    const pocket=sector%16===8?[holes[(sector-8)/16]]:[],flat=[contour,...pocket].flat();
+    const xy=(loop:V[])=>loop.map(v=>new THREE.Vector2(v.p.x,v.p.y));
+    for(const ids of THREE.ShapeUtils.triangulateShape(xy(contour),pocket.map(xy))){
+      let [a,b,c]=ids.map(i=>flat[i]);
+      if(b.p.clone().sub(a.p).cross(c.p.clone().sub(a.p)).z>0)[b,c]=[c,b];
+      const tri=[a,b,c],wrap=Math.max(...tri.map(v=>v.uv.x))-Math.min(...tri.map(v=>v.uv.x))>.5;
+      emit(...tri.map(v=>wrap&&v.uv.x<.5?{...v,uv:v.uv.clone().add(new THREE.Vector2(1,0))}:v) as [V,V,V]);
+    }
+  }
+  const triangle=(a:THREE.Vector3,b:THREE.Vector3,c:THREE.Vector3,normal:THREE.Vector3)=>{
+    if(b.clone().sub(a).cross(c.clone().sub(a)).dot(normal)<0)[b,c]=[c,b];
+    emit(...[a,b,c].map(p=>vertex(p,normal)) as [V,V,V]);
+  };
+  holes.forEach((loop,i)=>{const center=centers[i];for(let j=0;j<loop.length;j++){
+    const a=loop[j].p,b=loop[(j+1)%loop.length].p,c=a.clone().setZ(faceZ+depth),d=b.clone().setZ(faceZ+depth);
+    const n=new THREE.Vector3(center.x-(a.x+b.x)/2,center.y-(a.y+b.y)/2,0).normalize();
+    triangle(a,b,c,n);triangle(b,d,c,n);
+    triangle(c,d,new THREE.Vector3(center.x,center.y,faceZ+depth),new THREE.Vector3(0,0,-1));
+  }});
+  const g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));
+  g.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));g.setAttribute('tangent',new THREE.Float32BufferAttribute(tangents,4));
+  g.userData.seats={count:4,diameterMm:radius*2,depthMm:depth,remainingRingFloorMm:.52-depth,boundarySegments:holes.map(h=>h.length)};
+  return g;
+}
+
+/** Recessed screw face with a blind driver slot, closed walls and a real floor. */
+function seatedCasebackHead(faceMat:THREE.Material,cutMat:THREE.Material){
+  const radius=.55,height=.16,slotDepth=.075;
+  const slot=new THREE.Path();slot.moveTo(-.30,-.06);slot.lineTo(.30,-.06);slot.absarc(.30,0,.06,-Math.PI/2,Math.PI/2,false);slot.lineTo(-.30,.06);slot.absarc(-.30,0,.06,Math.PI/2,Math.PI*1.5,false);slot.closePath();
+  const disk=new THREE.Shape();disk.absarc(0,0,radius,0,Math.PI*2,false);
+  const face=disk.clone();face.holes.push(slot);
+  const positions:number[]=[],normals:number[]=[],uvs:number[]=[];
+  const emit=(a:THREE.Vector3,b:THREE.Vector3,c:THREE.Vector3,n:THREE.Vector3)=>{
+    const cross=b.clone().sub(a).cross(c.clone().sub(a));
+    if(cross.length()<1e-12)return; // Circle closure may produce a duplicate cap vertex.
+    if(cross.dot(n)<0)[b,c]=[c,b];
+    for(const p of [a,b,c]){positions.push(...p.toArray());normals.push(...n.toArray());uvs.push(p.x,p.y);}
+  };
+  const cap=(shape:THREE.Shape,z:number,sign:number)=>{const g=new THREE.ShapeGeometry(shape,32),p=g.getAttribute('position'),ix=g.index!;for(let i=0;i<ix.count;i+=3)emit(...Array.from({length:3},(_,j)=>new THREE.Vector3(p.getX(ix.getX(i+j)),p.getY(ix.getX(i+j)),z)) as [THREE.Vector3,THREE.Vector3,THREE.Vector3],new THREE.Vector3(0,0,sign));g.dispose();};
+  cap(face,0,-1);cap(disk,height,1);
+  for(let i=0;i<64;i++){
+    const a=i*Math.PI*2/64,b=(i+1)*Math.PI*2/64;
+    const p=new THREE.Vector3(radius*Math.cos(a),radius*Math.sin(a),0),q=new THREE.Vector3(radius*Math.cos(b),radius*Math.sin(b),0),r=p.clone().setZ(height),s=q.clone().setZ(height),n=new THREE.Vector3(Math.cos((a+b)/2),Math.sin((a+b)/2),0);
+    emit(p,q,r,n);emit(q,s,r,n);
+  }
+  const faceCount=positions.length/3;
+  const contour=slot.getPoints(32);if(contour[0].distanceTo(contour[contour.length-1])<1e-8)contour.pop();
+  for(let i=0;i<contour.length;i++){
+    const a=contour[i],b=contour[(i+1)%contour.length],p=new THREE.Vector3(a.x,a.y,0),q=new THREE.Vector3(b.x,b.y,0),r=p.clone().setZ(slotDepth),s=q.clone().setZ(slotDepth),n=new THREE.Vector3(a.y-b.y,b.x-a.x,0).normalize();
+    emit(p,q,r,n);emit(q,s,r,n);
+  }
+  cap(new THREE.Shape(contour),slotDepth,-1);
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(normals,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));
+  g.addGroup(0,faceCount,0);g.addGroup(faceCount,positions.length/3-faceCount,1);
+  const head=new THREE.Mesh(g,[faceMat,cutMat]);head.name='caseback_screw_head';
+  head.userData.construction={diameterMm:radius*2,heightMm:height,recessMm:.005,slotWidthMm:.12,slotLengthMm:.72,slotDepthMm:slotDepth,remainingHeadFloorMm:height-slotDepth};
+  return head;
+}
+
 export function createCase(grade: SteelGrade = "pale", design: DesignVariant = "baseline"): THREE.Group {
   const study = designStudy(design);
   const root = new THREE.Group();
@@ -592,6 +688,7 @@ export function createCase(grade: SteelGrade = "pale", design: DesignVariant = "
     ring.geometry.dispose();ring.geometry=revolve(backRadius,peek+.6,MID_Z0-.52,.52);
     lip.geometry.dispose();lip.geometry=revolve(peek+.6,peek,MID_Z0-.26,.22);
   }
+  if(arcFinish() && physicalStudy(design)) {const source=ring.geometry;ring.geometry=pocketCasebackRing(source);source.dispose();}
   const glass = new THREE.Mesh(
     new THREE.CircleGeometry(peek - 0.05, 128),
     new THREE.MeshPhysicalMaterial({
@@ -617,6 +714,11 @@ export function createCase(grade: SteelGrade = "pale", design: DesignVariant = "
     : steel(live ? 0x7a7e84 : 0xbabcbf, live ? 0.2 : 0.24);
   for (let i = 0; i < 4; i++) {
     const a = (i * Math.PI) / 2 + Math.PI / 4;
+    if(arcFinish() && physicalStudy(design)){
+      const screw=seatedCasebackHead(screwMat,authored?authoredSatin(grain,0,.36):steel(0x8b8e92,.36));
+      screw.position.set(Math.cos(a)*14.2,Math.sin(a)*14.2,MID_Z0-.52+.005);
+      screw.rotation.z=a;screw.userData.seatIndex=i;back.add(screw);continue;
+    }
     const geom = new THREE.CylinderGeometry(0.55, 0.55, 0.16, 32);
     geom.rotateX(Math.PI / 2);
     const screw = new THREE.Mesh(geom, screwMat);

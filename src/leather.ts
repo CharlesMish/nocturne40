@@ -1,5 +1,6 @@
 import * as THREE from "three";
-import { arcStudy } from "./design";
+import { arcStudy, arcFinish } from "./design";
+import { finishedHardware } from "./strap-hardware";
 
 /** Authored padded leather, with a continuous folded nose and a through bore.
  * Local Y follows the strap; local X is the spring-bar axis, all in mm. */
@@ -41,9 +42,13 @@ export function paddedLeather(hide: THREE.Material, withBuckle = false, refined 
     const q=-1+2*i/across,p=sample(j,q); positions.push(p.x,p.y,p.z);uvs.push(seated ? p.x/4 : i/across,seated ? (j<=96 ? perimeter[j].t*length : j>208 ? -Math.PI*1.1*(j-208)/24 : perimeter[j].t*length)/4 : perimeter[j].t);
   }
   const geometry=new THREE.BufferGeometry();
+  const relieved=withBuckle&&seated&&arcFinish();
   for(let j=0;j<n;j++) {
     const start=indices.length;
     for(let i=0;i<across;i++) {
+      // A real central fork at the buckle end: the two outer leaves retain the
+      // pin bore. The center terminates at frame 92, with its own rounded nose.
+      if(relieved&&i>=15&&i<17&&j>=92&&j<116)continue;
       const a=i*n+j,b=i*n+(j+1)%n,c=(i+1)*n+j,d=(i+1)*n+(j+1)%n;
       indices.push(a,c,b,b,c,d);
     }
@@ -74,8 +79,46 @@ export function paddedLeather(hide: THREE.Material, withBuckle = false, refined 
     }
     geometry.addGroup(start,indices.length-start,2);
   }
+  const forkHoles:number[]=[];
+  if(relieved){
+    const f=frames[92],steps=16;
+    const forkPoint=(q:number,a:number)=>{
+      const h=surfaceHeight(f.t,q),p=f.p.clone().addScaledVector(f.tangent,.8*Math.sin(a));
+      p.addScaledVector(f.normal,.0325+(h-.0325)*Math.cos(a));p.x=q*(9-f.t);return p;
+    };
+    const forkBases:number[]=[];
+    for(let i=15;i<=17;i++){
+      const q=-1+2*i/across;forkBases.push(positions.length/3);
+      for(let j=0;j<=steps;j++){const p=forkPoint(q,Math.PI*j/steps);positions.push(...p.toArray());uvs.push(p.x/4,(f.t*length+.8*Math.sin(Math.PI*j/steps))/4);}
+    }
+    let start=indices.length;
+    for(let i=0;i<2;i++)for(let j=0;j<steps;j++){
+      const a=forkBases[i]+j,b=a+1,c=forkBases[i+1]+j,d=c+1;indices.push(a,c,b,b,c,d);
+    }
+    geometry.addGroup(start,indices.length-start,2);
+    for(const sign of [-1,1]){
+      const q=sign/16,contour3:THREE.Vector3[]=[];
+      for(let j=92;j<=116;j++)contour3.push(sample(j,q));
+      for(let j=steps-1;j>0;j--)contour3.push(forkPoint(q,Math.PI*j/steps));
+      const contour=contour3.map(p=>new THREE.Vector2(p.y,p.z)),base=positions.length/3;
+      for(const p of contour3){positions.push(...p.toArray());uvs.push(p.y/4,p.z/4);}
+      forkHoles.push(positions.length/3);
+      for(const p of bores[1]){positions.push(sign*.5,p.x,p.y);uvs.push(p.x/4,p.y/4);}
+      start=indices.length;
+      for(const tri of THREE.ShapeUtils.triangulateShape(contour,[bores[1]])){
+        const [a,b,c]=tri.map(k=>base+k),pa=new THREE.Vector3().fromArray(positions,a*3);
+        const normal=new THREE.Vector3().fromArray(positions,b*3).sub(pa).cross(new THREE.Vector3().fromArray(positions,c*3).sub(pa));
+        if(normal.x*sign<0)indices.push(a,b,c);else indices.push(a,c,b);
+      }
+      geometry.addGroup(start,indices.length-start,2);
+    }
+    geometry.userData.tailRelief={widthMm:1,centerEndFrame:92,eyeWidthMm:.59};
+  }
   const start=indices.length;
-  for(let k=0;k<bores.length;k++) for(let j=0;j<48;j++) {const a=holeBases[0][k]+j,b=holeBases[0][k]+(j+1)%48,c=holeBases[1][k]+j,d=holeBases[1][k]+(j+1)%48;indices.push(a,c,b,b,c,d);}
+  for(let k=0;k<bores.length;k++){
+    const spans=relieved&&k===1?[[holeBases[0][k],forkHoles[0]],[forkHoles[1],holeBases[1][k]]]:[[holeBases[0][k],holeBases[1][k]]];
+    for(const [left,right] of spans)for(let j=0;j<48;j++){const a=left+j,b=left+(j+1)%48,c=right+j,d=right+(j+1)%48;indices.push(a,c,b,b,c,d);}
+  }
   geometry.addGroup(start,indices.length-start,1);
   geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
   geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));geometry.setIndex(indices);geometry.computeVertexNormals();
@@ -123,6 +166,7 @@ export function paddedLeather(hide: THREE.Material, withBuckle = false, refined 
 }
 
 export function fittedHardware(bar:THREE.Material, hide:THREE.Material, frames:ReturnType<typeof paddedLeather>['frames'], refined = false) {
+  if(arcFinish())return finishedHardware(bar,hide,frames);
   const group=new THREE.Group(); group.name='strap_hardware';
   // Cross-section in XZ, centered on the revised path. The keeper clears leather
   // on every side; no inherited translation or width multiplier is retained.

@@ -14,6 +14,7 @@ import { leatherLane } from "./strap";
 import { createPlates } from "./plate";
 import { designStudy, executionFinish, seatingFinish, arcStudy, arcLugFamily, LUG_FAMILIES, parseDesignVariant, corrected, designLabel } from "./design";
 import { isComparisonSettings, COMPARISON_POSES, type ComparisonSettings } from "./comparison";
+import { wristReference, referenceSize } from "./fit-reference";
 import glbUrl from "../vendor/going-train-core-v1/assets/going-train-core.glb?url";
 
 const MM = 0.001;
@@ -59,6 +60,15 @@ pmrem.dispose();
 const scene = new THREE.Scene();
 const background = new THREE.Color(0x141414);
 scene.background = background;
+const wristSize = referenceSize();
+if (wristSize && arcStudy()) {
+  scene.add(wristReference(wristSize));
+  const caption = document.createElement('div');
+  caption.id = 'reference-caption';
+  caption.textContent = `${wristSize} mm elliptical size reference · open display strap`;
+  caption.style.cssText = `position:fixed;${embedded ? 'bottom' : 'top'}:12px;left:12px;padding:6px 9px;background:#202020dd;color:#e4ded3;font:12px system-ui;pointer-events:none`;
+  document.body.append(caption);
+}
 
 const camera = new THREE.PerspectiveCamera(
   32,
@@ -114,6 +124,11 @@ const crownSpec = new THREE.DirectionalLight(0xfff6ea, 0.62);
 crownSpec.position.set(38 * MM, 3 * MM, 7 * MM);
 crownSpec.visible = false;
 scene.add(crownSpec);
+
+const hardwareKey = new THREE.DirectionalLight(0xfff4e8, .85);
+hardwareKey.position.set(16 * MM, -65 * MM, -6 * MM);
+hardwareKey.visible = false;
+scene.add(hardwareKey);
 
 const grid = new THREE.GridHelper(50 * MM, 50, 0x5a5a5a, 0x2a2a2a);
 grid.rotation.x = Math.PI / 2;
@@ -256,6 +271,11 @@ type CamView =
   | "seconds"
   | "center"
   | "lugtop"
+  | "hardware"
+  | "hardwareback"
+  | "backdetail"
+  | "wear"
+  | "wearside"
   | "lug"
   | "lug12"
   | "rake"
@@ -279,6 +299,11 @@ if (
   startView === "seconds" ||
   startView === "center" ||
   startView === "lugtop" ||
+  startView === "hardware" ||
+  startView === "hardwareback" ||
+  startView === "backdetail" ||
+  startView === "wear" ||
+  startView === "wearside" ||
   startView === "lug" ||
   startView === "lug12" ||
   startView === "rake" ||
@@ -344,13 +369,14 @@ function applyLightPalette() {
 
 function applyViewLights() {
   applyLightPalette();
-  const onBack = camView === "back";
+  const onBack = camView === "back" || camView === "backdetail" || camView === "hardwareback";
   const onSide = camView === "side";
   key.intensity = onBack ? 0.22 : lightMode === "cool" ? 0.82 : 0.92;
   fill.visible = !onBack;
   fill.intensity = onSide ? 0.16 : lightMode === "cool" ? 0.32 : 0.26;
   const onLug =
     camView === "lugtop" ||
+    camView === "hardware" ||
     camView === "lug" ||
     camView === "lug12" ||
     camView === "lugunder" ||
@@ -373,10 +399,11 @@ function applyViewLights() {
   peekLight.visible = onBack;
   strapGraze.visible = inspectQuery === "strap";
   crownSpec.visible = inspectQuery === "crown";
+  hardwareKey.visible = camView === "hardware";
   if (brightEnvironment) {
     // One fixed inspection rig, including profile views; no per-view rescue lights.
     key.intensity=1.4; fill.intensity=.45; fill.visible=true;
-    for (const light of [sideFill,backKey,backFill,peekLight,strapGraze,crownSpec]) light.visible=false;
+    for (const light of [sideFill,backKey,backFill,peekLight,strapGraze,crownSpec,hardwareKey]) light.visible=false;
   }
 }
 
@@ -505,6 +532,27 @@ function applyCamera() {
     camera.fov = 34;
     camera.position.set(24 * MM, -33 * MM, 32 * MM);
     controls.target.set(0, -20.4 * MM, -0.2 * MM);
+  } else if (camView === "hardware") {
+    camera.fov = 34;
+    camera.position.set(26 * MM, -77 * MM, -4 * MM);
+    controls.target.set(0, -39 * MM, -28 * MM);
+  } else if (camView === "hardwareback") {
+    camera.fov = 34;
+    camera.position.set(24 * MM, -14 * MM, -54 * MM);
+    controls.target.set(0, -39 * MM, -28 * MM);
+  } else if (camView === "backdetail") {
+    camera.fov = 24;
+    camera.position.set(24 * MM, -25 * MM, -26 * MM);
+    controls.target.set(9.8 * MM, -9.8 * MM, -3.4 * MM);
+  } else if (camView === "wear") {
+    camera.fov = 34;
+    camera.position.set(58 * MM, -64 * MM, 134 * MM);
+    controls.target.set(0, 0, -12 * MM);
+  } else if (camView === "wearside") {
+    camera.fov = 34;
+    camera.up.set(0, 0, 1);
+    camera.position.set(180 * MM, 0, -22 * MM);
+    controls.target.set(0, 0, -22 * MM);
   } else if (camView === "lug") {
     camera.fov = 30;
     camera.position.set(34 * MM, -18 * MM, -14 * MM);
@@ -629,6 +677,7 @@ window.addEventListener("message", event => {
   applyCamera();
   applyOrientation();
   sweepPosition.copy(camera.position).sub(controls.target);
+  sweepAxis.set(camView === 'wearside' ? 0 : 1, 0, camView === 'wearside' ? 1 : 0);
 });
 window.addEventListener("keydown", (event) => {
   if (event.key === "f" || event.key === "F") {

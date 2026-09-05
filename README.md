@@ -24,6 +24,8 @@ Flow is the selected lug family for the Arc exterior. Open `/explore.html` for a
 
 Open `/lugs.html` for the retained lug-family comparisons; see [lug-family notes](docs/ARC_LUG_FAMILIES.md). Arc defaults to Flow; `lug=arc` recalls the original Arc lugs.
 
+Open `/finish.html` for the opt-in physical-detail pass on Arc / Flow: buckle, keeper, leather relief and seated caseback screws. See [finishing notes and wrist-reference limits](docs/ARC_FINISHING.md).
+
 ## Historical starter instructions
 
 # Nocturne 40 — Cursor starter (B0 + B1 only)

@@ -16,6 +16,8 @@ export const physicalFinish = () => typeof location !== 'undefined' && new URLSe
 export const seatingFinish = () => typeof location !== 'undefined' && new URLSearchParams(location.search).get('finish') === 'physical2';
 
 export const arcStudy = () => seatingFinish() && new URLSearchParams(location.search).get('exploration') === 'arc';
+/** Physical-detail pass on the selected exterior, retained alongside its control. */
+export const arcFinish = () => arcStudy() && new URLSearchParams(location.search).get('refinement') === 'finish';
 
 export const LUG_FAMILIES = {
   arc: {label:'Arc', description:'Current waist and root transition.'},
