@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "build": "vite build",
+    "build:pages": "vite build --mode pages && node scripts/prepare-pages.mjs",
+    "preview:pages": "vite preview --outDir dist-pages",
     "check": "node scripts/check-core.mjs"
   },
   "dependencies": {

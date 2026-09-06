@@ -28,7 +28,7 @@ Useful query settings:
 
 The local comparison is `/.review/wearable/compare.html`; saved matched views are at `/.review/wearable/index.html`. These review tools and captures remain local. The comparator matches the watch, environment, exposure and camera settings; closure macros center each buckle separately. On another checkout, open two direct viewer URLs with identical settings, omitting `strap=complete` on the control.
 
-`watch.html` is a tracked Vite build entry. Build with `node node_modules/vite/bin/vite.js build`; relative asset paths support deployment beneath a repository subpath. A production build is prepared for hosting; committing the page does not itself activate GitHub Pages.
+`watch.html` is a tracked Vite build entry. `npm run build` retains the local viewer routes; `npm run build:pages` creates a dedicated presentation homepage with relative asset paths. See [GitHub Pages setup](GITHUB_PAGES.md) for the opt-in publishing workflow.
 
 ## Construction
 

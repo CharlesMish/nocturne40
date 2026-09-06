@@ -5,35 +5,37 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Nocturne 40. A warm dial, a gently curved case and a complete espresso leather strap. An interactive watch design study.">
   <title>Nocturne 40</title>
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <style>
     :root{color-scheme:dark;background:#151515;color:#e9e2d6;font-family:Arial,Helvetica,sans-serif}
-    *{box-sizing:border-box}body{margin:0}a{color:inherit}button{font:inherit}
-    header{margin:0 5vw;padding:25px 0;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #393733}
+    *{box-sizing:border-box}body{margin:0;height:100svh;min-height:540px;display:grid;grid-template-rows:auto minmax(0,1fr) auto}a{color:inherit}button{font:inherit}
+    header{margin:0 4vw;padding:17px 0;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #393733}
     .mark{font:24px Georgia,serif;letter-spacing:-1px;text-decoration:none}.edition{font-size:10px;letter-spacing:2.3px;color:#aba598;text-transform:uppercase}
-    main{display:grid;grid-template-columns:minmax(255px,30%) 1fr;align-items:center;max-width:1600px;margin:auto;padding:0 3vw 0 5vw;min-height:calc(100svh - 145px)}
-    .intro{padding:48px 0 60px;position:relative;z-index:1}.eyebrow{font-size:10px;letter-spacing:2.6px;text-transform:uppercase;color:#bba27e;margin:0 0 22px}
-    h1{font:normal clamp(46px,5vw,78px)/1.04 Georgia,'Times New Roman',serif;letter-spacing:-2px;margin:0 0 25px}
-    .description{font:16px/1.7 Georgia,serif;color:#bdb5a7;max-width:245px;margin:0 0 40px}
+    main{display:grid;grid-template-columns:minmax(210px,23%) minmax(0,1fr);align-items:center;min-height:0;padding:0 2vw 0 4vw}
+    .intro{padding:20px 0;position:relative;z-index:1}.eyebrow{font-size:10px;letter-spacing:2.6px;text-transform:uppercase;color:#bba27e;margin:0 0 18px}
+    h1{font:normal clamp(44px,4.5vw,68px)/1.04 Georgia,'Times New Roman',serif;letter-spacing:-2px;margin:0 0 20px}
+    .description{font:16px/1.6 Georgia,serif;color:#bdb5a7;max-width:230px;margin:0 0 25px}
     dl{margin:0;padding:0;max-width:245px}dl div{padding:12px 0;display:flex;justify-content:space-between;gap:15px;border-top:1px solid #35332f;font-size:11px}dt{color:#918a7f}dd{margin:0;text-align:right;color:#d8cfbf}
-    .stage{position:relative;min-width:0}.viewer{width:100%;height:min(74vw,740px);max-height:calc(100svh - 195px);min-height:480px;border:0;display:block;background:#151515}
-    nav{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;margin:0 0 20px}nav button{padding:9px 13px;background:none;border:1px solid transparent;color:#9e978b;font-size:11px;cursor:pointer;border-radius:2px}nav button:hover{color:#ede6da}nav button[aria-pressed=true]{border-color:#51473a;color:#d8bd94}button:focus-visible,a:focus-visible{outline:2px solid #d8bd94;outline-offset:4px}
-    .instruction{text-align:center;margin:0;color:#776f64;font-size:10px;letter-spacing:.4px}.status{position:absolute;inset:45% 0 auto;text-align:center;color:#9e978b;font-size:12px;pointer-events:none}.status[hidden]{display:none}
-    footer{margin:0 5vw;padding:18px 0;border-top:1px solid #393733;display:flex;justify-content:space-between;gap:20px;font-size:10px;color:#8f887d;letter-spacing:.5px}footer a{text-decoration:none}footer a:hover{color:#d8bd94}
-    @media(max-width:760px){header{padding:19px 0}.edition{font-size:9px;letter-spacing:1.5px}main{display:flex;flex-direction:column;padding:0 4vw}.intro{padding:35px 5vw 0;width:100%;text-align:center}h1{font-size:48px;margin-bottom:13px}.eyebrow{margin-bottom:13px}.description{max-width:360px;margin:0 auto 0;font-size:15px}dl{display:none}.stage{width:100%}.viewer{height:112vw;min-height:390px;max-height:620px}nav{margin-bottom:10px}.instruction{margin-bottom:25px}footer{font-size:9px} }
+    .stage{position:relative;min-width:0;min-height:0;height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto auto}.viewer{width:100%;height:100%;min-height:0;border:0;display:block;background:#151515}
+    nav{display:flex;justify-content:center;flex-wrap:wrap;gap:4px;margin:0 0 8px}nav button{padding:10px 13px;background:none;border:1px solid transparent;color:#9e978b;font-size:11px;cursor:pointer;border-radius:2px}nav button:hover{color:#ede6da}nav button[aria-pressed=true]{border-color:#51473a;color:#d8bd94}button:focus-visible,a:focus-visible{outline:2px solid #d8bd94;outline-offset:4px}
+    .instruction{text-align:center;margin:0 0 12px;color:#776f64;font-size:10px;letter-spacing:.4px}.status{position:absolute;inset:45% 0 auto;text-align:center;color:#9e978b;font-size:12px;pointer-events:none}.status[hidden]{display:none}
+    footer{margin:0 4vw;padding:13px 0;border-top:1px solid #393733;display:flex;justify-content:space-between;gap:16px;font-size:10px;color:#8f887d;letter-spacing:.5px}footer a{text-decoration:none}footer a:hover{color:#d8bd94}
+    @media(max-width:760px){body{min-height:600px}header{padding:13px 0}.edition{font-size:9px;letter-spacing:1.5px}main{display:flex;flex-direction:column;padding:0 3vw}.intro{flex:none;padding:15px 2vw 0;width:100%;text-align:center}h1{font-size:34px;letter-spacing:-1px;margin-bottom:8px}h1 br{display:none}.eyebrow,dl{display:none}.description{max-width:340px;margin:0 auto;font-size:14px}.stage{flex:1;width:100%;height:auto}nav{gap:2px}nav button{padding:10px 11px}.instruction{margin-bottom:10px}footer{font-size:9px}}
+    @media(min-width:761px) and (max-height:600px){body{min-height:420px}.intro dl{display:none}.description{margin-bottom:0}header{padding:12px 0}footer{padding:10px 0}}
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
   </style>
 </head>
 <body>
   <header><a class="mark" href="./watch.html" aria-label="Nocturne 40 home">N.40</a><span class="edition">A watch design study</span></header>
   <main>
-    <section class="intro" aria-labelledby="title"><p class="eyebrow">Arc / Flow</p><h1 id="title">Nocturne<br>40.</h1><p class="description">Warm ivory, dark leather and the quiet sweep of a steel case.</p><dl><div><dt>Case</dt><dd>40 mm</dd></div><div><dt>Dial</dt><dd>Small seconds at six</dd></div><div><dt>Strap</dt><dd>Espresso leather</dd></div><div><dt>Width</dt><dd>18 → 16 mm</dd></div></dl></section>
+    <section class="intro" aria-labelledby="title"><p class="eyebrow">Arc / Flow</p><h1 id="title">Nocturne<br> 40.</h1><p class="description">Warm ivory, dark leather and the quiet sweep of a steel case.</p><dl><div><dt>Case</dt><dd>40 mm</dd></div><div><dt>Dial</dt><dd>Small seconds at six</dd></div><div><dt>Strap</dt><dd>Espresso leather</dd></div><div><dt>Width</dt><dd>18 → 16 mm</dd></div></dl></section>
     <section class="stage" aria-label="Interactive watch"><iframe class="viewer" id="watch" title="Interactive Nocturne 40 watch"></iframe><p class="status" id="status" role="status">Preparing the watch…</p><nav aria-label="Watch views"><button data-view="oblique" aria-pressed="true">Three-quarter</button><button data-view="dial" aria-pressed="false">Dial</button><button data-view="wearside" aria-pressed="false">Profile</button><button data-view="back" aria-pressed="false">Caseback</button><button data-view="closure" aria-pressed="false">Strap</button></nav><p class="instruction">Drag to turn · scroll or pinch to move closer</p></section>
   </main>
   <footer><span>Charles Mish · Nocturne 40</span><a href="https://github.com/CharlesMish/nocturne40" target="_blank" rel="noopener noreferrer">View the project ↗</a></footer>
   <script type="module">
     const frame=document.querySelector('#watch'),status=document.querySelector('#status');let view='oblique',ready=false;
     const query=new URLSearchParams({design:'synthesis',finish:'physical2',exploration:'arc',lug:'flow',refinement:'finish',strap:'complete',strapPose:'closed',size:'170',view,light:'neutral',pose:'ten-ten',embed:'1',presentation:'1'});
-    frame.src='./index.html?'+query;
+    frame.src=(import.meta.env.MODE==='pages'?'./viewer.html?':'./index.html?')+query;
     function update(){if(ready)frame.contentWindow.postMessage({type:'nocturne:compare',view,light:'neutral',pose:'ten-ten',sweep:false},location.origin);}
     document.querySelectorAll('[data-view]').forEach(button=>button.addEventListener('click',()=>{view=button.dataset.view;document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));update();}));
     window.addEventListener('message',event=>{if(event.origin!==location.origin||event.source!==frame.contentWindow)return;if(event.data?.type==='nocturne:ready'){ready=true;status.hidden=true;update();}else if(event.data?.type==='nocturne:error'){status.textContent='The watch could not load. Refresh to try again.';}});

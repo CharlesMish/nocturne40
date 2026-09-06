@@ -6,6 +6,8 @@ An interactive watch design study: a warm ivory dial, Arc case, Flow lugs and es
 
 Run the commands below and open `/watch.html` for the clean presentation. The current exploration includes a complete 65 / 115 mm strap, seven adjustment holes, and open and closed poses. See [complete strap and presentation notes](docs/COMPLETE_STRAP.md) for controls, construction and validation limits.
 
+The presentation fits ordinary desktop windows and phones with more space for the interactive watch. A dedicated `npm run build:pages` build makes it the public homepage; the GitHub Actions workflow is ready, with publishing off until enabled. See [GitHub Pages setup](docs/GITHUB_PAGES.md).
+
 ## Accepted design baseline
 
 The accepted design uses the selected warm dial and the second physical-finish pass.
