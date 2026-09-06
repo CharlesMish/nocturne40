@@ -4,9 +4,10 @@
  * Buckle only on spec +Y (product 6).
  */
 import * as THREE from "three";
-import { designStudy, executionFinish, seatingFinish, physicalFinish, physicalStudy, type DesignVariant } from "./design";
+import { designStudy, executionFinish, seatingFinish, physicalFinish, physicalStudy, wearableStrap, strapPose, strapSize, type DesignVariant } from "./design";
 
 import { paddedLeather, fittedHardware } from "./leather";
+import { createWearableStrap } from "./wearable-strap";
 
 const THICK = 1.58;
 const W0 = 7.55;
@@ -683,7 +684,9 @@ export function addStrapToLug(tilt: THREE.Group, withBuckle: boolean, liveSteel 
   const bar = strapSteel(liveSteel);
   if (physicalStudy(design)) {
     const refined=executionFinish();
-    const {root, frames} = paddedLeather(hide, withBuckle, refined, physicalFinish(), seatingFinish());
+    const complete=wearableStrap();
+    const leather=complete?null:paddedLeather(hide, withBuckle, refined, physicalFinish(), seatingFinish());
+    const root=complete?createWearableStrap(hide,bar,withBuckle,{pose:strapPose(),circumference:strapSize()}):leather!.root;
     if (refined) {
       // Align the attachment with the horn section, rather than its upper edge.
       const attachment=new THREE.Group();attachment.name='strap_attachment';attachment.position.z=-.2;
@@ -694,11 +697,11 @@ export function addStrapToLug(tilt: THREE.Group, withBuckle: boolean, liveSteel 
         tip.rotation.z=Math.PI/2;tip.position.x=side*9.2;spring.add(tip);
       }
       attachment.add(root,spring);
-      if(withBuckle)attachment.add(fittedHardware(bar,hide,frames,true));
+      if(withBuckle&&!complete)attachment.add(fittedHardware(bar,hide,leather!.frames,true));
       tilt.add(attachment);
     } else {
       tilt.add(root, springBar(bar, design));
-      if (withBuckle) tilt.add(fittedHardware(bar, hide, frames));
+      if (withBuckle&&!complete) tilt.add(fittedHardware(bar, hide, leather!.frames));
     }
     return;
   }

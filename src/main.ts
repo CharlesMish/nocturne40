@@ -12,7 +12,7 @@ import { createDial, MARKER_LANES, tickLane, type CreamLook, type MarkerLook, ty
 import { attachHands, HAND_LANES, SECONDS_LANES, type HandStyle, type SecondsLane } from "./hands";
 import { leatherLane } from "./strap";
 import { createPlates } from "./plate";
-import { designStudy, executionFinish, seatingFinish, arcStudy, arcLugFamily, LUG_FAMILIES, parseDesignVariant, corrected, designLabel } from "./design";
+import { designStudy, executionFinish, seatingFinish, arcStudy, arcLugFamily, LUG_FAMILIES, parseDesignVariant, corrected, designLabel, wearableStrap, strapPose } from "./design";
 import { isComparisonSettings, COMPARISON_POSES, type ComparisonSettings } from "./comparison";
 import { wristReference, referenceSize } from "./fit-reference";
 import glbUrl from "../vendor/going-train-core-v1/assets/going-train-core.glb?url";
@@ -33,6 +33,7 @@ const canvasHost = document.body;
 const hint = document.getElementById("hint");
 const orientBtn = document.getElementById("orient");
 const embedded = new URLSearchParams(location.search).get("embed") === "1";
+const presenting = new URLSearchParams(location.search).get('presentation') === '1';
 if (embedded) document.getElementById("hud")!.style.display = "none";
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -65,7 +66,7 @@ if (wristSize && arcStudy()) {
   scene.add(wristReference(wristSize));
   const caption = document.createElement('div');
   caption.id = 'reference-caption';
-  caption.textContent = `${wristSize} mm elliptical size reference · open display strap`;
+  caption.textContent = `${wristSize} mm elliptical size reference · ${wearableStrap() ? `${strapPose()} strap study` : 'open display strap'}`;
   caption.style.cssText = `position:fixed;${embedded ? 'bottom' : 'top'}:12px;left:12px;padding:6px 9px;background:#202020dd;color:#e4ded3;font:12px system-ui;pointer-events:none`;
   document.body.append(caption);
 }
@@ -276,6 +277,8 @@ type CamView =
   | "backdetail"
   | "wear"
   | "wearside"
+  | "closure"
+  | "strapopen"
   | "lug"
   | "lug12"
   | "rake"
@@ -304,6 +307,8 @@ if (
   startView === "backdetail" ||
   startView === "wear" ||
   startView === "wearside" ||
+  startView === "closure" ||
+  startView === "strapopen" ||
   startView === "lug" ||
   startView === "lug12" ||
   startView === "rake" ||
@@ -369,7 +374,7 @@ function applyLightPalette() {
 
 function applyViewLights() {
   applyLightPalette();
-  const onBack = camView === "back" || camView === "backdetail" || camView === "hardwareback";
+  const onBack = camView === "back" || camView === "backdetail" || camView === "hardwareback" || camView === 'closure';
   const onSide = camView === "side";
   key.intensity = onBack ? 0.22 : lightMode === "cool" ? 0.82 : 0.92;
   fill.visible = !onBack;
@@ -506,6 +511,7 @@ function fitProjection() {
 function applyCamera() {
   camera.up.set(0, 1, 0);
   camera.fov = 32;
+  controls.maxDistance = (camView === 'strapopen' ? 650 : 240) * MM;
   if (camView === "side") {
     camera.position.set(CAM_DIST, 0, 8 * MM);
     controls.target.set(0, 0, 0);
@@ -553,6 +559,17 @@ function applyCamera() {
     camera.up.set(0, 0, 1);
     camera.position.set(180 * MM, 0, -22 * MM);
     controls.target.set(0, 0, -22 * MM);
+  } else if (camView === 'strapopen') {
+    camera.fov = 32;
+    camera.position.set(25 * MM, 23 * MM, 475 * MM);
+    controls.target.set(0, 23 * MM, 0);
+  } else if (camView === 'closure') {
+    wrapper.rotation.z = product ? PRODUCT_Z : 0;
+    wrapper.updateMatrixWorld(true);
+    const buckle = casing.getObjectByName('buckle');
+    controls.target.copy(buckle ? buckle.getWorldPosition(new THREE.Vector3()) : new THREE.Vector3(0, -39 * MM, -28 * MM));
+    camera.fov = 34;
+    camera.position.copy(controls.target).add(new THREE.Vector3(24 * MM, -28 * MM, -45 * MM));
   } else if (camView === "lug") {
     camera.fov = 30;
     camera.position.set(34 * MM, -18 * MM, -14 * MM);
@@ -680,6 +697,7 @@ window.addEventListener("message", event => {
   sweepAxis.set(camView === 'wearside' ? 0 : 1, 0, camView === 'wearside' ? 1 : 0);
 });
 window.addEventListener("keydown", (event) => {
+  if (presenting) return;
   if (event.key === "f" || event.key === "F") {
     const i = MARKER_LANES.indexOf(markerStyle);
     markerStyle = MARKER_LANES[(i + 1) % MARKER_LANES.length];
@@ -819,7 +837,9 @@ if (!glbUrl) {
       applyCamera();
       setFaceVisible(true);
       document.body.dataset.ready = "true";
-      if (embedded && window.parent !== window) window.parent.postMessage({type: "nocturne:ready", design}, location.origin);
+      const strap = casing.getObjectByName('strap_construction')?.userData.wearable;
+      if (strap) document.body.dataset.strapPose = strap.pose;
+      if (embedded && window.parent !== window) window.parent.postMessage({type: "nocturne:ready", design, strap}, location.origin);
     },
     undefined,
     (err) => {

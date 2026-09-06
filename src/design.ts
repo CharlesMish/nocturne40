@@ -18,6 +18,13 @@ export const seatingFinish = () => typeof location !== 'undefined' && new URLSea
 export const arcStudy = () => seatingFinish() && new URLSearchParams(location.search).get('exploration') === 'arc';
 /** Physical-detail pass on the selected exterior, retained alongside its control. */
 export const arcFinish = () => arcStudy() && new URLSearchParams(location.search).get('refinement') === 'finish';
+export const wearableStrap = () => arcFinish() && new URLSearchParams(location.search).get('strap') === 'complete';
+export const strapPose = (): 'open' | 'closed' => typeof location !== 'undefined' && new URLSearchParams(location.search).get('strapPose') === 'open' ? 'open' : 'closed';
+/** Nominal wrist reference. Fixed leather lengths are resolved by adjustment holes. */
+export function strapSize(): number {
+  const value = typeof location === 'undefined' ? NaN : Number(new URLSearchParams(location.search).get('size') ?? '170');
+  return Number.isFinite(value) && value >= 150 && value <= 190 ? value : 170;
+}
 
 export const LUG_FAMILIES = {
   arc: {label:'Arc', description:'Current waist and root transition.'},
