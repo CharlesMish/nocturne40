@@ -34,7 +34,7 @@
   <footer><span>Charles Mish · Nocturne 40</span><a href="https://github.com/CharlesMish/nocturne40" target="_blank" rel="noopener noreferrer">View the project ↗</a></footer>
   <script type="module">
     const frame=document.querySelector('#watch'),status=document.querySelector('#status');let view='oblique',ready=false;
-    const query=new URLSearchParams({design:'synthesis',finish:'physical2',exploration:'arc',lug:'flow',refinement:'finish',strap:'complete',strapPose:'closed',size:'170',view,light:'neutral',pose:'ten-ten',embed:'1',presentation:'1'});
+    const query=new URLSearchParams({design:'synthesis',finish:'physical2',exploration:'arc',lug:'flow',refinement:'finish',strap:'complete',strapPose:'closed',size:'170',surface:'atelier',view,light:'neutral',pose:'ten-ten',embed:'1',presentation:'1'});
     frame.src=(import.meta.env.MODE==='pages'?'./viewer.html?':'./index.html?')+query;
     function update(){if(ready)frame.contentWindow.postMessage({type:'nocturne:compare',view,light:'neutral',pose:'ten-ten',sweep:false},location.origin);}
     document.querySelectorAll('[data-view]').forEach(button=>button.addEventListener('click',()=>{view=button.dataset.view;document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));update();}));

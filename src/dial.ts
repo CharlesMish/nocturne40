@@ -5,7 +5,7 @@
  */
 import * as THREE from "three";
 import { PART_AXES_MM } from "./plate";
-import { designStudy, executionFinish, physicalFinish, preciseFamily, dressFamily, warmer, containment, type DesignVariant } from "./design";
+import { designStudy, executionFinish, physicalFinish, preciseFamily, dressFamily, warmer, containment, atelierFinish, type DesignVariant } from "./design";
 
 export const MARKER_LANES = ["curve", "slim", "dauphine", "baton"] as const;
 export type MarkerStyle = (typeof MARKER_LANES)[number];
@@ -89,6 +89,27 @@ function creamTexture(look: CreamLook = "current", design: DesignVariant = "base
 
 function dialUV(x: number, y: number) {
   return new THREE.Vector2(x / (DIAL_R * 2) + 0.5, y / (DIAL_R * 2) + 0.5);
+}
+
+/** Fine, deterministic surface grain. The accepted ivory color map is untouched.
+ * One texture covers the 31.4 mm dial; filtering quiets the finish at watch scale. */
+function dialGrain() {
+  const size = 1024, canvas = document.createElement('canvas');
+  canvas.width = canvas.height = size;
+  const ctx = canvas.getContext('2d')!;
+  const pixels = ctx.createImageData(size, size);
+  let seed = 0x40a57a;
+  for (let i = 0; i < size * size; i++) {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    const value = 96 + (seed >>> 25);
+    pixels.data.set([value, value, value, 255], i * 4);
+  }
+  ctx.putImageData(pixels, 0, 0);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.NoColorSpace;
+  texture.anisotropy = 8;
+  texture.name = 'fine_dial_grain';
+  return texture;
 }
 
 const DIAL_UV = {
@@ -198,6 +219,9 @@ function steelPolish() {
 }
 
 function roseGold() {
+  if (atelierFinish()) return new THREE.MeshPhysicalMaterial({
+    color: 0xc99179, metalness: .9, roughness: .27, envMapIntensity: .8,
+  });
   return new THREE.MeshPhysicalMaterial({
     color: 0xc4a070,
     metalness: 0.62,
@@ -332,6 +356,12 @@ export function createDial(
     metalness: study?.dialMetalness ?? 0.03,
     roughness: study?.dialRoughness ?? 0.48,
   });
+  if (atelierFinish()) {
+    faceMat.bumpMap = dialGrain();
+    // Three r170 normalizes the bump shader's surface derivatives; this is
+    // a shading strength, not a millimetre displacement of the dial surface.
+    faceMat.bumpScale = .14;
+  }
 
   const shape = new THREE.Shape();
   shape.absarc(0, 0, DIAL_R, 0, Math.PI * 2, false);
@@ -423,13 +453,20 @@ export function createDial(
   }
 
   const stepEdge = new THREE.Mesh(
-    latheZ([
+    latheZ(atelierFinish() ? [
+      new THREE.Vector2(SUB_R - 0.05, SECONDS_FLOOR),
+      new THREE.Vector2(SUB_R + 0.028, SECONDS_FLOOR + 0.018),
+      new THREE.Vector2(SUB_R + 0.105, fieldTop - 0.006),
+      new THREE.Vector2(SUB_R + 0.095, fieldTop + 0.004),
+      new THREE.Vector2(SUB_R - 0.015, fieldTop + 0.004),
+      new THREE.Vector2(SUB_R - 0.05, SECONDS_FLOOR),
+    ] : [
       new THREE.Vector2(SUB_R - 0.05, SECONDS_FLOOR),
       new THREE.Vector2(SUB_R + 0.028, SECONDS_FLOOR + 0.018),
       new THREE.Vector2(SUB_R + 0.022, fieldTop),
       new THREE.Vector2(SUB_R - 0.02, fieldTop),
       new THREE.Vector2(SUB_R - 0.05, SECONDS_FLOOR),
-    ]),
+    ], atelierFinish() ? 192 : 80),
     design === "sculptural" ? new THREE.MeshPhysicalMaterial({color: 0xb4aea0, metalness: 0.45, roughness: 0.42}) : roseGold(),
   );
   stepEdge.position.set(fourth.x, fourth.y, 0);

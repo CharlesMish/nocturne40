@@ -7,7 +7,7 @@
  */
 import * as THREE from "three";
 import { DIAL_SURFACE, SECONDS_FLOOR } from "./dial";
-import { designStudy, preciseFamily, dressFamily, warmer, containment, type DesignVariant } from "./design";
+import { designStudy, preciseFamily, dressFamily, warmer, containment, atelierFinish, type DesignVariant } from "./design";
 
 const MM = 0.001;
 
@@ -348,6 +348,16 @@ export function attachHands(
       painted.add(obj.material);
       obj.material.color.setHex(study.handColor);
       if (obj.name === "hand_ridge") obj.material.color.multiplyScalar(1.2);
+      if (atelierFinish()) {
+        // A blued-metal appearance, with the existing silhouette and ridge.
+        // This is a PBR approximation, not a thin-film oxide simulation.
+        obj.material.color.setHex(obj.name === 'hand_ridge' ? 0x315b9d : 0x244784);
+        obj.material.metalness = .86;
+        obj.material.roughness = obj.name === 'hand_ridge' ? .18 : .25;
+        obj.material.envMapIntensity = .72;
+        obj.material.clearcoat = 0;
+        obj.material.specularIntensity = .8;
+      }
     });
   }
   return meshes;
