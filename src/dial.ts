@@ -456,8 +456,8 @@ export function createDial(
     latheZ(atelierFinish() ? [
       new THREE.Vector2(SUB_R - 0.05, SECONDS_FLOOR),
       new THREE.Vector2(SUB_R + 0.028, SECONDS_FLOOR + 0.018),
-      new THREE.Vector2(SUB_R + 0.105, fieldTop - 0.006),
-      new THREE.Vector2(SUB_R + 0.095, fieldTop + 0.004),
+      new THREE.Vector2(SUB_R + 0.0973, fieldTop - 0.006),
+      new THREE.Vector2(SUB_R + 0.0873, fieldTop + 0.004),
       new THREE.Vector2(SUB_R - 0.015, fieldTop + 0.004),
       new THREE.Vector2(SUB_R - 0.05, SECONDS_FLOOR),
     ] : [
@@ -590,9 +590,13 @@ export function createDial(
   }
 
   const cannonMat = steelAccent(appliedLook);
-  const cannon = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.14, 0.1, 20), cannonMat);
-  cannon.rotation.x = Math.PI / 2;
-  cannon.position.set(0, 0, fieldTop + 0.02);
+  const cannon = new THREE.Mesh(atelierFinish() ? latheZ([
+    new THREE.Vector2(.235,3.45),new THREE.Vector2(.98,3.45),
+    new THREE.Vector2(.98,3.48),new THREE.Vector2(.48,3.48),
+    new THREE.Vector2(.48,3.915),new THREE.Vector2(.465,3.93),
+    new THREE.Vector2(.235,3.93),new THREE.Vector2(.235,3.45),
+  ],96) : new THREE.CylinderGeometry(0.16, 0.14, 0.1, 20), cannonMat);
+  if (!atelierFinish()) { cannon.rotation.x = Math.PI / 2; cannon.position.set(0, 0, fieldTop + 0.02); }
   cannon.name = "center_cannon";
   root.add(cannon);
 

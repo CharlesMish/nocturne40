@@ -2,6 +2,8 @@
 
 This material refinement follows the complete-strap and presentation checkpoint `2c5f313`. The presentation now selects `surface=atelier`; existing direct viewer URLs without that parameter retain the previous materials.
 
+The subsequent [hand-stack refinement](HAND_STACK.md) adds the visible movement-to-hand connection and reduces the lip described below to 93% of its initial width.
+
 ## Selected changes
 
 **Blued hands.** The previous hands used a dark navy tint with restrained environment response, which often appeared nearly black. The revised PBR material gives them a clearer blue metallic response and a slightly brighter, smoother ridge. They retain a dark silhouette head-on and gain blue highlights as the watch turns. This approximates the appearance of blued steel; it does not simulate the oxide film. Blade dimensions, positions, counterweights and collets are unchanged.

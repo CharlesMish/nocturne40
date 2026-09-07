@@ -52,6 +52,15 @@ function stackCylinder(radius: number, height: number, z: number, name: string, 
   return mesh;
 }
 
+/** A real bore for concentric parts, in attachment-local millimetres. */
+function sleeve(inner: number, outer: number, z0: number, z1: number, name: string, mat: THREE.Material) {
+  const points = [[inner,z0],[outer,z0],[outer,z1],[inner,z1],[inner,z0]].map(([r,z])=>new THREE.Vector2(r,z));
+  const geometry = new THREE.LatheGeometry(points, 96);
+  geometry.rotateX(Math.PI / 2);
+  // Lathe +Y becomes +Z; all axial dimensions remain in the hand's local frame.
+  const mesh = new THREE.Mesh(geometry, mat); mesh.name = name; return mesh;
+}
+
 type SwellSpec = {
   neckEnd: number;
   peak: number;
@@ -110,7 +119,9 @@ function swellShape(length: number, spec: SwellSpec, y0: number) {
   const pts: THREE.Vector2[] = [];
   for (let i = 0; i < n; i++) {
     const t = i / (n - 1);
-    const y = y0 + (length - y0) * t;
+    // Only trim the concealed root when boring the hub; keep all the original
+    // outline stations beyond it, so the visible leaf silhouette is unchanged.
+    const y = i === 0 ? y0 : .02 + (length - .02) * t;
     const hw = swellHalfWidth(y / length, spec);
     pts.push(new THREE.Vector2(Math.max(spec.tipW * 0.45, hw), y));
   }
@@ -161,10 +172,11 @@ function foldedLeaf(
   hubR: number,
   mat: THREE.Material,
   withRidge: boolean,
+  bored = false,
 ) {
   const g = new THREE.Group();
-  const y0 = 0.02;
-  if (hubR > 0) g.add(hub(hubR, thick, mat));
+  const y0 = bored ? .15 : 0.02;
+  if (hubR > 0) g.add(bored ? sleeve(.125,hubR,-(thick+.02)/2,(thick+.02)/2,'hour_collet',mat) : hub(hubR, thick, mat));
   const blade = new THREE.Mesh(extrudePlan(swellShape(length, spec, y0), thick), mat);
   blade.name = "hand_blade";
   g.add(blade);
@@ -310,22 +322,46 @@ export function attachHands(
   const minute = foldedLeaf(minuteLen, minuteShape, 0.14, 0, mat, true);
   minute.name = "minute_hand";
   minute.rotation.z = THREE.MathUtils.degToRad(-(60 + 180));
-  minute.add(
+  if (!atelierFinish()) minute.add(
     stackCylinder(0.1, 0.14, 0, "minute_collet", mat),
     stackCylinder(0.1, 0.18, -0.16, "minute_pipe", mat),
   );
   const minuteParent = centerMotion ?? centerPose;
   if (minuteParent) {
     setLocalZForWorldMm(minute, minuteParent, DIAL_SURFACE + 0.49);
+    if (atelierFinish()) {
+      // Read the frozen endpoint, rather than changing/re-exporting the arbor.
+      const tip = trainRoot.getObjectByName('center_arbor_upperTip');
+      if (!tip) throw new Error('Center arbor tip missing; cannot seat hand shaft.');
+      trainRoot.updateMatrixWorld(true);
+      const tipTop = new THREE.Box3().setFromObject(tip).max.z / MM;
+      const handZ = DIAL_SURFACE + .49;
+      const steel = new THREE.MeshPhysicalMaterial({color:0x89939e,metalness:.92,roughness:.24});
+      // A socket overlaps the existing upper pivot, rather than butting a new
+      // cylinder against its tapered endpoint. The original pivot is untouched.
+      const socketBottom = tipTop - .19 - handZ, socketRoof = tipTop + .01 - handZ;
+      const extensionGeometry = new THREE.LatheGeometry([
+        [.061,socketBottom],[.10,socketBottom],[.10,.07],[0,.07],
+        [0,socketRoof],[.061,socketRoof],[.061,socketBottom],
+      ].map(([r,z])=>new THREE.Vector2(r,z)),96);
+      extensionGeometry.rotateX(Math.PI/2);
+      const extension = new THREE.Mesh(extensionGeometry,steel);
+      extension.name = 'center_arbor_extension';minute.add(extension);
+      minute.add(stackCylinder(.18,.04,.09,'minute_seating_cap',steel));
+    }
     meshes.push(minute);
   }
 
   const hourShape = study ? {...HOUR_SWELL, maxW: preciseFamily(design) ? 1.1 : 1.22, peak: preciseFamily(design) ? 0.45 : 0.52} : HOUR_SWELL;
-  const hour = foldedLeaf(hourLen, hourShape, 0.16, 0.24, mat, true);
+  const hour = foldedLeaf(hourLen, hourShape, 0.16, 0.24, mat, true, atelierFinish());
   hour.name = "hour_hand";
   hour.rotation.z = THREE.MathUtils.degToRad(-(305 + 180));
   if (centerPose) {
     setLocalZForWorldMm(hour, centerPose, DIAL_SURFACE + 0.32);
+    if (atelierFinish()) {
+      const steel = new THREE.MeshPhysicalMaterial({color:0x78818b,metalness:.92,roughness:.3});
+      hour.add(sleeve(.125,.21,3.49-(DIAL_SURFACE+.32),.005,'hour_pipe',steel));
+    }
     meshes.push(hour);
   }
 
@@ -345,6 +381,7 @@ export function attachHands(
     const painted = new Set<THREE.Material>();
     for (const hand of meshes) hand.traverse(obj => {
       if (!(obj instanceof THREE.Mesh) || !(obj.material instanceof THREE.MeshPhysicalMaterial) || painted.has(obj.material)) return;
+      if (['center_arbor_extension','minute_seating_cap','hour_pipe'].includes(obj.name)) return;
       painted.add(obj.material);
       obj.material.color.setHex(study.handColor);
       if (obj.name === "hand_ridge") obj.material.color.multiplyScalar(1.2);
