@@ -639,7 +639,7 @@ export function applySteelIbl(root: THREE.Object3D, envMap: THREE.Texture, grade
       if (root.userData.corrected) mat.envMapIntensity = Math.min(mat.envMapIntensity, mat.roughness < 0.16 ? 0.85 : 0.55);
       if (studioFinish() && !mat.userData.studioSteel) {
         // The grey room forced dark base colours and capped reflections, which read as gunmetal.
-        // In the black strip studio, steel keeps a real ~0.5 reflectance and takes the full environment.
+        // In the strip studio, steel keeps a real ~0.5 reflectance and takes the full environment.
         const c = mat.color;
         c.setRGB(Math.min(0.62, c.r * 2.4), Math.min(0.62, c.g * 2.4), Math.min(0.64, c.b * 2.4));
         mat.envMapIntensity = 1;

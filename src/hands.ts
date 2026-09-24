@@ -23,15 +23,16 @@ export type HandStyle = SecondsBalance;
 
 /**
  * Heat bluing is a thin oxide film on polished steel, so model it as metal plus
- * thin-film interference: indigo head-on, drifting violet at glancing angles.
+ * thin-film interference. The film is kept light: ACES already pushes bright blues
+ * toward violet, so the base hue leans slightly cyan to keep highlights steel-blue.
  * Film values were chosen against three's iridescence model, not measured oxide.
  */
-function bluedSteel(roughness = 0.12, color = 0x1a3288) {
+function bluedSteel(roughness = 0.12, color = 0x112c5c) {
   const mat = new THREE.MeshPhysicalMaterial({
     color,
     metalness: 1,
     roughness,
-    iridescence: 0.4,
+    iridescence: 0.12,
     iridescenceIOR: 1.6,
     iridescenceThicknessRange: [370, 370],
   });
@@ -40,7 +41,7 @@ function bluedSteel(roughness = 0.12, color = 0x1a3288) {
 }
 
 function navy(roughness = 0.26, color = 0x1a355c) {
-  if (studioFinish()) return bluedSteel(roughness * 0.46, color === 0x1a355c ? 0x1a3288 : color === 0x152a48 ? 0x142a70 : 0x2748ae);
+  if (studioFinish()) return bluedSteel(roughness * 0.46, color === 0x1a355c ? 0x112c5c : color === 0x152a48 ? 0x0d2148 : 0x183872);
   return new THREE.MeshPhysicalMaterial({
     color,
     metalness: 0.42,

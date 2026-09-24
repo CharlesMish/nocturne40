@@ -411,7 +411,7 @@ function applyNavyIbl(root: THREE.Object3D) {
       if (mat.userData.bluedSteel) {
         // Real metal: the strip studio is what makes it read as polished blue.
         mat.envMap = steelEnv;
-        mat.envMapIntensity = 1;
+        mat.envMapIntensity = 0.7;
         mat.needsUpdate = true;
         continue;
       }

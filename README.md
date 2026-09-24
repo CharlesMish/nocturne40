@@ -20,7 +20,7 @@ Swap `finish=physical2` for `finish=studio` to see the lighting and hand-materia
 /?design=synthesis&finish=studio&view=oblique&light=neutral&pose=ten-ten
 ```
 
-`studio` keeps everything in `physical2` and changes only light and material: a near-black reflection room with long strip softboxes, polished steel at a realistic reflectance instead of the dark, capped grey that read as gunmetal, and blued hands as real metal with a thin-film (`iridescence`) oxide layer plus a shading-only crown across each blade. Hand outlines, case dimensions and the train are unchanged.
+`studio` keeps everything in `physical2` and changes only light and material: a dim reflection room with long strip softboxes, polished steel at a realistic reflectance instead of the dark, capped grey that read as gunmetal, and blued hands as real metal with a thin-film (`iridescence`) oxide layer plus a shading-only crown across each blade. Hand outlines, case dimensions and the train are unchanged.
 
 Add `&environment=bright` for neutral inspection. The bare URL intentionally retains the historical viewer default; it is not the accepted design shown above.
 
