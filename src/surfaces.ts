@@ -97,21 +97,30 @@ export function opticalGlass(coated = false) {
   return material;
 }
 
-export function reflectionStudio(bright = false, flank = false) {
+/**
+ * Strips: a near-black room with long, bright softboxes, as in watch photography.
+ * Polished steel then carries crisp light and dark bands instead of an even grey.
+ */
+export function reflectionStudio(bright = false, flank = false, strips = false) {
   const room = new THREE.Scene();
-  room.background = bright ? new THREE.Color().setRGB(.85,.85,.85) : new THREE.Color().setRGB(0.45, 0.46, 0.48);
+  room.background = bright ? new THREE.Color().setRGB(.85,.85,.85)
+    : strips ? new THREE.Color().setRGB(0.012, 0.012, 0.013) : new THREE.Color().setRGB(0.45, 0.46, 0.48);
   const canvas=document.createElement('canvas');canvas.width=canvas.height=128;
   const ctx=canvas.getContext('2d')!; const data=ctx.createImageData(128,128);
   const smooth=(x:number)=>{const t=THREE.MathUtils.clamp(x,0,1);return t*t*(3-2*t);};
   for(let y=0;y<128;y++) for(let x=0;x<128;x++) {
     const i=(y*128+x)*4;data.data[i]=data.data[i+1]=data.data[i+2]=255;
-    const feather = bright ? 5 : flank ? 28 : 18;
+    const feather = bright ? 5 : strips ? 10 : flank ? 28 : 18;
     data.data[i+3]=255*smooth(Math.min(x,127-x)/feather)*smooth(Math.min(y,127-y)/feather);
   }
   ctx.putImageData(data,0,0);const map=new THREE.CanvasTexture(canvas);
   const cards = bright
     ? [[-4,2,5,2,8,3.2], [4,-1,4,1.2,8,.025], [0,5,2,8,2,2.4]]
-    : flank ? [[-4,2,4,5,8,2.2],[4,-1,1,2,7,.10],[0,5,2,7,3,1.4]] : [[-3,4,6,6,1.5,2.2], [5,1,2,2,7,2], [-4,-3,1,2,5,1.4]];
+    : strips
+      // Tall key strip upper left, overhead bar, narrow right rim for the crown flank,
+      // and a dim broad front diffuser so dial-facing polish is not a dead black hole.
+      ? [[-4,1,5,1.1,11,5], [0,5.5,3.5,11,.9,3.5], [6,0,.5,.8,11,3], [0,0,7,7,5,.3]]
+      : flank ? [[-4,2,4,5,8,2.2],[4,-1,1,2,7,.10],[0,5,2,7,3,1.4]] : [[-3,4,6,6,1.5,2.2], [5,1,2,2,7,2], [-4,-3,1,2,5,1.4]];
   for (const [x,y,z,w,h,power] of cards) {
     const card = new THREE.Mesh(new THREE.PlaneGeometry(w,h), new THREE.MeshBasicMaterial({
       color: new THREE.Color().setScalar(power), map, transparent:true, side: THREE.DoubleSide}));

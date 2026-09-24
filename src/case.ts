@@ -6,7 +6,7 @@
 import * as THREE from "three";
 import { receiveSpringTip } from "./socket";
 import { addStrapToLug } from "./strap";
-import { designStudy, executionFinish, seatingFinish, corrected, physicalStudy, dressFamily, containment, type DesignVariant } from "./design";
+import { designStudy, executionFinish, seatingFinish, studioFinish, corrected, physicalStudy, dressFamily, containment, type DesignVariant } from "./design";
 
 import { refinedLathe, crystalShell, opticalGlass } from "./surfaces";
 
@@ -637,6 +637,14 @@ export function applySteelIbl(root: THREE.Object3D, envMap: THREE.Texture, grade
         mat.envMapIntensity = mat.roughness < 0.18 ? 0.62 : mat.roughness < 0.33 ? 0.4 : 0.36;
       }
       if (root.userData.corrected) mat.envMapIntensity = Math.min(mat.envMapIntensity, mat.roughness < 0.16 ? 0.85 : 0.55);
+      if (studioFinish() && !mat.userData.studioSteel) {
+        // The grey room forced dark base colours and capped reflections, which read as gunmetal.
+        // In the black strip studio, steel keeps a real ~0.5 reflectance and takes the full environment.
+        const c = mat.color;
+        c.setRGB(Math.min(0.62, c.r * 2.4), Math.min(0.62, c.g * 2.4), Math.min(0.64, c.b * 2.4));
+        mat.envMapIntensity = 1;
+        mat.userData.studioSteel = true;
+      }
       mat.needsUpdate = true;
     }
   });
