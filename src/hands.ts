@@ -7,7 +7,7 @@
  */
 import * as THREE from "three";
 import { DIAL_SURFACE, SECONDS_FLOOR } from "./dial";
-import { designStudy, preciseFamily, dressFamily, warmer, containment, type DesignVariant } from "./design";
+import { designStudy, preciseFamily, dressFamily, warmer, containment, studioFinish, type DesignVariant } from "./design";
 
 const MM = 0.001;
 
@@ -21,7 +21,27 @@ export type SecondsLane = (typeof SECONDS_LANES)[number];
 export const HAND_LANES = SECONDS_BALANCES;
 export type HandStyle = SecondsBalance;
 
+/**
+ * Heat bluing is a thin oxide film on polished steel, so model it as metal plus
+ * thin-film interference. The film is kept light: ACES already pushes bright blues
+ * toward violet, so the base hue leans slightly cyan to keep highlights steel-blue.
+ * Film values were chosen against three's iridescence model, not measured oxide.
+ */
+function bluedSteel(roughness = 0.12, color = 0x112c5c) {
+  const mat = new THREE.MeshPhysicalMaterial({
+    color,
+    metalness: 1,
+    roughness,
+    iridescence: 0.12,
+    iridescenceIOR: 1.6,
+    iridescenceThicknessRange: [370, 370],
+  });
+  mat.userData.bluedSteel = true;
+  return mat;
+}
+
 function navy(roughness = 0.26, color = 0x1a355c) {
+  if (studioFinish()) return bluedSteel(roughness * 0.46, color === 0x1a355c ? 0x112c5c : color === 0x152a48 ? 0x0d2148 : 0x183872);
   return new THREE.MeshPhysicalMaterial({
     color,
     metalness: 0.42,
@@ -154,6 +174,23 @@ function ridgeMesh(length: number, spec: SwellSpec, thick: number) {
   return mesh;
 }
 
+/**
+ * Shading-only crown across the blade: face normals lean outward toward each edge.
+ * A flat polished blade mirrors one direction and reads as a single flat tone;
+ * this gives the light-to-dark sweep of a softly bent hand. Outline and thickness are unchanged.
+ */
+function crownFaces(geometry: THREE.BufferGeometry, lean = 0.42) {
+  const pos = geometry.getAttribute("position");
+  const normal = geometry.getAttribute("normal");
+  for (let i = 0; i < normal.count; i++) {
+    const nz = normal.getZ(i);
+    if (Math.abs(nz) < 0.99) continue;
+    const side = Math.sign(pos.getX(i));
+    normal.setXYZ(i, side * Math.sin(lean), 0, Math.sign(nz) * Math.cos(lean));
+  }
+  normal.needsUpdate = true;
+}
+
 function foldedLeaf(
   length: number,
   spec: SwellSpec,
@@ -166,6 +203,7 @@ function foldedLeaf(
   const y0 = 0.02;
   if (hubR > 0) g.add(hub(hubR, thick, mat));
   const blade = new THREE.Mesh(extrudePlan(swellShape(length, spec, y0), thick), mat);
+  if (studioFinish()) crownFaces(blade.geometry);
   blade.name = "hand_blade";
   g.add(blade);
   if (withRidge) g.add(ridgeMesh(length, spec, thick));
@@ -341,7 +379,7 @@ export function attachHands(
     meshes.push(seconds);
   }
 
-  if (study) {
+  if (study && !studioFinish()) {
     const painted = new Set<THREE.Material>();
     for (const hand of meshes) hand.traverse(obj => {
       if (!(obj instanceof THREE.Mesh) || !(obj.material instanceof THREE.MeshPhysicalMaterial) || painted.has(obj.material)) return;

@@ -1,5 +1,5 @@
 import { isComparisonSettings, type ComparisonSettings } from "./comparison";
-import { designLabel, executionFinish, seatingFinish, physicalFinish, type DesignVariant } from "./design";
+import { designLabel, executionFinish, seatingFinish, studioFinish, physicalFinish, type DesignVariant } from "./design";
 
 const panels = [...document.querySelectorAll<HTMLElement>("article[data-design]")];
 const view = document.querySelector<HTMLSelectElement>("#view")!;
@@ -52,7 +52,7 @@ function selectGroup() {
     panel.querySelectorAll('.swatches i').forEach(s=>s.remove());
     const frame=panel.querySelector('iframe')!; frame.title=designLabel(design);
     const state=settings();
-    frame.src=`./?${new URLSearchParams({design,embed:'1',view:state.view,light:state.light,pose:state.pose,environment:environment.value,finish:seatingFinish()?'physical2':physicalFinish()?'physical':executionFinish()?'execution':'previous'})}`;
+    frame.src=`./?${new URLSearchParams({design,embed:'1',view:state.view,light:state.light,pose:state.pose,environment:environment.value,finish:studioFinish()?'studio':seatingFinish()?'physical2':physicalFinish()?'physical':executionFinish()?'execution':'previous'})}`;
     send(panel);
   });
   const url = new URL(location.href); url.searchParams.set('group',group.value); url.searchParams.set('environment',environment.value); history.replaceState(null,'',url);
@@ -69,7 +69,7 @@ function settings(): ComparisonSettings {
 function send(panel: HTMLElement) {
   const state = settings();
   panel.querySelector("iframe")?.contentWindow?.postMessage(state, location.origin);
-  const query = new URLSearchParams({design: panel.dataset.design!, view: state.view, light: state.light, pose: state.pose, environment:environment.value,finish:seatingFinish()?'physical2':physicalFinish()?'physical':executionFinish()?'execution':'previous'});
+  const query = new URLSearchParams({design: panel.dataset.design!, view: state.view, light: state.light, pose: state.pose, environment:environment.value,finish:studioFinish()?'studio':seatingFinish()?'physical2':physicalFinish()?'physical':executionFinish()?'execution':'previous'});
   panel.querySelector<HTMLAnchorElement>(".open")!.href = `./?${query}`;
 }
 function sync() { panels.forEach(send); }

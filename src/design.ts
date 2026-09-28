@@ -13,7 +13,10 @@ export const executionFinish = () => typeof location !== 'undefined' && new URLS
 
 /** Physical finishing on the selected face; no additional character lane. */
 export const physicalFinish = () => typeof location !== 'undefined' && new URLSearchParams(location.search).get('finish') === 'physical' || seatingFinish();
-export const seatingFinish = () => typeof location !== 'undefined' && new URLSearchParams(location.search).get('finish') === 'physical2';
+export const seatingFinish = () => typeof location !== 'undefined' && ['physical2', 'studio'].includes(new URLSearchParams(location.search).get('finish') ?? '');
+
+/** Physical2 plus a dark strip-light studio, brighter steel, and oxide-film blued hands. */
+export const studioFinish = () => typeof location !== 'undefined' && new URLSearchParams(location.search).get('finish') === 'studio';
 
 /** Coordinated choices for the two opt-in studies, all dimensions in mm. */
 export const DESIGN_STUDIES = {

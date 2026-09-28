@@ -14,6 +14,14 @@ Open the Vite URL with:
 /?design=synthesis&finish=physical2&view=oblique&light=neutral&pose=ten-ten
 ```
 
+Swap `finish=physical2` for `finish=studio` to see the lighting and hand-material pass on top of it:
+
+```text
+/?design=synthesis&finish=studio&view=oblique&light=neutral&pose=ten-ten
+```
+
+`studio` keeps everything in `physical2` and changes only light and material: a dim reflection room with long strip softboxes, polished steel at a realistic reflectance instead of the dark, capped grey that read as gunmetal, and blued hands as real metal with a thin-film (`iridescence`) oxide layer plus a shading-only crown across each blade. Hand outlines, case dimensions and the train are unchanged.
+
 Add `&environment=bright` for neutral inspection. The bare URL intentionally retains the historical viewer default; it is not the accepted design shown above.
 
 See [strap construction and validation](docs/STRAP_CONSTRUCTION.md) for the final pass and preserved design decisions. The vendor train remains unchanged. Local `.review/` galleries and `PROGRESS.md` are excluded from Git; the source regenerates the live model, but saved review screenshots are local artifacts.

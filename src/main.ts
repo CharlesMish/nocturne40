@@ -12,7 +12,7 @@ import { createDial, MARKER_LANES, tickLane, type CreamLook, type MarkerLook, ty
 import { attachHands, HAND_LANES, SECONDS_LANES, type HandStyle, type SecondsLane } from "./hands";
 import { leatherLane } from "./strap";
 import { createPlates } from "./plate";
-import { designStudy, executionFinish, seatingFinish, parseDesignVariant, corrected, designLabel } from "./design";
+import { designStudy, executionFinish, seatingFinish, studioFinish, parseDesignVariant, corrected, designLabel } from "./design";
 import { isComparisonSettings, COMPARISON_POSES, type ComparisonSettings } from "./comparison";
 import glbUrl from "../vendor/going-train-core-v1/assets/going-train-core.glb?url";
 
@@ -47,7 +47,7 @@ const brightEnvironment = new URLSearchParams(location.search).get('environment'
 const pmrem = new THREE.PMREMGenerator(renderer);
 let steelEnv: THREE.Texture;
 if (corrected(design) || brightEnvironment) {
-  const studio = reflectionStudio(brightEnvironment, seatingFinish());
+  const studio = reflectionStudio(brightEnvironment, seatingFinish(), studioFinish());
   const cube = new THREE.WebGLCubeRenderTarget(1024, {type: THREE.HalfFloatType});
   new THREE.CubeCamera(0.1, 100, cube).update(renderer, studio);
   steelEnv = pmrem.fromCubemap(cube.texture).texture;
@@ -366,6 +366,8 @@ function applyViewLights() {
         ? 0.32
         : 0.5;
   backKey.visible = onBack;
+  // Studio steel has a real ~0.5 reflectance, so the back rescue key no longer needs to be as hot.
+  backKey.intensity = studioFinish() ? 0.85 : 1.35;
   backFill.visible = onBack;
   peekLight.visible = onBack;
   strapGraze.visible = inspectQuery === "strap";
@@ -406,6 +408,13 @@ function applyNavyIbl(root: THREE.Object3D) {
     const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
     for (const mat of mats) {
       if (!(mat instanceof THREE.MeshStandardMaterial)) continue;
+      if (mat.userData.bluedSteel) {
+        // Real metal: the strip studio is what makes it read as polished blue.
+        mat.envMap = steelEnv;
+        mat.envMapIntensity = 0.7;
+        mat.needsUpdate = true;
+        continue;
+      }
       if (mat.metalness >= 0.5) continue;
       mat.envMap = steelEnv;
       mat.envMapIntensity = 0.22;
