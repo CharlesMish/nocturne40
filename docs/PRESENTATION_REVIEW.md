@@ -119,8 +119,15 @@ are outside this presentation-only change.
   inside a 390 x 844 responsive frame; this is not physical touch-device testing.
 - The production artifact loaded from `/nocturne40/`, including its model and
   controls; the historical query route and comparison page remained accessible.
-- Keyboard dispatch to the WebGL iframe timed out in the in-app browser, so the
-  new presentation shortcut guard has source review only, not completed
-  end-to-end keyboard/gesture validation. One unattributed `MutationObserver`
-  error appeared in the browser log during root navigation even though the
-  watch reported ready and rendered. Do not claim an entirely clean console.
+- Follow-up keyboard QA at unchanged head `d72cda8` passed Enter/Space presets,
+  finish selection, source disclosure, and all 16 shortcut guards. Trusted events
+  sent to a temporary focus target inside the iframe left pixels and model-state
+  text identical. The F shortcut still worked in baseline and candidate technical
+  viewers. Physical touch testing remains open.
+- The `MutationObserver` error also reproduced on a minimal static iframe without
+  watch, Three.js or Vite code, isolating it to the in-app browser environment.
+  No candidate regression was found.
+
+The owner subsequently approved publication. See [the bounded release package
+and current deployment gate](PAGES_RELEASE.md); this historical review's publication
+boundary records what was authorized during the original draft phase.

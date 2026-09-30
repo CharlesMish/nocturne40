@@ -30,8 +30,12 @@ Swap `finish=physical2` for `finish=studio` to see the lighting and hand-materia
 
 Add `&environment=bright` for neutral inspection. Existing query-based viewer URLs
 retain their meaning; `/?viewer=1` recalls the historical viewer default. Build
-with `npm run build`, then inspect locally with `npm run preview`. No deployment
-workflow is added by this presentation change.
+with `npm run build`, then inspect locally with `npm run preview`.
+
+For the complete Pages release, follow [publication and preserved studies](docs/PAGES_RELEASE.md).
+It packages the current presentation and pinned Astra study together, preserving
+the old public technical URLs. The existing Pages environment's branch policy
+must explicitly permit main before that release can publish.
 
 See [strap construction and validation](docs/STRAP_CONSTRUCTION.md) for the final pass and preserved design decisions. The vendor train remains unchanged. Local `.review/` galleries and `PROGRESS.md` are excluded from Git; the source regenerates the live model, but saved review screenshots are local artifacts.
 
