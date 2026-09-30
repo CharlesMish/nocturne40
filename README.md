@@ -2,6 +2,12 @@
 
 The accepted design uses the selected warm dial and the second physical-finish pass.
 
+The bare local URL now opens `/watch.html`: a Precise Dress presentation around
+the current model, with view buttons and the existing Studio light / Original
+physical finish selector. It links the separately published Arc / Flow study
+without importing that branch's geometry. See [presentation provenance and
+review](docs/PRESENTATION_REVIEW.md) for exact refs, differences and validation.
+
 ```sh
 npm install
 npm run check
@@ -22,7 +28,10 @@ Swap `finish=physical2` for `finish=studio` to see the lighting and hand-materia
 
 `studio` keeps everything in `physical2` and changes only light and material: a dim reflection room with long strip softboxes, polished steel at a realistic reflectance instead of the dark, capped grey that read as gunmetal, and blued hands as real metal with a thin-film (`iridescence`) oxide layer plus a shading-only crown across each blade. Hand outlines, case dimensions and the train are unchanged.
 
-Add `&environment=bright` for neutral inspection. The bare URL intentionally retains the historical viewer default; it is not the accepted design shown above.
+Add `&environment=bright` for neutral inspection. Existing query-based viewer URLs
+retain their meaning; `/?viewer=1` recalls the historical viewer default. Build
+with `npm run build`, then inspect locally with `npm run preview`. No deployment
+workflow is added by this presentation change.
 
 See [strap construction and validation](docs/STRAP_CONSTRUCTION.md) for the final pass and preserved design decisions. The vendor train remains unchanged. Local `.review/` galleries and `PROGRESS.md` are excluded from Git; the source regenerates the live model, but saved review screenshots are local artifacts.
 

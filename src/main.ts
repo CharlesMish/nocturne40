@@ -32,6 +32,7 @@ const canvasHost = document.body;
 const hint = document.getElementById("hint");
 const orientBtn = document.getElementById("orient");
 const embedded = new URLSearchParams(location.search).get("embed") === "1";
+const presenting = embedded && new URLSearchParams(location.search).get("presentation") === "1";
 if (embedded) document.getElementById("hud")!.style.display = "none";
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -633,6 +634,9 @@ window.addEventListener("message", event => {
   sweepPosition.copy(camera.position).sub(controls.target);
 });
 window.addEventListener("keydown", (event) => {
+  // Presentation controls own the view; hidden study shortcuts must not alter
+  // the selected watch when the embedded canvas receives keyboard focus.
+  if (presenting) return;
   if (event.key === "f" || event.key === "F") {
     const i = MARKER_LANES.indexOf(markerStyle);
     markerStyle = MARKER_LANES[(i + 1) % MARKER_LANES.length];

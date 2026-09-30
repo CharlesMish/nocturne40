@@ -1,0 +1,55 @@
+/* Presentation shell adapted from Astra 8f55172, without its model changes. */
+:root { color-scheme: dark; background: #141414; color: #e9e2d6; font-family: Arial, Helvetica, sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; }
+a { color: inherit; text-underline-offset: 4px; }
+button, select { font: inherit; }
+header { margin: 0 4vw; padding: 18px 0; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #393733; }
+.mark { font: 24px Georgia, serif; letter-spacing: -1px; text-decoration: none; }
+.edition, .eyebrow { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
+.edition { color: #b6afa2; }
+main { display: grid; grid-template-columns: minmax(220px, 25%) minmax(0, 1fr); align-items: center; padding: 0 4vw; }
+.intro { padding: 28px 0; }
+.eyebrow { color: #c6ae88; margin: 0 0 18px; }
+h1 { font: normal clamp(44px, 4.5vw, 68px)/1.04 Georgia, serif; letter-spacing: -2px; margin: 0 0 20px; }
+.description { font: 18px/1.5 Georgia, serif; color: #c6beaf; max-width: 240px; margin: 0 0 25px; }
+dl { max-width: 250px; margin: 0; }
+dl div { display: flex; justify-content: space-between; gap: 15px; padding: 12px 0; border-top: 1px solid #393733; font-size: 12px; }
+dt { color: #b6afa2; } dd { margin: 0; }
+.other-study { max-width: 250px; margin-top: 26px; font-size: 12px; }
+.other-study a { color: #ddc49e; }
+.other-study p { color: #b6afa2; line-height: 1.5; margin: 10px 0 0; }
+.stage { min-width: 0; padding: 14px 0; }
+.viewer-wrap { position: relative; height: clamp(350px, calc(100svh - 280px), 850px); }
+iframe { width: 100%; height: 100%; display: block; border: 0; }
+#status { position: absolute; inset: 42% 15% auto; text-align: center; color: #c6beaf; line-height: 1.5; pointer-events: none; }
+#status[hidden] { display: none; }
+.views { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+.views button { min-height: 44px; padding: 10px 14px; border: 1px solid transparent; border-radius: 2px; background: none; color: #b6afa2; cursor: pointer; font-size: 12px; }
+.views button:hover { color: #fff4e3; }
+.views button[aria-pressed="true"] { border-color: #79664a; color: #e5c89d; }
+.finish-control { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; font-size: 12px; color: #c6beaf; }
+select { min-height: 36px; padding: 6px; border: 1px solid #5b5347; border-radius: 2px; background: #1d1c1a; color: #e9e2d6; }
+.finish-control span, .instruction { color: #b6afa2; font-size: 11px; }
+.instruction { text-align: center; margin: 14px 0 0; }
+footer { margin: 0 4vw; padding: 16px 0; border-top: 1px solid #393733; display: flex; justify-content: space-between; align-items: start; gap: 24px; color: #b6afa2; font-size: 11px; line-height: 1.5; }
+details { max-width: 510px; } summary { cursor: pointer; color: #ddc49e; }
+button:focus-visible, a:focus-visible, select:focus-visible, summary:focus-visible { outline: 2px solid #e5c89d; outline-offset: 4px; }
+noscript { display: block; padding: 16px; }
+@media (max-width: 760px) {
+  header { padding: 14px 0; }
+  .edition { font-size: 9px; letter-spacing: 1px; }
+  main { display: flex; flex-direction: column; padding: 0 4vw; }
+  .intro { padding: 22px 0 0; width: 100%; text-align: center; }
+  .eyebrow { font-size: 9px; margin-bottom: 8px; }
+  h1 { font-size: 36px; letter-spacing: -1px; margin-bottom: 10px; } h1 br { display: none; }
+  .description { max-width: 300px; margin: 0 auto; font-size: 16px; }
+  dl { display: none; }
+  .other-study { max-width: 330px; margin: 18px auto 0; }
+  .other-study p { margin-top: 6px; }
+  .stage { width: 100%; }
+  .viewer-wrap { height: clamp(310px, 46svh, 520px); }
+  .views { gap: 0; } .views button { padding: 10px 9px; font-size: 11px; }
+  .finish-control span { flex-basis: 100%; text-align: center; }
+  footer { flex-direction: column; gap: 12px; }
+}

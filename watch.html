@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="Explore Nocturne 40: a 40 mm dress-watch design study with a warm ivory dial, blued hands and small seconds at six." />
+    <title>Nocturne 40 — Precise Dress</title>
+    <link rel="stylesheet" href="/src/presentation.css" />
+  </head>
+  <body>
+    <header>
+      <a class="mark" href="./watch.html" aria-label="Nocturne 40 home">N.40</a>
+      <span class="edition">A watch design study</span>
+    </header>
+    <main>
+      <section class="intro" aria-labelledby="title">
+        <p class="eyebrow">Precise Dress</p>
+        <h1 id="title">Nocturne<br /> 40.</h1>
+        <p class="description">Warm ivory, blued hands, and small seconds at six.</p>
+        <dl><div><dt>Case</dt><dd>40 mm</dd></div><div><dt>Display</dt><dd>Small seconds</dd></div></dl>
+        <aside class="other-study" aria-label="Another design study">
+          <a href="https://charlesmish.github.io/nocturne40/" target="_blank" rel="noopener noreferrer">Explore Arc / Flow ↗</a>
+          <p>A separate published design, with a curved case, different lugs, complete strap and seated hand stack.</p>
+        </aside>
+      </section>
+      <section class="stage" aria-label="Interactive Precise Dress watch">
+        <div class="viewer-wrap">
+          <iframe id="watch" title="Interactive Nocturne 40 — Precise Dress"></iframe>
+          <p id="status" role="status">Preparing the watch…</p>
+        </div>
+        <nav class="views" aria-label="Watch views">
+          <button type="button" data-view="oblique" aria-pressed="true">Three-quarter</button>
+          <button type="button" data-view="dial" aria-pressed="false">Dial</button>
+          <button type="button" data-view="side" aria-pressed="false">Profile</button>
+          <button type="button" data-view="back" aria-pressed="false">Caseback</button>
+          <button type="button" data-view="seconds" aria-pressed="false">Seconds</button>
+        </nav>
+        <div class="finish-control">
+          <label for="finish">Finish</label>
+          <select id="finish"><option value="studio">Studio light</option><option value="physical2">Original physical finish</option></select>
+          <span>Same watch geometry</span>
+        </div>
+        <p class="instruction">Drag to turn · scroll or pinch to move closer</p>
+        <noscript>The interactive study requires JavaScript and WebGL. <a href="https://github.com/CharlesMish/nocturne40">Read the project notes</a>.</noscript>
+      </section>
+    </main>
+    <footer>
+      <span>Charles Mish · Design study; manufacturing tolerances are not established.</span>
+      <details>
+        <summary>Sources &amp; inspection</summary>
+        <p>This view preserves the Precise Dress / synthesis model on <a href="https://github.com/CharlesMish/nocturne40/tree/cda7c7dc84f5234ce3a2ba5ae6110d192c68a1ad">main at cda7c7d</a>, including its studio finish. The original physical finish is the accepted <a href="https://github.com/CharlesMish/nocturne40/tree/154cb513f09bca22b004cda00233da799ce9b5a0">154cb51 baseline</a>.</p>
+        <p>The separate public Arc / Flow study was verified at <a href="https://github.com/CharlesMish/nocturne40/tree/8f55172b4a81ebc157fab409ae1d8c9ac5e31212">Astra 8f55172</a> on September 30, 2026. Its geometry differs. Both retain the same frozen going-train asset; neither implements complete motion works.</p>
+        <a id="technical" href="./index.html?design=synthesis&amp;finish=studio&amp;view=oblique&amp;light=neutral&amp;pose=ten-ten">Open this technical view</a>
+        <span aria-hidden="true"> · </span><a href="./index.html?viewer=1">Historical viewer</a>
+        <span aria-hidden="true"> · </span><a href="./compare.html">Design comparisons</a>
+      </details>
+    </footer>
+    <script type="module" src="/src/presentation.ts"></script>
+  </body>
+</html>
