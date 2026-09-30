@@ -1,0 +1,58 @@
+name: Build watch / GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nocturne-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/checkout@v6
+        with:
+          ref: 8f55172b4a81ebc157fab409ae1d8c9ac5e31212
+          path: .review/astra-source
+      - name: Build the pinned Arc / Flow study
+        working-directory: .review/astra-source
+        run: |
+          npm ci
+          npm run check
+          npx tsc --noEmit
+          npm run build:pages
+      - run: npm ci
+      - run: npm run check
+      - name: Package both presentations
+        run: npm run build:pages -- .review/astra-source
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    if: vars.DEPLOY_PAGES == 'true' && github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy presentation
+        id: deployment
+        uses: actions/deploy-pages@v4

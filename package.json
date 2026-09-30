@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "build:pages": "npm run build && node scripts/prepare-pages.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "check": "node scripts/check-core.mjs"
   },
