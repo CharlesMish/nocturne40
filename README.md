@@ -37,7 +37,24 @@ It packages the current presentation and pinned Astra study together, preserving
 the old public technical URLs. The existing Pages environment's branch policy
 must explicitly permit main before that release can publish.
 
-See [strap construction and validation](docs/STRAP_CONSTRUCTION.md) for the final pass and preserved design decisions. The vendor train remains unchanged. Local `.review/` galleries and `PROGRESS.md` are excluded from Git; the source regenerates the live model, but saved review screenshots are local artifacts.
+See [strap construction and validation](docs/STRAP_CONSTRUCTION.md) for the final pass and preserved design decisions. The vendor train's mechanical files remain unchanged. Local `.review/` galleries and `PROGRESS.md` are excluded from Git; the source regenerates the live model, but saved review screenshots are local artifacts.
+
+## License
+
+CharlesMish's original software, watch design, rendered assets, and documentation,
+including the bundled going-train core, are available under the [MIT License](LICENSE),
+to the extent CharlesMish holds the rights to them. The core's
+[PROJECT_RIGHTS.txt](vendor/going-train-core-v1/PROJECT_RIGHTS.txt) contains the
+same MIT text. This replaces the previous owner-controlled rights restriction.
+
+Third-party software retains its own licenses and copyright notices; preserve
+the [core's third-party notices](vendor/going-train-core-v1/THIRD_PARTY_NOTICES.txt),
+including Three.js, and the licenses supplied with other dependencies.
+
+The core's rights notice, README, and package checksums were updated for this
+licensing change. Its source, GLB, specifications, mechanical evidence, and
+source-authority record remain unchanged. The mechanical freeze in
+`CONSTRAINTS.md` is an engineering rule, not a restriction on the MIT grant.
 
 ## Historical starter instructions
 
