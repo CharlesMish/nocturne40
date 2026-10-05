@@ -1,6 +1,6 @@
 # Watch Going-Train Core V1
 
-This private handoff isolates the five RC1 compound arbors that carry the
+This core package isolates the five RC1 compound arbors that carry the
 certified going train:
 
 1. barrel 80T → center pinion 12T;
@@ -75,5 +75,12 @@ profiles, tooth counts, pitch radii, XY axes, Z intervals, pair clocking, and
 compound-arbor ratios remain unchanged. A new case or bridge design must also
 be checked independently for clearances to this train.
 
-This is a private design-source handoff, not a public open-source release. See
-`PROJECT_RIGHTS.txt` and `THIRD_PARTY_NOTICES.txt`.
+CharlesMish's original source, core design, GLB asset, and documentation in this
+package are available under the MIT License in `PROJECT_RIGHTS.txt`, to the
+extent CharlesMish holds the rights to them. Third-party software retains its
+own terms; preserve `THIRD_PARTY_NOTICES.txt` and dependency licenses.
+
+The October 2026 licensing update replaces the previous owner-controlled
+rights restriction and refreshes this README and the package checksums. It
+does not change the mechanical source, GLB, specifications, evidence, or
+`SOURCE_AUTHORITY.json`. Historical release archives are unchanged.

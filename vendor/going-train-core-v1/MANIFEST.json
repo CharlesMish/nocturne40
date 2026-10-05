@@ -1,7 +1,7 @@
 {
   "schema": "watch.going-train-core-package-manifest.v1",
   "package": "watch-going-train-core-v1",
-  "generatedUtc": "2026-08-29T00:00:00.000Z",
+  "generatedUtc": "2026-10-05T23:22:47.079Z",
   "authority": "RC1 going-train mechanical closure",
   "fileCount": 24,
   "files": [
@@ -57,13 +57,13 @@
     },
     {
       "file": "PROJECT_RIGHTS.txt",
-      "bytes": 593,
-      "sha256": "8f6eff9f4688f9064bed2656a4640c7598a601c212cdb6ae2660110b0acdcbad"
+      "bytes": 1068,
+      "sha256": "cb9be6c55058aa4cf3e6983dad85cd2c8447f38c1c11c57bd2cb8016ce184175"
     },
     {
       "file": "README.md",
-      "bytes": 2757,
-      "sha256": "593c554a702ed70ce969882c3f5a064701c388a769d0f3446a725758cecbc454"
+      "bytes": 3219,
+      "sha256": "fbbc43cd9635ff0f22798cb4905f71c6f0d80a82788d62192395c78940d53d6a"
     },
     {
       "file": "scripts/validate-glb.mjs",

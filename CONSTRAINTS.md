@@ -77,4 +77,8 @@ Forbidden in B0 / B1:
 
 Working name: **Nocturne 40**.
 Do not call a derivative asset “RC1”.
-Do not publish the vendor core.
+The owner-controlled core is available under the MIT terms in
+`vendor/going-train-core-v1/PROJECT_RIGHTS.txt`; preserve its third-party notices.
+The mechanical freeze above is an engineering constraint, not a copyright
+restriction. The owner-authorized licensing update changes only rights
+documentation and its package checksums.
