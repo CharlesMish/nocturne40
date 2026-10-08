@@ -1,6 +1,10 @@
-# Nocturne 40 - accepted design baseline
+# Nocturne 40
 
-The accepted design uses the selected warm dial and the second physical-finish pass.
+An interactive dress-watch design study built around a frozen five-arbor going
+train. The accepted design uses the selected warm dial and second physical-finish pass.
+
+**[Open Precise Dress](https://charlesmish.github.io/nocturne40/)** ·
+[Arc / Flow — preserved Astra study](https://charlesmish.github.io/nocturne40/studies/astra-8f55172/)
 
 The bare local URL now opens `/watch.html`: a Precise Dress presentation around
 the current model, with view buttons and the existing Studio light / Original
@@ -8,8 +12,13 @@ physical finish selector. It links the separately published Arc / Flow study
 without importing that branch's geometry. See [presentation provenance and
 review](docs/PRESENTATION_REVIEW.md) for exact refs, differences and validation.
 
+## Run locally
+
+Use Node.js 24 (the version used by the Pages workflow), npm, and a browser
+with JavaScript and WebGL. From a checkout of this repository:
+
 ```sh
-npm install
+npm ci
 npm run check
 npm run dev
 ```
@@ -34,10 +43,25 @@ with `npm run build`, then inspect locally with `npm run preview`.
 
 For the complete Pages release, follow [publication and preserved studies](docs/PAGES_RELEASE.md).
 It packages the current presentation and pinned Astra study together, preserving
-the old public technical URLs. The existing Pages environment's branch policy
-must explicitly permit main before that release can publish.
+the old public technical URLs. The published
+[deployment manifest](https://charlesmish.github.io/nocturne40/deployment-manifest.json)
+identifies the source refs and file hashes; the release document retains the
+deployment gate observed during its September 30 review.
 
 See [strap construction and validation](docs/STRAP_CONSTRUCTION.md) for the final pass and preserved design decisions. The vendor train's mechanical files remain unchanged. Local `.review/` galleries and `PROGRESS.md` are excluded from Git; the source regenerates the live model, but saved review screenshots are local artifacts.
+
+## Contributing and repository guide
+
+Read [CONSTRAINTS.md](CONSTRAINTS.md) and [AGENTS.md](AGENTS.md) before editing.
+The vendor core is read-only: preserve its geometry, units, pivots, ratios and
+mechanical evidence. Presentation work does not establish manufacturing readiness.
+Use a focused branch from `main`, describe the scope and run `npm run check` and
+`npm run build` before proposing a pull request. Later implementation requires
+an explicitly scoped task; the inherited first-session guardrails still apply.
+
+- [Presentation review](docs/PRESENTATION_REVIEW.md): accepted presentation and study identity.
+- [Strap construction](docs/STRAP_CONSTRUCTION.md): design decisions and validation limits.
+- [Development history](docs/DEVELOPMENT_HISTORY.md): starter prompts, design passes and original review records.
 
 ## License
 
@@ -55,72 +79,3 @@ The core's rights notice, README, and package checksums were updated for this
 licensing change. Its source, GLB, specifications, mechanical evidence, and
 source-authority record remain unchanged. The mechanical freeze in
 `CONSTRAINTS.md` is an engineering rule, not a restriction on the MIT grant.
-
-## Historical starter instructions
-
-# Nocturne 40 — Cursor starter (B0 + B1 only)
-
-This folder is the **first session** of a new watch built around a frozen going-train core.
-
-You do **not** design the whole watch in this pass.
-You do **not** install pstack.
-You paste **one prompt** into Cursor Composer and stop when the checklist is green.
-
-## What this watch is (one paragraph)
-
-A closed dress watch. Cream dial, soft heat-blued hands, steel case, modestly **domed sapphire**, exhibition back. One small rose-gold accent (curiosity, not a two-tone watch). The certified five-arbor train stays read-only. Small seconds at 6 after a **180°** rotation around the center arbor.
-
-## 15-minute setup (do this once)
-
-1. Install [Cursor](https://cursor.com) if needed. Sign in. You do not need extra plugins.
-2. Unzip this starter so you can see `README.md` at the repo root.
-3. Unzip `watch-going-train-core-v1.zip` into:
-
-   ```text
-   vendor/going-train-core-v1/
-   ```
-
-   After that you should have:
-
-   ```text
-   vendor/going-train-core-v1/CORE_SPEC.json
-   vendor/going-train-core-v1/assets/going-train-core.glb
-   vendor/going-train-core-v1/INTEGRATION.md
-   ```
-
-4. In a terminal at the repo root:
-
-   ```sh
-   git init
-   git add .
-   git commit -m "baseline: starter + vendor core"
-   ```
-
-5. **File → Open Folder** on this repo (not your home directory, not the zip).
-6. Open Composer / Agent (Cursor: `Cmd+I` / `Ctrl+I` is the usual chat; look for **Agent** or **Composer** if you want it to edit files).
-7. Paste **only** the contents of `prompts/B0-B1.md`.
-8. Let it work. If it asks to run `npm install` or the check script, allow that.
-9. Stop when `scripts/check-core.mjs` prints `OK` and you can see the train in the browser.
-
-Then come back here (or send the diff) for review. Do not start plates, case, or dial until that review.
-
-## If Cursor feels loud
-
-- Use **one** Agent/Composer chat. Do not open three.
-- Model: Composer default, or Grok 4.6 if you see it. Do not swap mid-session.
-- If it wants to edit anything under `vendor/`, say **no** and point it at `CONSTRAINTS.md`.
-- If it stalls, say: `Stop designing. Finish B1 only. Run node scripts/check-core.mjs.`
-
-## Layout
-
-| Path | Why it exists |
-|---|---|
-| `CONSTRAINTS.md` | Frozen mechanical + product rules |
-| `AGENTS.md` | Short rules Cursor should read |
-| `docs/AESTHETIC.md` | Soft look (not a pixel spec) |
-| `docs/VALIDATION.md` | What you (or Claude/ChatGPT) audit later |
-| `prompts/B0-B1.md` | The only prompt for session one |
-| `scripts/check-core.mjs` | “Did the five arbors move?” |
-| `src/` | Empty-enough viewer stub |
-
-`docs/LATER.md` is notes for bursts after review. Ignore it in session one.
