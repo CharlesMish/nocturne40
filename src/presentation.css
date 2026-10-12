@@ -43,12 +43,31 @@ noscript { display: block; padding: 16px; }
   .intro { padding: 22px 0 0; width: 100%; text-align: center; }
   .eyebrow { font-size: 9px; margin-bottom: 8px; }
   h1 { font-size: 36px; letter-spacing: -1px; margin-bottom: 10px; } h1 br { display: none; }
-  .description { max-width: 300px; margin: 0 auto; font-size: 16px; }
-  dl { display: none; }
+  .description { max-width: 300px; margin: 0 auto 14px; font-size: 16px; }
+  dl {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    max-width: 320px;
+    margin: 0 auto;
+    border-top: 1px solid #393733;
+    border-bottom: 1px solid #393733;
+  }
+  dl div {
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 10px 8px;
+    border-top: 0;
+    text-align: center;
+  }
+  dl div + div { border-left: 1px solid #393733; }
   .other-study { max-width: 330px; margin: 18px auto 0; }
   .other-study p { margin-top: 6px; }
   .stage { width: 100%; }
-  .viewer-wrap { height: clamp(310px, 46svh, 520px); }
+  .viewer-wrap { height: clamp(290px, 42svh, 500px); }
   .views { gap: 0; } .views button { padding: 10px 9px; font-size: 11px; }
   .finish-control span { flex-basis: 100%; text-align: center; }
   footer { flex-direction: column; gap: 12px; }
