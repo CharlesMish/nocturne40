@@ -8,7 +8,7 @@ const buttons = document.querySelectorAll<HTMLButtonElement>("[data-view]");
 const query = new URLSearchParams(location.search);
 const viewParam = query.get("view");
 let view: ComparisonSettings["view"] = COMPARISON_VIEWS.find(v => v === viewParam && Array.from(buttons).some(b => b.dataset.view === v)) ?? "oblique";
-let finish = query.get("finish") === "physical2" ? "physical2" : "studio";
+let finish = query.get("finish") === "studio" ? "studio" : "physical2";
 let ready = false;
 let timeout: ReturnType<typeof setTimeout>;
 
