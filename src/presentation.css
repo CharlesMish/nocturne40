@@ -33,7 +33,7 @@ select { min-height: 36px; padding: 6px; border: 1px solid #5b5347; border-radiu
 .finish-control span, .instruction { color: #b6afa2; font-size: 11px; }
 .instruction { text-align: center; margin: 14px 0 0; }
 footer { margin: 0 4vw; padding: 16px 0; border-top: 1px solid #393733; display: flex; justify-content: space-between; align-items: start; gap: 24px; color: #b6afa2; font-size: 11px; line-height: 1.5; }
-details { max-width: 510px; } summary { cursor: pointer; color: #ddc49e; }
+details { max-width: 510px; } summary { cursor: pointer; color: #ddc49e; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
 button:focus-visible, a:focus-visible, select:focus-visible, summary:focus-visible { outline: 2px solid #e5c89d; outline-offset: 4px; }
 noscript { display: block; padding: 16px; }
 @media (max-width: 760px) {
